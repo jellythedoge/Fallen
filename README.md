@@ -1,5 +1,3 @@
-### Fallen
-
 ## Features
 - Glow
 - Chams
