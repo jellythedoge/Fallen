@@ -36,7 +36,6 @@ namespace Fallen
         }
 
         [STAThread]
-
         public static void Initialize()
         {
 

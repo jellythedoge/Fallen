@@ -71,13 +71,13 @@ namespace Fallen.Features
                 //NO HANDS//
                 ////////////
 
-                if (Settings.Noflash.Enabled && NohandsCheck != 0)
+                if (Settings.Nohands.Enabled && NohandsCheck != 0)
                 {
                     MainClass.Memory.WriteInt(LocalPlayer.Base + 0x254, 0);
                 }
-                else if (!Settings.Noflash.Enabled && NohandsCheck != 255)
+                else if (!Settings.Nohands.Enabled && NohandsCheck != 317)
                 {
-                    MainClass.Memory.WriteInt(LocalPlayer.Base + 0x254, 255);
+                    MainClass.Memory.WriteInt(LocalPlayer.Base + 0x254, 317);
                 }
 
                 /////////////
