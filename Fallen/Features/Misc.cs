@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+using hazedumper;
 using Fallen.API;
 using Fallen.Features;
 using System.Diagnostics;
@@ -19,39 +20,34 @@ namespace Fallen.Features
             {
                 var FovCheck = MainClass.Memory.ReadInt(LocalPlayer.Base + netvars.m_iFOV);
                 var NohandsCheck = MainClass.Memory.ReadInt(LocalPlayer.Base + 0x254);
-                bool EndFlash = (!Settings.NoflashEnabled);
+                bool EndFlash = (!Settings.Noflash.Enabled);
                 
-                var Entity = new Entity();
-
-                //-<swap>
-
                 ///////////////
                 //FOV CHANGER//
                 ///////////////
 
-                if (Settings.FovchangerEnabled)
+                if (Settings.Fovchanger.Enabled)
                 {
                     if (!MainClass.Memory.ReadBool(LocalPlayer.Base + netvars.m_bIsScoped))
                     {
-                        if (FovCheck != Settings.Fov)
+                        if (FovCheck != Settings.Fovchanger.Fov)
                         {
-                            MainClass.Memory.WriteInt(LocalPlayer.Base + netvars.m_iFOV, Settings.Fov);
+                            MainClass.Memory.WriteInt(LocalPlayer.Base + netvars.m_iFOV, Settings.Fovchanger.Fov);
                         }
                     }
                 }
-                //-<block>
 
                 ////////////
                 //NO FLASH//
                 ////////////
 
-                if (Settings.NoflashEnabled || EndFlash)
+                if (Settings.Noflash.Enabled || EndFlash)
                 {
                     var FlashCheck = MainClass.Memory.ReadFloat(LocalPlayer.Base + netvars.m_flFlashMaxAlpha);
 
                     if (EndFlash)
                     {
-                        if (FlashCheck == Settings.Flash && FlashCheck != 255)
+                        if (FlashCheck == Settings.Noflash.Flash && FlashCheck != 255)
                         {
                             MainClass.Memory.WriteFloat(LocalPlayer.Base + netvars.m_flFlashMaxAlpha, 255);
                             Console.WriteLine("Flash one");
@@ -59,30 +55,26 @@ namespace Fallen.Features
                     }
                     else
                     {
-                        if (FlashCheck != Settings.Flash && FlashCheck != 0)
+                        if (FlashCheck != Settings.Noflash.Flash && FlashCheck != 0)
                         {
-                            MainClass.Memory.WriteFloat(LocalPlayer.Base + netvars.m_flFlashMaxAlpha, Settings.Flash);
+                            MainClass.Memory.WriteFloat(LocalPlayer.Base + netvars.m_flFlashMaxAlpha, Settings.Noflash.Flash);
                             Console.WriteLine(MainClass.Memory.ReadFloat(LocalPlayer.Base + netvars.m_flFlashMaxAlpha)); 
                         }
                     }
                 }
-                //-<block>
 
                 ////////////
                 //NO HANDS//
                 ////////////
 
-                if (Settings.NohandsEnabled && NohandsCheck != 0)
+                if (Settings.Noflash.Enabled && NohandsCheck != 0)
                 {
                     MainClass.Memory.WriteInt(LocalPlayer.Base + 0x254, 0);
                 }
-                else if (!Settings.NohandsEnabled && NohandsCheck != 255)
+                else if (!Settings.Noflash.Enabled && NohandsCheck != 255)
                 {
                     MainClass.Memory.WriteInt(LocalPlayer.Base + 0x254, 255);
                 }
-                //-<block>
-
-                //-<swap/>
 
                 Thread.Sleep(10);
             }

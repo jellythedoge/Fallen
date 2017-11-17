@@ -12,113 +12,124 @@ namespace Fallen.API
         //Feature Toggles//
         ///////////////////
 
-        public static bool GlowEnabled = false;
-        public static bool BhopEnabled = false;
-        public static bool TriggerEnabled = false;
-        public static bool NoflashEnabled = false;
-        public static bool SkinchangerEnabled = false;
-        public static bool FovchangerEnabled = false;
-        public static bool NohandsEnabled = false;
+        public struct Glow
+        {
+            public static bool GlowTeam = true;
+            public static bool GlowEnemy = true;
 
-        public static bool OverlayEnabled = false;
-        public static bool CrosshairEnabled = false;
+            public static bool ChamsTeam = true;
+            public static bool ChamsEnemy = true;
 
-        public static bool Spacedown = false;
-        public static bool LAltdown = false;
+            public static float TeamRed = 0;
+            public static float TeamGreen = 0;
+            public static float TeamBlue = 255;
 
-        //////////////////
-        //Config Options//
-        //////////////////
-            
-        public static bool LoadNoConfig = false;
-        
-        public static bool ChamsTeam = true;
-        public static bool ChamsEnemy = true;
+            public static float EnemyRed = 255;
+            public static float EnemyGreen = 0;
+            public static float EnemyBlue = 0;
+        }
 
-        public static bool GlowTeam = true;
-        public static bool GlowEnemy = true;
+        public struct Bhop
+        {
+            public static bool Enabled = false;
+            public static bool Key = false;
+        }
 
-        public static int Fov = 90;
-        public static float Flash = 255;
+        public struct Trigger
+        {
+            public static bool Enabled = false;
+            public static bool Key = false;
+        }
 
-        ///////////////
-        //Glow Colors//
-        ///////////////
+        public struct Noflash
+        {
+            public static bool Enabled = false;
+            public static float Flash = 255;
+        }
 
-        public static float TeamRed = 0;
-        public static float TeamGreen = 0;
-        public static float TeamBlue = 255;
+        public struct Fovchanger
+        {
+            public static bool Enabled = false;
+            public static int Fov = 90;
+        }
 
-        public static float EnemyRed = 255;
-        public static float EnemyGreen = 0;
-        public static float EnemyBlue = 0;
+        public struct Nohands
+        {
+            public static bool Enabled = false;
+        }
 
-        ///////////////
-        //SKINCHANGER//
-        ///////////////
+        public struct Overlay
+        {
+            public static bool Enabled = false;
+            public static bool Crosshair = false;
+        }
 
-        public static int
-        INVALID = -1,
-        WEAPON_DEAGLE = 231,
-        WEAPON_ELITE = 658,
-        WEAPON_FIVESEVEN = 427,
-        WEAPON_GLOCK = 38,
-        WEAPON_AK47 = 282,
-        WEAPON_AUG = 9,
-        WEAPON_AWP = 475,
-        WEAPON_FAMAS = 10,
-        WEAPON_G3SG1 = 11,
-        WEAPON_GALILAR = 13,
-        WEAPON_M249 = 14,
-        WEAPON_M4A1 = 309,
-        WEAPON_MAC10 = 17,
-        WEAPON_P90 = 19,
-        WEAPON_UMP45 = 556,
-        WEAPON_XM1014 = 25,
-        WEAPON_BIZON = 26,
-        WEAPON_MAG7 = 27,
-        WEAPON_NEGEV = 28,
-        WEAPON_SAWEDOFF = 29,
-        WEAPON_TEC9 = 599,
-        WEAPON_TASER = 31,
-        WEAPON_HKP2000 = 32,
-        WEAPON_MP7 = 33,
-        WEAPON_MP9 = 34,
-        WEAPON_NOVA = 537,
-        WEAPON_P250 = 36,
-        WEAPON_SCAR20 = 312,
-        WEAPON_SG556 = 39,
-        WEAPON_SSG08 = 40,
-        WEAPON_KNIFE = 42,
-        WEAPON_FLASHBANG = 43,
-        WEAPON_HEGRENADE = 44,
-        WEAPON_SMOKEGRENADE = 45,
-        WEAPON_MOLOTOV = 46,
-        WEAPON_DECOY = 47,
-        WEAPON_INCGRENADE = 48,
-        WEAPON_C4 = 49,
-        WEAPON_KNIFE_T = 59,
-        WEAPON_M4A1_SILENCER = 77,
-        WEAPON_USP_SILENCER = 313,
-        WEAPON_CZ75A = 350,
-        WEAPON_REVOLVER = 64,
-        WEAPON_KNIFE_BAYONET = 500,
-        WEAPON_KNIFE_FLIP = 505,
-        WEAPON_KNIFE_GUT = 506,
-        WEAPON_KNIFE_KARAMBIT = 507,
-        WEAPON_KNIFE_M9_BAYONET = 508,
-        WEAPON_KNIFE_TACTICAL = 509,
-        WEAPON_KNIFE_FALCHION = 512,
-        WEAPON_KNIFE_SURVIVAL_BOWIE = 514,
-        WEAPON_KNIFE_BUTTERFLY = 515,
-        WEAPON_KNIFE_PUSH = 516,
-        GLOVE_STUDDED_BLOODHOUND = 5027,
-        GLOVE_T_SIDE = 5028,
-        GLOVE_CT_SIDE = 5029,
-        GLOVE_SPORTY = 5030,
-        GLOVE_SLICK = 5031,
-        GLOVE_LEATHER_WRAP = 5032,
-        GLOVE_MOTORCYCLE = 5033,
-        GLOVE_SPECIALIST = 5034;
+        public struct Skinchanger
+        {
+            public static bool Enabled = false;
+
+            public static int INVALID = -1;
+            public static int WEAPON_DEAGLE = 231;
+            public static int WEAPON_ELITE = 658;
+            public static int WEAPON_FIVESEVEN = 427;
+            public static int WEAPON_GLOCK = 38;
+            public static int WEAPON_AK47 = 282;
+            public static int WEAPON_AUG = 9;
+            public static int WEAPON_AWP = 475;
+            public static int WEAPON_FAMAS = 10;
+            public static int WEAPON_G3SG1 = 11;
+            public static int WEAPON_GALILAR = 13;
+            public static int WEAPON_M249 = 14;
+            public static int WEAPON_M4A1 = 309;
+            public static int WEAPON_MAC10 = 17;
+            public static int WEAPON_P90 = 19;
+            public static int WEAPON_UMP45 = 556;
+            public static int WEAPON_XM1014 = 25;
+            public static int WEAPON_BIZON = 26;
+            public static int WEAPON_MAG7 = 27;
+            public static int WEAPON_NEGEV = 28;
+            public static int WEAPON_SAWEDOFF = 29;
+            public static int WEAPON_TEC9 = 599;
+            public static int WEAPON_TASER = 31;
+            public static int WEAPON_HKP2000 = 32;
+            public static int WEAPON_MP7 = 33;
+            public static int WEAPON_MP9 = 34;
+            public static int WEAPON_NOVA = 537;
+            public static int WEAPON_P250 = 36;
+            public static int WEAPON_SCAR20 = 312;
+            public static int WEAPON_SG556 = 39;
+            public static int WEAPON_SSG08 = 40;
+            public static int WEAPON_KNIFE = 42;
+            public static int WEAPON_FLASHBANG = 43;
+            public static int WEAPON_HEGRENADE = 44;
+            public static int WEAPON_SMOKEGRENADE = 45;
+            public static int WEAPON_MOLOTOV = 46;
+            public static int WEAPON_DECOY = 47;
+            public static int WEAPON_INCGRENADE = 48;
+            public static int WEAPON_C4 = 49;
+            public static int WEAPON_KNIFE_T = 59;
+            public static int WEAPON_M4A1_SILENCER = 77;
+            public static int WEAPON_USP_SILENCER = 313;
+            public static int WEAPON_CZ75A = 350;
+            public static int WEAPON_REVOLVER = 64;
+            public static int WEAPON_KNIFE_BAYONET = 500;
+            public static int WEAPON_KNIFE_FLIP = 505;
+            public static int WEAPON_KNIFE_GUT = 506;
+            public static int WEAPON_KNIFE_KARAMBIT = 507;
+            public static int WEAPON_KNIFE_M9_BAYONET = 508;
+            public static int WEAPON_KNIFE_TACTICAL = 509;
+            public static int WEAPON_KNIFE_FALCHION = 512;
+            public static int WEAPON_KNIFE_SURVIVAL_BOWIE = 514;
+            public static int WEAPON_KNIFE_BUTTERFLY = 515;
+            public static int WEAPON_KNIFE_PUSH = 516;
+            public static int GLOVE_STUDDED_BLOODHOUND = 5027;
+            public static int GLOVE_T_SIDE = 5028;
+            public static int GLOVE_CT_SIDE = 5029;
+            public static int GLOVE_SPORTY = 5030;
+            public static int GLOVE_SLICK = 5031;
+            public static int GLOVE_LEATHER_WRAP = 5032;
+            public static int GLOVE_MOTORCYCLE = 5033;
+            public static int GLOVE_SPECIALIST = 5034;
+        }
     }
 }

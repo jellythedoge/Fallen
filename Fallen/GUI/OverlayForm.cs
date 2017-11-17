@@ -130,7 +130,7 @@ namespace Fallen.GUI
             //Crosshair//
             /////////////
 
-            if (Settings.CrosshairEnabled)
+            if (Settings.Overlay.Crosshair)
             {
                 Render.DrawEllipse(Crosshair, rect.left + rect.right / 2 - 3, rect.top + rect.bottom / 2 - 3, 5, 5);
             }

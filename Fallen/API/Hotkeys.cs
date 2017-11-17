@@ -40,23 +40,23 @@ namespace Fallen.API
             }
 
             //Bunny
-            if (WParam == (IntPtr)WMKeydown && VKCode == 0x20 && Settings.BhopEnabled)
+            if (WParam == (IntPtr)WMKeydown && VKCode == 0x20 && Settings.Bhop.Enabled)
             {
-                Settings.Spacedown = true; //True
+                Settings.Bhop.Key = true; //True
             }
             else if (WParam == (IntPtr)WMKeyup && VKCode == 0x20)
             {
-                Settings.Spacedown = false; //False
+                Settings.Bhop.Key = false; //False
             }
 
             //TriggerKey
-            if (WParam == (IntPtr)VkLmenu && Settings.TriggerEnabled)
+            if (WParam == (IntPtr)VkLmenu && Settings.Trigger.Enabled)
             {
-                Settings.LAltdown = true; //True
+                Settings.Trigger.Key = true; //True
             }
             else if (WParam == (IntPtr)WMKeyup && VKCode == 0xA4)
             {
-                Settings.LAltdown = false; //False
+                Settings.Trigger.Key = false; //False
             }
 
             //Panic

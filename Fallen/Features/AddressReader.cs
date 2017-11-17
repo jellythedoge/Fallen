@@ -2,6 +2,7 @@
 
 using System;
 using Fallen.API;
+using hazedumper;
 using System.Threading;
 
 #endregion

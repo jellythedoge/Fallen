@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 
 using Fallen.API;
+using hazedumper;
 
 namespace Fallen.Features
 {
@@ -15,11 +16,11 @@ namespace Fallen.Features
         {
             while (true)
             {
-                if (Settings.BhopEnabled)
+                if (Settings.Bhop.Enabled)
                 {
                     var flag = MainClass.Memory.ReadInt(LocalPlayer.Base + 0x100);
 
-                    if (flag == 257 && (Settings.Spacedown) || flag == 263 && (Settings.Spacedown))
+                    if (flag == 257 && (Settings.Bhop.Key) || flag == 263 && (Settings.Bhop.Key))
                     {
                         MainClass.Memory.WriteInt(MainClass.ClientPointer + signatures.dwForceJump, 5);
                     }

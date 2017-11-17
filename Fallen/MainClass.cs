@@ -52,18 +52,16 @@ namespace Fallen
             Console.WriteLine("//Fallen Sharp CSGO//");
             Console.WriteLine("/////////////////////");
             Console.WriteLine("");
-            //-<swap>
-            Console.WriteLine("Glow status - " + Settings.GlowEnabled + " //STATUS NOT ALWAYS CORRECT");
-            Console.WriteLine("ChamsE status - " + Settings.ChamsEnemy);
-            Console.WriteLine("ChamsT status - " + Settings.ChamsTeam);
-            Console.WriteLine("Trigger status - " + Settings.TriggerEnabled);
-            Console.WriteLine("Bhop status - " + Settings.BhopEnabled);
-            Console.WriteLine("NoFlash status - " + Settings.NoflashEnabled);
-            Console.WriteLine("FOV status - " + Settings.FovchangerEnabled);
-            Console.WriteLine("Skinchanger status - " + Settings.SkinchangerEnabled);
-            //-<swap/>
+            Console.WriteLine("GlowE status - " + Settings.Glow.GlowEnemy);
+            Console.WriteLine("GlowT status - " + Settings.Glow.GlowTeam);
+            Console.WriteLine("ChamsE status - " + Settings.Glow.ChamsEnemy);
+            Console.WriteLine("ChamsT status - " + Settings.Glow.ChamsTeam);
+            Console.WriteLine("Trigger status - " + Settings.Trigger.Enabled);
+            Console.WriteLine("Bhop status - " + Settings.Bhop.Enabled);
+            Console.WriteLine("NoFlash status - " + Settings.Noflash.Enabled);
+            Console.WriteLine("FOV status - " + Settings.Fovchanger.Enabled);
+            Console.WriteLine("Skinchanger status - " + Settings.Skinchanger.Enabled);
 
-            //-<swap>
             AddressReaderCall();
             ConsoleReaderCall();
             GlowCall();
@@ -71,9 +69,8 @@ namespace Fallen
             BunnyCall();
             SkinchangerCall();
             MischacksCall();
-            //-<swap/>
 
-            if (Settings.OverlayEnabled)
+            if (Settings.Overlay.Enabled)
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
@@ -85,8 +82,6 @@ namespace Fallen
         //ADRESS READER//
         /////////////////
 
-        //-<swap>
-
         public static void AddressReaderCall()
         {
             var AddressReader = new AddressReader();
@@ -94,8 +89,6 @@ namespace Fallen
             var AddressReaderThread = new Thread(AddressReader.Run);
             AddressReaderThread.Start();
         }
-
-        //-<block>
 
         //////////////////
         //CONSOLE READER//
@@ -109,8 +102,6 @@ namespace Fallen
             ConsoleReaderThread.Start();
         }
 
-        //-<block>
-
         ///////////////
         //GLOW THREAD//
         ///////////////
@@ -123,8 +114,6 @@ namespace Fallen
             GlowThread.Start();
         }
 
-        //-<block>
-
         //////////////////
         //TRIGGER THREAD//
         //////////////////
@@ -136,9 +125,7 @@ namespace Fallen
             var TriggerThread = new Thread(Trigger.Run);
             TriggerThread.Start();
         }
-
-        //-<block>
-
+        
         ////////////////
         //BUNNY THREAD//
         ////////////////
@@ -150,9 +137,7 @@ namespace Fallen
             var BunnyThread = new Thread(Bunny.Run);
             BunnyThread.Start();
         }
-
-        //-<block>
-
+        
         //////////////////////
         //SKINCHANGER THREAD//
         //////////////////////
@@ -164,9 +149,7 @@ namespace Fallen
             var SkinchangerThread = new Thread(Skinchanger.Run);
             SkinchangerThread.Start();
         }
-
-        //-<block>
-
+        
         ///////////////
         //MISC THREAD//
         ///////////////
@@ -178,7 +161,5 @@ namespace Fallen
             var MiscThread = new Thread(Misc.Run);
             MiscThread.Start();
         }
-
-        //-<swap/>
     }
 }

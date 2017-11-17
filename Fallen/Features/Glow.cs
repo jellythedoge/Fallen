@@ -1,6 +1,7 @@
 ﻿#region
 
 using Fallen.API;
+using hazedumper;
 using System.Threading;
 using System;
 
@@ -16,9 +17,6 @@ namespace Fallen.Features
             {
                 for (var i = 0; i < 64; i++)
                 {
-                    if (Settings.GlowEnabled)
-                        continue;
-                    //-<swap>
                     if (Arrays.Entity[i].Base == 0)
                         continue;
                     if (Arrays.Entity[i].Base == LocalPlayer.Base)
@@ -27,24 +25,19 @@ namespace Fallen.Features
                         continue;
                     if (Arrays.Entity[i].Dormant == 1)
                         continue;
-                    //-<swap/>
 
                     if (Arrays.Entity[i].Team != LocalPlayer.Team)
                     {
-                        if (Settings.GlowEnemy)
+                        if (Settings.Glow.GlowEnemy)
                         {
-                            //-<swap>
-
-                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x4, Settings.EnemyRed / 255);
-                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x8, Settings.EnemyGreen / 255);
-                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0xC, Settings.EnemyBlue / 255);
+                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x4, Settings.Glow.EnemyRed / 255);
+                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x8, Settings.Glow.EnemyGreen / 255);
+                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0xC, Settings.Glow.EnemyBlue / 255);
                             MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x10, (float) 200 / 255);
                             MainClass.Memory.WriteBool(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x24, true);
                             MainClass.Memory.WriteBool(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x25, false);
-                            
-                            //-<swap/>
 
-                            if (Settings.ChamsEnemy)
+                            if (Settings.Glow.ChamsEnemy)
                             {
                                 MainClass.Memory.WriteBool(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x2C, true);
 
@@ -54,20 +47,16 @@ namespace Fallen.Features
                     }
                     else
                     {
-                        if (Settings.GlowTeam)
+                        if (Settings.Glow.GlowTeam)
                         {
-                            //-<swap>
-
-                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x4, Settings.TeamRed / 255);
-                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x8, Settings.TeamGreen / 255);
-                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0xC, Settings.TeamBlue / 255);
+                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x4, Settings.Glow.TeamRed / 255);
+                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x8, Settings.Glow.TeamGreen / 255);
+                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0xC, Settings.Glow.TeamBlue / 255);
                             MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x10, (float) 200 / 255);
                             MainClass.Memory.WriteBool(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x24, true);
                             MainClass.Memory.WriteBool(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x25, false);
 
-                            //-<swap/>
-
-                            if (Settings.ChamsTeam)
+                            if (Settings.Glow.ChamsTeam)
                             {
                                 MainClass.Memory.WriteBool(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x2C, true);
 

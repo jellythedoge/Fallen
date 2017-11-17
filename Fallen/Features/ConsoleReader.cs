@@ -1,6 +1,7 @@
 ﻿#region
 
 using Fallen.API;
+using hazedumper;
 using System;
 using System.IO;
 using System.Reflection;
@@ -13,6 +14,8 @@ namespace Fallen.Features
     {
         internal void Run()
         {
+            bool glow = true;
+
             while (true)
             {
                 var input = Console.ReadLine();
@@ -25,66 +28,74 @@ namespace Fallen.Features
 
                     case "skins":
                     case "skinchanger":
-                        if (!Settings.SkinchangerEnabled)
+                        if (!Settings.Skinchanger.Enabled)
                         {
-                            Settings.SkinchangerEnabled = !Settings.SkinchangerEnabled;
+                            Settings.Skinchanger.Enabled = !Settings.Skinchanger.Enabled;
                             Console.WriteLine("Skinchanger Changer On!");
                         }
                         else
                         {
-                            Settings.SkinchangerEnabled = !Settings.SkinchangerEnabled;
+                            Settings.Skinchanger.Enabled = !Settings.Skinchanger.Enabled;
                             Console.WriteLine("Skinchanger changer Off!");
                         }
                         break;
 
                     case "change flash":
                         Console.WriteLine("Enter a number between 0-255");
-                        Settings.Flash = float.Parse(Console.ReadLine());
+                        Settings.Noflash.Flash = float.Parse(Console.ReadLine());
                         break;
 
                     case "change fov":
                         Console.WriteLine("Enter a number between 0-255");
-                        Settings.Fov = int.Parse(Console.ReadLine());
+                        Settings.Fovchanger.Fov = int.Parse(Console.ReadLine());
                         break;
 
                     case "noflash":
-                        if (Settings.NoflashEnabled)
+                        if (Settings.Noflash.Enabled)
                             Console.WriteLine("NoFlash Off!");
-                        else if (!Settings.NoflashEnabled)
+                        else if (!Settings.Noflash.Enabled)
                             Console.WriteLine("NoFlash On!");
 
-                        Settings.NoflashEnabled = !Settings.NoflashEnabled;
+                        Settings.Noflash.Enabled = !Settings.Noflash.Enabled;
                         break;
 
                     case "fov":
-                        if (!Settings.FovchangerEnabled)
+                        if (!Settings.Fovchanger.Enabled)
                         {
-                            Settings.FovchangerEnabled = !Settings.FovchangerEnabled;
+                            Settings.Fovchanger.Enabled = !Settings.Fovchanger.Enabled;
                             Console.WriteLine("Fov Changer On!");
                         }
                         else
                         {
-                            Settings.FovchangerEnabled = !Settings.FovchangerEnabled;
+                            Settings.Fovchanger.Enabled = !Settings.Fovchanger.Enabled;
                             Console.WriteLine("Fov changer Off!");
                         }
                         break;
 
                     case "glow":
                         MainClass.GlowCall();
-                        if (!Settings.GlowEnabled)
+                        if (!glow)
+                        {
                             Console.WriteLine("Glow On!");
+                            Settings.Glow.GlowEnemy = true;
+                            Settings.Glow.GlowTeam = true;
+                        }
                         else
+                        {
                             Console.WriteLine("Glow Off!");
+                            Settings.Glow.GlowEnemy = false;
+                            Settings.Glow.GlowTeam = true;
+                        }
                         break;
 
                     case "chams":
-                        Settings.ChamsTeam = !Settings.ChamsTeam;
-                        Settings.ChamsEnemy = !Settings.ChamsEnemy;
+                        Settings.Glow.ChamsTeam = !Settings.Glow.ChamsTeam;
+                        Settings.Glow.ChamsEnemy = !Settings.Glow.ChamsEnemy;
                         break;
 
                     case "trigger":
                         MainClass.TriggerCall();
-                        if (Settings.TriggerEnabled)
+                        if (Settings.Trigger.Enabled)
                             Console.WriteLine("Trigger On!");
                         else
                             Console.WriteLine("Trigger Off!");
@@ -92,7 +103,7 @@ namespace Fallen.Features
 
                     case "bhop":
                         MainClass.BunnyCall();
-                        if (Settings.BhopEnabled)
+                        if (Settings.Bhop.Enabled)
                             Console.WriteLine("Bhop On!");
                         else
                             Console.WriteLine("Bhop Off!");
@@ -111,15 +122,15 @@ namespace Fallen.Features
                         Console.WriteLine("//Fallen Sharp CSGO//");
                         Console.WriteLine("/////////////////////");
                         Console.WriteLine("");
-                        Console.WriteLine("");
-                        Console.WriteLine("Glow status - " + Settings.GlowEnabled + " //STATUS NOT ALWAYS CORRECT");
-                        Console.WriteLine("ChamsE status - " + Settings.ChamsEnemy);
-                        Console.WriteLine("ChamsT status - " + Settings.ChamsTeam);
-                        Console.WriteLine("Trigger status - " + Settings.TriggerEnabled);
-                        Console.WriteLine("Bhop status - " + Settings.BhopEnabled);
-                        Console.WriteLine("NoFlash status - " + Settings.NoflashEnabled);
-                        Console.WriteLine("FOV status - " + Settings.FovchangerEnabled);
-                        Console.WriteLine("Skinchanger status - " + Settings.SkinchangerEnabled);
+                        Console.WriteLine("GlowE status - " + Settings.Glow.GlowEnemy);
+                        Console.WriteLine("GlowT status - " + Settings.Glow.GlowTeam);
+                        Console.WriteLine("ChamsE status - " + Settings.Glow.ChamsEnemy);
+                        Console.WriteLine("ChamsT status - " + Settings.Glow.ChamsTeam);
+                        Console.WriteLine("Trigger status - " + Settings.Trigger.Enabled);
+                        Console.WriteLine("Bhop status - " + Settings.Bhop.Enabled);
+                        Console.WriteLine("NoFlash status - " + Settings.Noflash.Enabled);
+                        Console.WriteLine("FOV status - " + Settings.Fovchanger.Enabled);
+                        Console.WriteLine("Skinchanger status - " + Settings.Skinchanger.Enabled);
                         break;
 
                     case "save":

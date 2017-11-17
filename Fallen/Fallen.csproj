@@ -69,6 +69,7 @@
     <Compile Include="API\Structs.cs" />
     <Compile Include="Features\Bunny.cs" />
     <Compile Include="Features\ConsoleReader.cs" />
+    <Compile Include="Features\RCS.cs" />
     <Compile Include="Features\Skinchanger.cs" />
     <Compile Include="Features\Misc.cs" />
     <Compile Include="Features\Glow.cs" />
