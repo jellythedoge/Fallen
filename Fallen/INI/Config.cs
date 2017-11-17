@@ -63,6 +63,9 @@ namespace Fallen.INI.INI
                 var FovchangerEnabled = data["FOV"]["Enabled"];
                 var Fov = data["FOV"]["Fov"];
 
+                var HitsoundEnabled = data["HITSOUND"]["Enabled"];
+                var Hitsound = data["HITSOUND"]["Mode"];
+
                 var TriggerEnabled = data["TRIGGER"]["Enabled"];
 
                 var OverlayEnabled = data["OVERLAY"]["Enabled"];
@@ -104,6 +107,9 @@ namespace Fallen.INI.INI
                 Settings.Glow.ChamsTeam = bool.Parse(ChamsTeam);
                 Settings.Glow.GlowEnemy = bool.Parse(GlowEnemy);
                 Settings.Glow.ChamsEnemy = bool.Parse(ChamsEnemy);
+
+                Settings.Hitsound.Enabled = bool.Parse(HitsoundEnabled);
+                Settings.Hitsound.Mode = int.Parse(Hitsound);
 
                 Settings.Trigger.Enabled = bool.Parse(TriggerEnabled);
 
@@ -191,6 +197,9 @@ namespace Fallen.INI.INI
             data["NO FLASH"]["Flash Amount"] = Settings.Noflash.Flash.ToString();
 
             data["NOHANDS"]["Enabled"] = Settings.Noflash.Enabled.ToString();
+
+            data["HITSOUND"]["Enabled"] = Settings.Hitsound.Enabled.ToString();
+            data["HITSOUND"]["Mode"] = Settings.Hitsound.Mode.ToString();
 
             data["TRIGGER"]["Enabled"] = Settings.Trigger.Enabled.ToString();
 

@@ -40,7 +40,7 @@ namespace Fallen.Features
                         Weapon Weapon = new Weapon();
 
                         // Get Adress To Current Weapon Out Of Array Of Currently Equipped Weapons
-                        int iCurWeaponAdress = (MainClass.Memory.ReadInt(LocalPlayer.Base + netvars.m_hMyWeapons + (i - 1) * 0x4)) & 0xFFF;
+                        var iCurWeaponAdress = (MainClass.Memory.ReadInt(LocalPlayer.Base + netvars.m_hMyWeapons + (i - 1) * 0x4)) & 0xFFF;
 
                         // Get Baseadress of The Current Weapon
                         Weapon.m_iBase = MainClass.Memory.ReadInt(MainClass.ClientPointer + signatures.dwEntityList + (iCurWeaponAdress - 1) * 0x10);
@@ -260,7 +260,7 @@ namespace Fallen.Features
                                 ItemDefinition = 1337;
                                 break;
                         }
-
+                        
                         // Check If The Weapon Doesn't Have The Skin Yet
                         if (Weapon.m_iTexture != OverrideTexture && OverrideTexture != 1337)
                         {

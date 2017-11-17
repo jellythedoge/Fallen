@@ -16,10 +16,14 @@ namespace Fallen.Features
     {
         internal void Run()
         {
+            var HitAmmount = 1;
+            var player = new System.Media.SoundPlayer();
+
             while (true)
             {
                 var FovCheck = MainClass.Memory.ReadInt(LocalPlayer.Base + netvars.m_iFOV);
                 var NohandsCheck = MainClass.Memory.ReadInt(LocalPlayer.Base + 0x254);
+                var HitVal = MainClass.Memory.ReadInt(LocalPlayer.Base + 0xA2C8);
                 bool EndFlash = (!Settings.Noflash.Enabled);
                 
                 ///////////////
@@ -76,6 +80,44 @@ namespace Fallen.Features
                     MainClass.Memory.WriteInt(LocalPlayer.Base + 0x254, 255);
                 }
 
+                /////////////
+                //HIT SOUND//
+                /////////////
+                
+                if (Settings.Hitsound.Enabled)
+                {
+                    if (Settings.Hitsound.Mode == 1)
+                    {
+                        if (HitAmmount != HitVal)
+                        {
+                            player.Stream = Properties.Resources.cod;
+                            player.Play();
+                            HitAmmount = HitVal;
+                        }
+                    }
+                    else if (Settings.Hitsound.Mode == 2)
+                    {
+                        if (HitAmmount != HitVal)
+                        {
+                            player.Stream = Properties.Resources.anime;
+                            player.Play();
+                            HitAmmount = HitVal;
+                        }
+                    }
+                    else if (Settings.Hitsound.Mode == 3)
+                    {
+                        if (HitAmmount != HitVal)
+                        {
+                            player.Stream = Properties.Resources.bubble;
+                            player.Play();
+                            HitAmmount = HitVal;
+                        }
+                    }
+                    else
+                    {
+                        Settings.Hitsound.Mode = 1;
+                    }
+                }
                 Thread.Sleep(10);
             }
         }

@@ -64,6 +64,12 @@ namespace Fallen.API
             public static bool Crosshair = false;
         }
 
+        public struct Hitsound
+        {
+            public static bool Enabled = false;
+            public static int Mode = 1;
+        }
+
         public struct Skinchanger
         {
             public static bool Enabled = false;
