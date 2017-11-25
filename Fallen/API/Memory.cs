@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
+using Fallen.API;
+
 #endregion
 
 namespace Memory
@@ -15,43 +17,46 @@ namespace Memory
         //Public Mem Class//
         ////////////////////
 
-        // Nested Types
-        [Flags]
-        public enum ProcessAccessFlags : uint
-        {
-            All = 2035711,
-            CreateThread = 2,
-            DupHandle = 64,
-            QueryInformation = 1024,
-            SetInformation = 512,
-            Synchronize = 1048576,
-            Terminate = 1,
-            VmOperation = 8,
-            VmRead = 16,
-            VmWrite = 32
-        }
-
         // Fields
         protected int BaseAddress;
 
-        protected Process[] MyProcess;
-        protected ProcessModule MyProcessModule;
-        protected int ProcessHandle;
-        protected string ProcessName;
+        public Process[] MyProcess;
+        public ProcessModule MyProcessModule;
+        public int ProcessHandle;
+        public string ProcessName;
 
-        // Methods
         public ProcessMemory(string pProcessName)
         {
             ProcessName = pProcessName;
         }
 
-        public bool CheckProcess()
+        public bool StartProcess()
         {
-            return Process.GetProcessesByName(ProcessName).Length > 0;
+            if (ProcessName != "")
+            {
+                MyProcess = Process.GetProcessesByName(ProcessName);
+                if (MyProcess.Length == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(ProcessName + " IS NOT RUNNING OR HAS NOT BEEN FOUND!. ", "Process Not Found");
+                    Console.ReadKey();
+                    Environment.Exit(0);
+                    return false;
+                }
+                ProcessHandle = OpenProcess(2035711, false, MyProcess[0].Id);
+                if (ProcessHandle == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(ProcessName + " IS NOT RUNNING OR HAS NOT BEEN FOUND!. ", "Process Not Found");
+                    Console.ReadKey();
+                    Environment.Exit(0);
+                    return false;
+                }
+                return true;
+            }
+            Console.WriteLine("Define process name first!");
+            return false;
         }
-
-        [DllImport("kernel32.dll")]
-        public static extern bool CloseHandle(int hObject);
 
         public string CutString(string mystring)
         {
@@ -78,9 +83,6 @@ namespace Memory
             return -1;
         }
 
-        [DllImport("user32.dll", EntryPoint = "FindWindow", SetLastError = true)]
-        public static extern int FindWindowByCaption(int zeroOnly, string lpWindowName);
-
         public int ImageAddress()
         {
             BaseAddress = 0;
@@ -97,13 +99,7 @@ namespace Memory
             return pOffset + BaseAddress;
         }
 
-        public string MyProcessName()
-        {
-            return ProcessName;
-        }
-
-        [DllImport("kernel32.dll")]
-        public static extern int OpenProcess(uint dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+        #region Pointers
 
         public int Pointer(bool addToImageAddress, int pOffset)
         {
@@ -166,6 +162,10 @@ namespace Memory
         {
             return ReadInt(ReadInt(ReadInt(ReadInt(ReadInt(DllImageAddress(module) + pOffset) + pOffset2) + pOffset3) + pOffset4) + pOffset5) + pOffset6;
         }
+
+        #endregion
+
+        #region ReadMem
 
         public byte ReadByte(int pOffset)
         {
@@ -234,8 +234,6 @@ namespace Memory
             return BitConverter.ToDouble(ReadMem(DllImageAddress(module) + pOffset, 8), 0);
         }
 
-
-        //DEMO READ CHAR
         public virtual Char ReadChar(int pOffset)
         {
             return BitConverter.ToChar(ReadMem(pOffset, 4), 0);
@@ -250,6 +248,7 @@ namespace Memory
         {
             return BitConverter.ToChar(ReadMem(DllImageAddress(module) + pOffset, 4), 0);
         }
+
         //DEMO READ CHAR/
 
         public int ReadInt(int pOffset)
@@ -281,9 +280,6 @@ namespace Memory
             ReadProcessMemory(ProcessHandle, lpBaseAddress, buffer, pSize, 0);
             return buffer;
         }
-
-        [DllImport("kernel32.dll")]
-        public static extern bool ReadProcessMemory(int hProcess, int lpBaseAddress, byte[] buffer, int size, int lpNumberOfBytesRead);
 
         public short ReadShort(int pOffset)
         {
@@ -345,36 +341,9 @@ namespace Memory
             return BitConverter.ToUInt32(ReadMem(DllImageAddress(module) + pOffset, 4), 0);
         }
 
-        public bool StartProcess()
-        {
-            if (ProcessName != "")
-            {
-                MyProcess = Process.GetProcessesByName(ProcessName);
-                if (MyProcess.Length == 0)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(ProcessName + " IS NOT RUNNING OR HAS NOT BEEN FOUND!. ", "Process Not Found");
-                    Console.ReadKey();
-                    Environment.Exit(0);
-                    return false;
-                }
-                ProcessHandle = OpenProcess(2035711, false, MyProcess[0].Id);
-                if (ProcessHandle == 0)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(ProcessName + " IS NOT RUNNING OR HAS NOT BEEN FOUND!. ", "Process Not Found");
-                    Console.ReadKey();
-                    Environment.Exit(0);
-                    return false;
-                }
-                return true;
-            }
-            Console.WriteLine("Define process name first!");
-            return false;
-        }
+        #endregion
 
-        [DllImport("kernel32.dll")]
-        public static extern bool VirtualProtectEx(int hProcess, int lpAddress, int dwSize, uint flNewProtect, out uint lpflOldProtect);
+        #region WriteMem
 
         public void WriteByte(int pOffset, byte pBytes)
         {
@@ -421,7 +390,6 @@ namespace Memory
             WriteMem(DllImageAddress(module) + pOffset, BitConverter.GetBytes(pBytes));
         }
 
-        //BOOL
         public void WriteBool(int pOffset, bool pBytes)
         {
             WriteMem(pOffset, BitConverter.GetBytes(pBytes));
@@ -437,9 +405,6 @@ namespace Memory
             WriteMem(DllImageAddress(module) + pOffset, BitConverter.GetBytes(pBytes));
         }
 
-        //BOOL
-
-        //Char trash
         public void WriteChar(int pOffset, char pBytes)
         {
             WriteMem(pOffset, BitConverter.GetBytes(pBytes));
@@ -454,8 +419,6 @@ namespace Memory
         {
             WriteMem(DllImageAddress(module) + pOffset, BitConverter.GetBytes(pBytes));
         }
-
-        //char trash/
 
         public void WriteInt(int pOffset, int pBytes)
         {
@@ -482,9 +445,6 @@ namespace Memory
             var lpBaseAddress = addToImageAddress ? ImageAddress(pOffset) : pOffset;
             WriteProcessMemory(ProcessHandle, lpBaseAddress, pBytes, pBytes.Length, 0);
         }
-
-        [DllImport("kernel32.dll")]
-        public static extern bool WriteProcessMemory(int hProcess, int lpBaseAddress, byte[] buffer, int size, int lpNumberOfBytesWritten);
 
         public void WriteShort(int pOffset, short pBytes)
         {
@@ -545,5 +505,58 @@ namespace Memory
         {
             WriteMem(DllImageAddress(module) + pOffset, BitConverter.GetBytes(pBytes));
         }
+
+        #endregion
+
+        #region SigScanning
+
+        //Nothing Here Yet.....
+
+        #endregion
+
+        #region DLLIMPORTS
+
+        ///////////////
+        //DLL IMPORTs//
+        ///////////////
+
+        [DllImport("kernel32.dll")]
+        public static extern bool CloseHandle(int hObject);
+
+        [DllImport("kernel32.dll")]
+        public static extern int OpenProcess(uint dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+
+        [DllImport("user32.dll", EntryPoint = "FindWindow", SetLastError = true)]
+        public static extern int FindWindowByCaption(int zeroOnly, string lpWindowName);
+
+        [DllImport("kernel32.dll")]
+        public static extern bool ReadProcessMemory(int hProcess, int lpBaseAddress, byte[] buffer, int size, int lpNumberOfBytesRead);
+
+        [DllImport("kernel32.dll")]
+        public static extern bool VirtualProtectEx(int hProcess, int lpAddress, int dwSize, uint flNewProtect, out uint lpflOldProtect);
+
+        [DllImport("kernel32.dll")]
+        public static extern bool WriteProcessMemory(int hProcess, int lpBaseAddress, byte[] buffer, int size, int lpNumberOfBytesWritten);
+
+        #endregion
+
+        #region ProcessAccessFlags
+
+        [Flags]
+        public enum ProcessAccessFlags : uint
+        {
+            All = 2035711,
+            CreateThread = 2,
+            DupHandle = 64,
+            QueryInformation = 1024,
+            SetInformation = 512,
+            Synchronize = 1048576,
+            Terminate = 1,
+            VmOperation = 8,
+            VmRead = 16,
+            VmWrite = 32
+        }
+
+        #endregion
     }
 }

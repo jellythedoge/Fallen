@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Windows.Forms;
 
 using Fallen.API;
 using hazedumper;
@@ -16,6 +17,10 @@ namespace Fallen.Features
         {
             while (true)
             {
+                if (SDK.GameActive)
+                {
+
+                }
                 if (Settings.Bhop.Enabled)
                 {
                     var flag = MainClass.Memory.ReadInt(LocalPlayer.Base + 0x100);

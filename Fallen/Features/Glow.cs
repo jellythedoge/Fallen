@@ -33,7 +33,7 @@ namespace Fallen.Features
                             MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x4, Settings.Glow.EnemyRed / 255);
                             MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x8, Settings.Glow.EnemyGreen / 255);
                             MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0xC, Settings.Glow.EnemyBlue / 255);
-                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x10, (float) 200 / 255);
+                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x10, (float) 100 / 255);
                             MainClass.Memory.WriteBool(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x24, true);
                             MainClass.Memory.WriteBool(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x25, false);
 
@@ -52,7 +52,7 @@ namespace Fallen.Features
                             MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x4, Settings.Glow.TeamRed / 255);
                             MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x8, Settings.Glow.TeamGreen / 255);
                             MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0xC, Settings.Glow.TeamBlue / 255);
-                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x10, (float) 200 / 255);
+                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x10, (float) 100 / 255);
                             MainClass.Memory.WriteBool(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x24, true);
                             MainClass.Memory.WriteBool(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x25, false);
 

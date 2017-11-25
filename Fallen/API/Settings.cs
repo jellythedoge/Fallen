@@ -33,6 +33,7 @@ namespace Fallen.API
         {
             public static bool Enabled = false;
             public static bool Key = false;
+            public static int JumpAmmount = 0;
         }
 
         public struct Trigger

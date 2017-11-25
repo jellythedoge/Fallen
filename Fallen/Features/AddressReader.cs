@@ -25,6 +25,12 @@ namespace Fallen.Features
                 LocalPlayer.GlowBase = MainClass.Memory.ReadInt(MainClass.ClientPointer + signatures.dwGlowObjectManager);
                 LocalPlayer.JumpFlags = MainClass.Memory.ReadInt(LocalPlayer.Base + netvars.m_fFlags);
 
+                //////////////
+                //MISC STUFF//
+                //////////////
+
+                LocalPlayer.GameState = MainClass.Memory.ReadByte(LocalPlayer.ClientState + 0x100);
+
                 ////////////////
                 //ENTITY STUFF//
                 ////////////////

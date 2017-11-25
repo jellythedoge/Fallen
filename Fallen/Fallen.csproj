@@ -59,17 +59,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\Weapons.cs" />
+    <Compile Include="API\SDK.cs" />
     <Compile Include="Features\AddressReader.cs" />
-    <Compile Include="API\DLLImports.cs" />
-    <Compile Include="API\Hotkeys.cs" />
     <Compile Include="API\Memory.cs" />
     <Compile Include="API\Offsets.cs" />
     <Compile Include="API\Settings.cs" />
-    <Compile Include="API\Structs.cs" />
     <Compile Include="Features\Bunny.cs" />
     <Compile Include="Features\ConsoleReader.cs" />
-    <Compile Include="Features\RCS.cs" />
     <Compile Include="Features\Skinchanger.cs" />
     <Compile Include="Features\Misc.cs" />
     <Compile Include="Features\Glow.cs" />

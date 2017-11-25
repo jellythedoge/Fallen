@@ -28,8 +28,6 @@ namespace Fallen
             ClientPointer = Memory.DllImageAddress("client.dll");
             EnginePointer = Memory.DllImageAddress("engine.dll");
 
-            DLLImports.SetHook();
-
             Initialize();
 
             Application.Run();
@@ -68,6 +66,8 @@ namespace Fallen
             BunnyCall();
             SkinchangerCall();
             MischacksCall();
+
+            SDK.KeyboardProc();
 
             if (Settings.Overlay.Enabled)
             {

@@ -1,7 +1,7 @@
 ﻿using System;
 
 // Offsets timestamp
-// Fri, 17 Nov 2017 11:45:03 +1300
+// Thu, 23 Nov 2017 06:49:02 +1300
 
 namespace hazedumper
 {
@@ -67,6 +67,10 @@ namespace hazedumper
         public const Int32 m_vecViewOffset = 0x104;
         public const Int32 m_viewPunchAngle = 0x3010;
         public const Int32 m_szArmsModel = 0x38D7;
+        public const Int32 m_hViewModel = 0x32DC;
+        public const Int32 m_nModelIndex = 0x254;
+        public const Int32 m_flLowerBodyYawTarget = 0x39DC;
+        public const Int32 m_angEyeAngles = 0xB23C;
     }
     public static class signatures
     {
