@@ -19,14 +19,13 @@ namespace Fallen
 
         public static int ClientPointer;
         public static int EnginePointer;
-        public static ProcessMemory Memory = new ProcessMemory("csgo");
 
         static void Main(string[] args)
         {
-            Memory.StartProcess();
+            ProcessMemory.Initialize("csgo");
 
-            ClientPointer = Memory.DllImageAddress("client.dll");
-            EnginePointer = Memory.DllImageAddress("engine.dll");
+            ClientPointer = ProcessMemory.GetModuleAdress("client");
+            EnginePointer = ProcessMemory.GetModuleAdress("engine");
 
             Initialize();
 

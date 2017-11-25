@@ -17,21 +17,17 @@ namespace Fallen.Features
         {
             while (true)
             {
-                if (SDK.GameActive)
-                {
-
-                }
                 if (Settings.Bhop.Enabled)
                 {
-                    var flag = MainClass.Memory.ReadInt(LocalPlayer.Base + 0x100);
+                    var flag = Memory.ProcessMemory.ReadMemory<int>(LocalPlayer.Base + 0x100);
 
                     if (flag == 257 && (Settings.Bhop.Key) || flag == 263 && (Settings.Bhop.Key))
                     {
-                        MainClass.Memory.WriteInt(MainClass.ClientPointer + signatures.dwForceJump, 5);
+                        Memory.ProcessMemory.WriteMemory<int>(MainClass.ClientPointer + signatures.dwForceJump, 5);
                     }
                     else
                     {
-                        MainClass.Memory.WriteInt(MainClass.ClientPointer + signatures.dwForceJump, 4);
+                        Memory.ProcessMemory.WriteMemory<int>(MainClass.ClientPointer + signatures.dwForceJump, 4);
                     }
                 }
                 Thread.Sleep(1);

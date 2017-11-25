@@ -19,17 +19,17 @@ namespace Fallen.Features
                 //LOCAL PLAYER//
                 ////////////////
 
-                LocalPlayer.Base = MainClass.Memory.ReadInt(MainClass.ClientPointer + signatures.dwLocalPlayer);
-                LocalPlayer.Team = MainClass.Memory.ReadInt(LocalPlayer.Base + netvars.m_iTeamNum);
-                LocalPlayer.ClientState = MainClass.Memory.ReadInt(MainClass.EnginePointer + signatures.dwClientState);
-                LocalPlayer.GlowBase = MainClass.Memory.ReadInt(MainClass.ClientPointer + signatures.dwGlowObjectManager);
-                LocalPlayer.JumpFlags = MainClass.Memory.ReadInt(LocalPlayer.Base + netvars.m_fFlags);
+                LocalPlayer.Base = Memory.ProcessMemory.ReadMemory<int>(MainClass.ClientPointer + signatures.dwLocalPlayer);
+                LocalPlayer.Team = Memory.ProcessMemory.ReadMemory<int>(LocalPlayer.Base + netvars.m_iTeamNum);
+                LocalPlayer.ClientState = Memory.ProcessMemory.ReadMemory<int>(MainClass.EnginePointer + signatures.dwClientState);
+                LocalPlayer.GlowBase = Memory.ProcessMemory.ReadMemory<int>(MainClass.ClientPointer + signatures.dwGlowObjectManager);
+                LocalPlayer.JumpFlags = Memory.ProcessMemory.ReadMemory<int>(LocalPlayer.Base + netvars.m_fFlags);
 
                 //////////////
                 //MISC STUFF//
                 //////////////
 
-                LocalPlayer.GameState = MainClass.Memory.ReadByte(LocalPlayer.ClientState + 0x100);
+                LocalPlayer.GameState = Memory.ProcessMemory.ReadMemory<byte>(LocalPlayer.ClientState + 0x100);
 
                 ////////////////
                 //ENTITY STUFF//
@@ -39,15 +39,15 @@ namespace Fallen.Features
                 {
                     var entity = Arrays.Entity[i];
 
-                    entity.Base = MainClass.Memory.ReadInt(MainClass.ClientPointer + signatures.dwEntityList + i * 0x10);
+                    entity.Base = Memory.ProcessMemory.ReadMemory<int>(MainClass.ClientPointer + signatures.dwEntityList + i * 0x10);
 
                     if (entity.Base != 0)
                     {
                         
-                        entity.Team = MainClass.Memory.ReadInt(entity.Base + netvars.m_iTeamNum);
-                        entity.Health = MainClass.Memory.ReadInt(entity.Base + netvars.m_iHealth);
-                        entity.Dormant = MainClass.Memory.ReadInt(entity.Base + 0xE9);
-                        entity.GlowIndex = MainClass.Memory.ReadInt(entity.Base + netvars.m_iGlowIndex);
+                        entity.Team = Memory.ProcessMemory.ReadMemory<int>(entity.Base + netvars.m_iTeamNum);
+                        entity.Health = Memory.ProcessMemory.ReadMemory<int>(entity.Base + netvars.m_iHealth);
+                        entity.Dormant = Memory.ProcessMemory.ReadMemory<int>(entity.Base + 0xE9);
+                        entity.GlowIndex = Memory.ProcessMemory.ReadMemory<int>(entity.Base + netvars.m_iGlowIndex);
 
                         Arrays.Entity[i] = entity;
                     }

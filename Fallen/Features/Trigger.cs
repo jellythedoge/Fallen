@@ -16,19 +16,19 @@ namespace Fallen.Features
             {
                 if (Settings.Trigger.Enabled)
                 {
-                    var entityInCrossId = MainClass.Memory.ReadInt(LocalPlayer.Base + netvars.m_iCrosshairId);
+                    var entityInCrossId = Memory.ProcessMemory.ReadMemory<int>(LocalPlayer.Base + netvars.m_iCrosshairId);
                     if (entityInCrossId != 0)
                     {
-                        var entityBase = MainClass.Memory.ReadInt(MainClass.ClientPointer + signatures.dwEntityList + (entityInCrossId - 1) * 0x10);
-                        var entityTeam = MainClass.Memory.ReadInt(entityBase + netvars.m_iTeamNum);
+                        var entityBase = Memory.ProcessMemory.ReadMemory<int>(MainClass.ClientPointer + signatures.dwEntityList + (entityInCrossId - 1) * 0x10);
+                        var entityTeam = Memory.ProcessMemory.ReadMemory<int>(entityBase + netvars.m_iTeamNum);
                         if (!Settings.Trigger.Key)
                             Thread.Sleep(1);
 
                         if (Settings.Trigger.Key && entityTeam != LocalPlayer.Team)
                         {
-                            MainClass.Memory.WriteInt(MainClass.ClientPointer + signatures.dwForceAttack, 5);
+                            Memory.ProcessMemory.WriteMemory<int>(MainClass.ClientPointer + signatures.dwForceAttack, 5);
                             Thread.Sleep(2);
-                            MainClass.Memory.WriteInt(MainClass.ClientPointer + signatures.dwForceAttack, 4);
+                            Memory.ProcessMemory.WriteMemory<int>(MainClass.ClientPointer + signatures.dwForceAttack, 4);
                             Thread.Sleep(4);
                         }
                     }

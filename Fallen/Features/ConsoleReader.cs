@@ -22,8 +22,8 @@ namespace Fallen.Features
                 switch (input.ToLower())
                 {
                     case "test":
-                        Console.WriteLine(MainClass.Memory.ReadInt(LocalPlayer.Base + netvars.m_iHealth));
-                        MainClass.Memory.WriteInt(netvars.m_iHealth, 500);
+                        Console.WriteLine(Memory.ProcessMemory.ReadMemory<int>(LocalPlayer.Base + netvars.m_iHealth));
+                        Memory.ProcessMemory.WriteMemory<int>(netvars.m_iHealth, 500);
                         break;
 
                     case "skins":

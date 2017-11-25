@@ -21,9 +21,9 @@ namespace Fallen.Features
 
             while (true)
             {
-                var FovCheck = MainClass.Memory.ReadInt(LocalPlayer.Base + netvars.m_iFOV);
-                var NohandsCheck = MainClass.Memory.ReadInt(LocalPlayer.Base + 0x254);
-                var HitVal = MainClass.Memory.ReadInt(LocalPlayer.Base + 0xA2C8);
+                var FovCheck = Memory.ProcessMemory.ReadMemory<int>(LocalPlayer.Base + netvars.m_iFOV);
+                var NohandsCheck = Memory.ProcessMemory.ReadMemory<int>(LocalPlayer.Base + 0x254);
+                var HitVal = Memory.ProcessMemory.ReadMemory<int>(LocalPlayer.Base + 0xA2C8);
                 bool EndFlash = (!Settings.Noflash.Enabled);
                 
                 ///////////////
@@ -32,11 +32,11 @@ namespace Fallen.Features
 
                 if (Settings.Fovchanger.Enabled)
                 {
-                    if (!MainClass.Memory.ReadBool(LocalPlayer.Base + netvars.m_bIsScoped))
+                    if (!Memory.ProcessMemory.ReadMemory<bool>(LocalPlayer.Base + netvars.m_bIsScoped))
                     {
                         if (FovCheck != Settings.Fovchanger.Fov)
                         {
-                            MainClass.Memory.WriteInt(LocalPlayer.Base + netvars.m_iFOV, Settings.Fovchanger.Fov);
+                            Memory.ProcessMemory.WriteMemory<int>(LocalPlayer.Base + netvars.m_iFOV, Settings.Fovchanger.Fov);
                         }
                     }
                 }
@@ -47,13 +47,13 @@ namespace Fallen.Features
 
                 if (Settings.Noflash.Enabled || EndFlash)
                 {
-                    var FlashCheck = MainClass.Memory.ReadFloat(LocalPlayer.Base + netvars.m_flFlashMaxAlpha);
+                    var FlashCheck = Memory.ProcessMemory.ReadMemory<float>(LocalPlayer.Base + netvars.m_flFlashMaxAlpha);
 
                     if (EndFlash)
                     {
                         if (FlashCheck == Settings.Noflash.Flash && FlashCheck != 255)
                         {
-                            MainClass.Memory.WriteFloat(LocalPlayer.Base + netvars.m_flFlashMaxAlpha, 255);
+                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.Base + netvars.m_flFlashMaxAlpha, 255);
                             Console.WriteLine("Flash one");
                         }
                     }
@@ -61,8 +61,8 @@ namespace Fallen.Features
                     {
                         if (FlashCheck != Settings.Noflash.Flash && FlashCheck != 0)
                         {
-                            MainClass.Memory.WriteFloat(LocalPlayer.Base + netvars.m_flFlashMaxAlpha, Settings.Noflash.Flash);
-                            Console.WriteLine(MainClass.Memory.ReadFloat(LocalPlayer.Base + netvars.m_flFlashMaxAlpha)); 
+                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.Base + netvars.m_flFlashMaxAlpha, Settings.Noflash.Flash);
+                            Console.WriteLine(Memory.ProcessMemory.ReadMemory<float>(LocalPlayer.Base + netvars.m_flFlashMaxAlpha)); 
                         }
                     }
                 }
@@ -73,11 +73,11 @@ namespace Fallen.Features
 
                 if (Settings.Nohands.Enabled && NohandsCheck != 0)
                 {
-                    MainClass.Memory.WriteInt(LocalPlayer.Base + 0x254, 0);
+                    Memory.ProcessMemory.WriteMemory<int>(LocalPlayer.Base + 0x254, 0);
                 }
                 else if (!Settings.Nohands.Enabled && NohandsCheck != 317)
                 {
-                    MainClass.Memory.WriteInt(LocalPlayer.Base + 0x254, 317);
+                    Memory.ProcessMemory.WriteMemory<int>(LocalPlayer.Base + 0x254, 317);
                 }
 
                 /////////////

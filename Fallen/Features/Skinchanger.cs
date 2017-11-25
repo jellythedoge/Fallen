@@ -41,24 +41,24 @@ namespace Fallen.Features
                         Weapon Weapon = new Weapon();
 
                         // Get Adress To Current Weapon Out Of Array Of Currently Equipped Weapons
-                        var MyWeapons = (MainClass.Memory.ReadInt(LocalPlayer.Base + netvars.m_hMyWeapons + (i - 1) * 0x4)) & 0xFFF;
+                        var MyWeapons = (Memory.ProcessMemory.ReadMemory<int>(LocalPlayer.Base + netvars.m_hMyWeapons + (i - 1) * 0x4)) & 0xFFF;
 
-                        var CurWeapon = (MainClass.Memory.ReadInt(LocalPlayer.Base + netvars.m_hActiveWeapon + (i - 1) * 0x4)) & 0xFFF;
+                        var CurWeapon = (Memory.ProcessMemory.ReadMemory<int>(LocalPlayer.Base + netvars.m_hActiveWeapon + (i - 1) * 0x4)) & 0xFFF;
 
                         // Get Baseadress of my Weapons
-                        Weapon.m_iBase = MainClass.Memory.ReadInt(MainClass.ClientPointer + signatures.dwEntityList + (MyWeapons - 1) * 0x10);
+                        Weapon.m_iBase = Memory.ProcessMemory.ReadMemory<int>(MainClass.ClientPointer + signatures.dwEntityList + (MyWeapons - 1) * 0x10);
 
                         // Get Baseadress of held Weapon
-                        Weapon.Held = MainClass.Memory.ReadInt(MainClass.ClientPointer + signatures.dwEntityList + (CurWeapon - 1) * 0x10);
+                        Weapon.Held = Memory.ProcessMemory.ReadMemory<int>(MainClass.ClientPointer + signatures.dwEntityList + (CurWeapon - 1) * 0x10);
 
                         // Get The WeaponID
-                        Weapon.m_iItemDefinitionIndex = MainClass.Memory.ReadInt(Weapon.m_iBase + netvars.m_iItemDefinitionIndex);
+                        Weapon.m_iItemDefinitionIndex = Memory.ProcessMemory.ReadMemory<int>(Weapon.m_iBase + netvars.m_iItemDefinitionIndex);
 
                         // Get EntityID Of WeaponOwner
-                        Weapon.m_iXuIDLow = MainClass.Memory.ReadInt(Weapon.m_iBase + netvars.m_OriginalOwnerXuidLow);
+                        Weapon.m_iXuIDLow = Memory.ProcessMemory.ReadMemory<int>(Weapon.m_iBase + netvars.m_OriginalOwnerXuidLow);
 
                         // Get Weapon Skin
-                        Weapon.m_iTexture = MainClass.Memory.ReadInt(Weapon.m_iBase + netvars.m_nFallbackPaintKit);
+                        Weapon.m_iTexture = Memory.ProcessMemory.ReadMemory<int>(Weapon.m_iBase + netvars.m_nFallbackPaintKit);
 
                         switch (Weapon.m_iItemDefinitionIndex)
                         {
@@ -299,13 +299,13 @@ namespace Fallen.Features
                             #region SETSKIN
 
                             // Set New Item Values
-                            MainClass.Memory.WriteInt(Weapon.m_iBase + netvars.m_iItemIDLow, -1);
-                            MainClass.Memory.WriteInt(Weapon.m_iBase + netvars.m_nFallbackPaintKit, OverrideTexture);
-                            MainClass.Memory.WriteInt(Weapon.m_iBase + netvars.m_nFallbackSeed, 661);
-                            MainClass.Memory.WriteInt(Weapon.m_iBase + netvars.m_nFallbackStatTrak, StatTrak);
-                            MainClass.Memory.WriteFloat(Weapon.m_iBase + netvars.m_flFallbackWear, 0.00001f);
-                            MainClass.Memory.WriteInt(Weapon.m_iBase + netvars.m_iAccountID, Weapon.m_iXuIDLow);
-                            MainClass.Memory.WriteInt(Weapon.m_iBase + netvars.m_iItemDefinitionIndex, ItemDefinition);
+                            Memory.ProcessMemory.WriteMemory<int>(Weapon.m_iBase + netvars.m_iItemIDLow, -1);
+                            Memory.ProcessMemory.WriteMemory<int>(Weapon.m_iBase + netvars.m_nFallbackPaintKit, OverrideTexture);
+                            Memory.ProcessMemory.WriteMemory<int>(Weapon.m_iBase + netvars.m_nFallbackSeed, 661);
+                            Memory.ProcessMemory.WriteMemory<int>(Weapon.m_iBase + netvars.m_nFallbackStatTrak, StatTrak);
+                            Memory.ProcessMemory.WriteMemory<float>(Weapon.m_iBase + netvars.m_flFallbackWear, 0.00001f);
+                            Memory.ProcessMemory.WriteMemory<int>(Weapon.m_iBase + netvars.m_iAccountID, Weapon.m_iXuIDLow);
+                            Memory.ProcessMemory.WriteMemory<int>(Weapon.m_iBase + netvars.m_iItemDefinitionIndex, ItemDefinition);
 
                             #endregion
 
@@ -328,7 +328,7 @@ namespace Fallen.Features
 
         internal static void ForceFullUpdate()
         {
-            MainClass.Memory.WriteInt(LocalPlayer.ClientState + 0x174, -1);
+            Memory.ProcessMemory.WriteMemory<int>(LocalPlayer.ClientState + 0x174, -1);
             Task.Delay(100000);
         }
     }

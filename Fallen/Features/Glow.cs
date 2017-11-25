@@ -30,18 +30,18 @@ namespace Fallen.Features
                     {
                         if (Settings.Glow.GlowEnemy)
                         {
-                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x4, Settings.Glow.EnemyRed / 255);
-                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x8, Settings.Glow.EnemyGreen / 255);
-                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0xC, Settings.Glow.EnemyBlue / 255);
-                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x10, (float) 100 / 255);
-                            MainClass.Memory.WriteBool(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x24, true);
-                            MainClass.Memory.WriteBool(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x25, false);
+                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x4, Settings.Glow.EnemyRed / 255);
+                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x8, Settings.Glow.EnemyGreen / 255);
+                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0xC, Settings.Glow.EnemyBlue / 255);
+                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x10, (float) 100 / 255);
+                            Memory.ProcessMemory.WriteMemory<bool>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x24, true);
+                            Memory.ProcessMemory.WriteMemory<bool>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x25, false);
 
                             if (Settings.Glow.ChamsEnemy)
                             {
-                                MainClass.Memory.WriteBool(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x2C, true);
+                                Memory.ProcessMemory.WriteMemory<bool>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x2C, true);
 
-                                MainClass.Memory.WriteBool(LocalPlayer.Base + netvars.m_bSpotted, true);
+                                Memory.ProcessMemory.WriteMemory<bool>(LocalPlayer.Base + netvars.m_bSpotted, true);
                             }
                         }
                     }
@@ -49,18 +49,18 @@ namespace Fallen.Features
                     {
                         if (Settings.Glow.GlowTeam)
                         {
-                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x4, Settings.Glow.TeamRed / 255);
-                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x8, Settings.Glow.TeamGreen / 255);
-                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0xC, Settings.Glow.TeamBlue / 255);
-                            MainClass.Memory.WriteFloat(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x10, (float) 100 / 255);
-                            MainClass.Memory.WriteBool(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x24, true);
-                            MainClass.Memory.WriteBool(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x25, false);
+                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x4, Settings.Glow.TeamRed / 255);
+                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x8, Settings.Glow.TeamGreen / 255);
+                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0xC, Settings.Glow.TeamBlue / 255);
+                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x10, (float) 100 / 255);
+                            Memory.ProcessMemory.WriteMemory<bool>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x24, true);
+                            Memory.ProcessMemory.WriteMemory<bool>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x25, false);
 
                             if (Settings.Glow.ChamsTeam)
                             {
-                                MainClass.Memory.WriteBool(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x2C, true);
+                                Memory.ProcessMemory.WriteMemory<bool>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x2C, true);
 
-                                MainClass.Memory.WriteBool(LocalPlayer.Base + netvars.m_bSpotted, true);
+                                Memory.ProcessMemory.WriteMemory<bool>(LocalPlayer.Base + netvars.m_bSpotted, true);
                             }
                         }
                     }
