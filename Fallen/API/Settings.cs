@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fallen.API
+﻿namespace Fallen.API
 {
     internal class Settings
     {
@@ -12,40 +6,26 @@ namespace Fallen.API
         //Feature Toggles//
         ///////////////////
 
-        public struct Glow
+        public struct GlowTeam
         {
-            public static bool GlowTeam = true;
-            public static bool GlowEnemy = true;
+            public static bool Enabled = true;
+            public static bool ChamsEnabled = true;
 
-            public static bool ChamsTeam = true;
-            public static bool ChamsEnemy = true;
-
-            public static float TeamRed = 0;
-            public static float TeamGreen = 0;
-            public static float TeamBlue = 255;
-
-            public static float EnemyRed = 255;
-            public static float EnemyGreen = 0;
-            public static float EnemyBlue = 0;
+            public static float Alpha = 255;
+            public static float Red = 0;
+            public static float Green = 0;
+            public static float Blue = 255;
         }
 
-        public struct Bhop
+        public struct GlowEnemy
         {
-            public static bool Enabled = false;
-            public static bool Key = false;
-            public static int JumpAmmount = 0;
-        }
+            public static bool Enabled = true;
+            public static bool ChamsEnabled = true;
 
-        public struct Trigger
-        {
-            public static bool Enabled = false;
-            public static bool Key = false;
-        }
-
-        public struct Noflash
-        {
-            public static bool Enabled = false;
-            public static float Flash = 255;
+            public static float Alpha = 255;
+            public static float Red = 255;
+            public static float Green = 0;
+            public static float Blue = 0;
         }
 
         public struct Fovchanger
@@ -54,21 +34,65 @@ namespace Fallen.API
             public static int Fov = 90;
         }
 
+        public struct Bhop
+        {
+            public static bool Enabled = false;
+            public static bool Key = false;
+            public static bool JumpLimit = false;
+            public static int MaxJumps = 5;
+        }
+
+        public struct NoFlash
+        {
+            public static bool Enabled = false;
+            public static float Flash = 255;
+        }
+
         public struct Nohands
         {
             public static bool Enabled = false;
-        }
-
-        public struct Overlay
-        {
-            public static bool Enabled = false;
-            public static bool Crosshair = false;
         }
 
         public struct Hitsound
         {
             public static bool Enabled = false;
             public static int Mode = 1;
+        }
+
+        public struct Trigger
+        {
+            public static bool Enabled = false;
+            public static bool Key = false;
+        }
+
+        public struct Autopistol
+        {
+            public static bool Enabled = false;
+            public static bool Key = false;
+            public static bool AnyGun = false;
+        }
+
+        public struct Radar
+        {
+            public static bool Enabled = false;
+        }
+
+        public struct Aimbot
+        {
+            public static bool Enabled = false;
+        }
+
+        public struct RCS
+        {
+            public static bool Enabled = false;
+            public static float X = 2f;
+            public static float Y = 2f;
+        }
+
+        public struct Overlay
+        {
+            public static bool Enabled = false;
+            public static bool Crosshair = false;
         }
 
         public struct Skinchanger

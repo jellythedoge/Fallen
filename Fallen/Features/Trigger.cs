@@ -1,7 +1,7 @@
 ﻿#region
 
 using Fallen.API;
-using hazedumper;
+using Memory;
 using System.Threading;
 
 #endregion
@@ -14,21 +14,24 @@ namespace Fallen.Features
         {
             while (true)
             {
+                ///TO DO
+                ///Add World2Screen and Raytrace and add VIS Check, not expected soon!
+
                 if (Settings.Trigger.Enabled)
                 {
-                    var entityInCrossId = Memory.ProcessMemory.ReadMemory<int>(LocalPlayer.Base + netvars.m_iCrosshairId);
+                    var entityInCrossId = MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + Offsets.m_iCrosshairId);
                     if (entityInCrossId != 0)
                     {
-                        var entityBase = Memory.ProcessMemory.ReadMemory<int>(MainClass.ClientPointer + signatures.dwEntityList + (entityInCrossId - 1) * 0x10);
-                        var entityTeam = Memory.ProcessMemory.ReadMemory<int>(entityBase + netvars.m_iTeamNum);
+                        var entityBase = MemoryManager.ReadMemory<int>(MainClass.ClientPointer + Offsets.dwEntityList + (entityInCrossId - 1) * 0x10);
+                        var entityTeam = MemoryManager.ReadMemory<int>(entityBase + Offsets.m_iTeamNum);
                         if (!Settings.Trigger.Key)
                             Thread.Sleep(1);
 
-                        if (Settings.Trigger.Key && entityTeam != LocalPlayer.Team)
+                        if (Settings.Trigger.Key && entityTeam != LocalPlayer.m_iTeam)
                         {
-                            Memory.ProcessMemory.WriteMemory<int>(MainClass.ClientPointer + signatures.dwForceAttack, 5);
+                            MemoryManager.WriteMemory<bool>(MainClass.ClientPointer + Offsets.dwForceAttack, true);
                             Thread.Sleep(2);
-                            Memory.ProcessMemory.WriteMemory<int>(MainClass.ClientPointer + signatures.dwForceAttack, 4);
+                            MemoryManager.WriteMemory<bool>(MainClass.ClientPointer + Offsets.dwForceAttack, false);
                             Thread.Sleep(4);
                         }
                     }

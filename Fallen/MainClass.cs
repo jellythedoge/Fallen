@@ -4,6 +4,7 @@ using Fallen.API;
 using Fallen.Features;
 using Memory;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -16,16 +17,17 @@ namespace Fallen
 {
     internal class MainClass
     {
-
         public static int ClientPointer;
         public static int EnginePointer;
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            ProcessMemory.Initialize("csgo");
+            MemoryManager.Initialize("csgo");
 
-            ClientPointer = ProcessMemory.GetModuleAdress("client");
-            EnginePointer = ProcessMemory.GetModuleAdress("engine");
+            ClientPointer = MemoryManager.GetModuleAdress("client");
+            EnginePointer = MemoryManager.GetModuleAdress("engine");
+
+            List<string> outdatedSignatures = Offsets.ScanPatterns();
 
             Initialize();
 
@@ -35,12 +37,11 @@ namespace Fallen
         [STAThread]
         public static void Initialize()
         {
-
             //////////////////////
             //INITIALIZE MESSAGE//
             //////////////////////
 
-            INI.INI.Ini.LoadConfig();
+            INI.INI.LoadConfig();
 
             Console.Title = "Fallen Sharp CSGO - " + File.GetLastWriteTime(Assembly.GetExecutingAssembly().Location);
             Console.ForegroundColor = ConsoleColor.White;
@@ -48,22 +49,31 @@ namespace Fallen
             Console.WriteLine("//Fallen Sharp CSGO//");
             Console.WriteLine("/////////////////////");
             Console.WriteLine("");
-            Console.WriteLine("GlowE status - " + Settings.Glow.GlowEnemy);
-            Console.WriteLine("GlowT status - " + Settings.Glow.GlowTeam);
-            Console.WriteLine("ChamsE status - " + Settings.Glow.ChamsEnemy);
-            Console.WriteLine("ChamsT status - " + Settings.Glow.ChamsTeam);
-            Console.WriteLine("Trigger status - " + Settings.Trigger.Enabled);
-            Console.WriteLine("Bhop status - " + Settings.Bhop.Enabled);
-            Console.WriteLine("NoFlash status - " + Settings.Noflash.Enabled);
+            Console.WriteLine("GlowE status - " + Settings.GlowEnemy.Enabled);
+            Console.WriteLine("GlowT status - " + Settings.GlowTeam.Enabled);
+            Console.WriteLine("ChamsE status - " + Settings.GlowEnemy.ChamsEnabled);
+            Console.WriteLine("ChamsT status - " + Settings.GlowTeam.ChamsEnabled);
             Console.WriteLine("FOV status - " + Settings.Fovchanger.Enabled);
+            Console.WriteLine("Bhop status - " + Settings.Bhop.Enabled);
+            Console.WriteLine("NoFlash status - " + Settings.NoFlash.Enabled);
+            Console.WriteLine("NoHands status - " + Settings.Nohands.Enabled);
+            Console.WriteLine("Hitsound status - " + Settings.Hitsound.Enabled);
+            Console.WriteLine("Trigger status - " + Settings.Trigger.Enabled);
+            Console.WriteLine("Autopistol status - " + Settings.Autopistol.Enabled);
+            Console.WriteLine("Radar status - " + Settings.Radar.Enabled);
+            Console.WriteLine("Aimbot status - " + Settings.Aimbot.Enabled + " // DOES NOTHING AT THE MOMENT");
+            Console.WriteLine("RCS status - " + Settings.RCS.Enabled);
             Console.WriteLine("Skinchanger status - " + Settings.Skinchanger.Enabled);
+            Console.WriteLine("");
 
             AddressReaderCall();
             ConsoleReaderCall();
             GlowCall();
             TriggerCall();
+            AimbotCall();
             BunnyCall();
             SkinchangerCall();
+            RadarCall();
             MischacksCall();
 
             SDK.KeyboardProc();
@@ -82,9 +92,7 @@ namespace Fallen
 
         public static void AddressReaderCall()
         {
-            var AddressReader = new AddressReader();
-
-            var AddressReaderThread = new Thread(AddressReader.Run);
+            var AddressReaderThread = new Thread(SDK.AddressReader);
             AddressReaderThread.Start();
         }
 
@@ -123,7 +131,19 @@ namespace Fallen
             var TriggerThread = new Thread(Trigger.Run);
             TriggerThread.Start();
         }
-        
+
+        /////////////////////////
+        //RECOIL CONTROL THREAD//
+        /////////////////////////
+
+        public static void AimbotCall()
+        {
+            var RCS = new RCS();
+
+            var RCSThread = new Thread(RCS.Run);
+            RCSThread.Start();
+        }
+
         ////////////////
         //BUNNY THREAD//
         ////////////////
@@ -135,7 +155,19 @@ namespace Fallen
             var BunnyThread = new Thread(Bunny.Run);
             BunnyThread.Start();
         }
-        
+
+        ////////////////
+        //RADAR THREAD//
+        ////////////////
+
+        public static void RadarCall()
+        {
+            var Radar = new Radar();
+
+            var RadarThread = new Thread(Radar.Run);
+            RadarThread.Start();
+        }
+
         //////////////////////
         //SKINCHANGER THREAD//
         //////////////////////
@@ -147,7 +179,7 @@ namespace Fallen
             var SkinchangerThread = new Thread(Skinchanger.Run);
             SkinchangerThread.Start();
         }
-        
+
         ///////////////
         //MISC THREAD//
         ///////////////

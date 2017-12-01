@@ -11,6 +11,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -38,11 +39,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Debug\</OutputPath>
+    <Optimize>true</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>..\Release\</OutputPath>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
@@ -60,12 +62,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\SDK.cs" />
-    <Compile Include="Features\AddressReader.cs" />
     <Compile Include="API\Memory.cs" />
     <Compile Include="API\Offsets.cs" />
     <Compile Include="API\Settings.cs" />
     <Compile Include="Features\Bunny.cs" />
     <Compile Include="Features\ConsoleReader.cs" />
+    <Compile Include="Features\Radar.cs" />
+    <Compile Include="Features\RCS.cs" />
     <Compile Include="Features\Skinchanger.cs" />
     <Compile Include="Features\Misc.cs" />
     <Compile Include="Features\Glow.cs" />
@@ -112,10 +115,12 @@
   <ItemGroup>
     <EmbeddedResource Include="GUI\OverlayForm.resx">
       <DependentUpon>OverlayForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

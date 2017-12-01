@@ -1,9 +1,8 @@
 ﻿#region
 
 using Fallen.API;
-using hazedumper;
+using Memory;
 using System.Threading;
-using System;
 
 #endregion
 
@@ -17,50 +16,46 @@ namespace Fallen.Features
             {
                 for (var i = 0; i < 64; i++)
                 {
-                    if (Arrays.Entity[i].Base == 0)
+                    if (Arrays.Entity[i].m_iBase == 0)
                         continue;
-                    if (Arrays.Entity[i].Base == LocalPlayer.Base)
+                    if (Arrays.Entity[i].m_iBase == LocalPlayer.m_iBase)
                         continue;
-                    if (Arrays.Entity[i].Health < 1)
+                    if (Arrays.Entity[i].m_iHealth < 1)
                         continue;
-                    if (Arrays.Entity[i].Dormant == 1)
+                    if (Arrays.Entity[i].m_iDormant == 1)
                         continue;
 
-                    if (Arrays.Entity[i].Team != LocalPlayer.Team)
+                    if (Arrays.Entity[i].m_iTeam != LocalPlayer.m_iTeam)
                     {
-                        if (Settings.Glow.GlowEnemy)
+                        if (Settings.GlowEnemy.Enabled)
                         {
-                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x4, Settings.Glow.EnemyRed / 255);
-                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x8, Settings.Glow.EnemyGreen / 255);
-                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0xC, Settings.Glow.EnemyBlue / 255);
-                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x10, (float) 100 / 255);
-                            Memory.ProcessMemory.WriteMemory<bool>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x24, true);
-                            Memory.ProcessMemory.WriteMemory<bool>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x25, false);
+                            MemoryManager.WriteMemory<float>(LocalPlayer.m_iGlowBase + Arrays.Entity[i].m_iGlowIndex * 0x38 + 0x10, Settings.GlowEnemy.Alpha / 255);
+                            MemoryManager.WriteMemory<float>(LocalPlayer.m_iGlowBase + Arrays.Entity[i].m_iGlowIndex * 0x38 + 0x4, Settings.GlowEnemy.Red / 255);
+                            MemoryManager.WriteMemory<float>(LocalPlayer.m_iGlowBase + Arrays.Entity[i].m_iGlowIndex * 0x38 + 0x8, Settings.GlowEnemy.Green / 255);
+                            MemoryManager.WriteMemory<float>(LocalPlayer.m_iGlowBase + Arrays.Entity[i].m_iGlowIndex * 0x38 + 0xC, Settings.GlowEnemy.Blue / 255);
+                            MemoryManager.WriteMemory<bool>(LocalPlayer.m_iGlowBase + Arrays.Entity[i].m_iGlowIndex * 0x38 + 0x24, true);
+                            MemoryManager.WriteMemory<bool>(LocalPlayer.m_iGlowBase + Arrays.Entity[i].m_iGlowIndex * 0x38 + 0x25, false);
 
-                            if (Settings.Glow.ChamsEnemy)
+                            if (Settings.GlowEnemy.ChamsEnabled)
                             {
-                                Memory.ProcessMemory.WriteMemory<bool>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x2C, true);
-
-                                Memory.ProcessMemory.WriteMemory<bool>(LocalPlayer.Base + netvars.m_bSpotted, true);
+                                MemoryManager.WriteMemory<bool>(LocalPlayer.m_iGlowBase + Arrays.Entity[i].m_iGlowIndex * 0x38 + 0x2C, true);
                             }
                         }
                     }
                     else
                     {
-                        if (Settings.Glow.GlowTeam)
+                        if (Settings.GlowTeam.Enabled)
                         {
-                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x4, Settings.Glow.TeamRed / 255);
-                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x8, Settings.Glow.TeamGreen / 255);
-                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0xC, Settings.Glow.TeamBlue / 255);
-                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x10, (float) 100 / 255);
-                            Memory.ProcessMemory.WriteMemory<bool>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x24, true);
-                            Memory.ProcessMemory.WriteMemory<bool>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x25, false);
+                            MemoryManager.WriteMemory<float>(LocalPlayer.m_iGlowBase + Arrays.Entity[i].m_iGlowIndex * 0x38 + 0x10, Settings.GlowTeam.Alpha / 255);
+                            MemoryManager.WriteMemory<float>(LocalPlayer.m_iGlowBase + Arrays.Entity[i].m_iGlowIndex * 0x38 + 0x4, Settings.GlowTeam.Red / 255);
+                            MemoryManager.WriteMemory<float>(LocalPlayer.m_iGlowBase + Arrays.Entity[i].m_iGlowIndex * 0x38 + 0x8, Settings.GlowTeam.Green / 255);
+                            MemoryManager.WriteMemory<float>(LocalPlayer.m_iGlowBase + Arrays.Entity[i].m_iGlowIndex * 0x38 + 0xC, Settings.GlowTeam.Blue / 255);
+                            MemoryManager.WriteMemory<bool>(LocalPlayer.m_iGlowBase + Arrays.Entity[i].m_iGlowIndex * 0x38 + 0x24, true);
+                            MemoryManager.WriteMemory<bool>(LocalPlayer.m_iGlowBase + Arrays.Entity[i].m_iGlowIndex * 0x38 + 0x25, false);
 
-                            if (Settings.Glow.ChamsTeam)
+                            if (Settings.GlowTeam.ChamsEnabled)
                             {
-                                Memory.ProcessMemory.WriteMemory<bool>(LocalPlayer.GlowBase + Arrays.Entity[i].GlowIndex * 0x38 + 0x2C, true);
-
-                                Memory.ProcessMemory.WriteMemory<bool>(LocalPlayer.Base + netvars.m_bSpotted, true);
+                                MemoryManager.WriteMemory<bool>(LocalPlayer.m_iGlowBase + Arrays.Entity[i].m_iGlowIndex * 0x38 + 0x2C, true);
                             }
                         }
                     }

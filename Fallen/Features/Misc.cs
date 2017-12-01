@@ -1,42 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿#region
+
+using Fallen.API;
+using Memory;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-using hazedumper;
-using Fallen.API;
-using Fallen.Features;
-using System.Diagnostics;
+#endregion
 
 namespace Fallen.Features
 {
     internal class Misc
     {
-        internal void Run()
+        internal async void Run()
         {
-            var HitAmmount = 1;
-            var player = new System.Media.SoundPlayer();
+            var HitAmmount = MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + 0xA2C8);
+            dynamic Sound = new System.Media.SoundPlayer();
 
             while (true)
             {
-                var FovCheck = Memory.ProcessMemory.ReadMemory<int>(LocalPlayer.Base + netvars.m_iFOV);
-                var NohandsCheck = Memory.ProcessMemory.ReadMemory<int>(LocalPlayer.Base + 0x254);
-                var HitVal = Memory.ProcessMemory.ReadMemory<int>(LocalPlayer.Base + 0xA2C8);
-                bool EndFlash = (!Settings.Noflash.Enabled);
-                
+                var FovCheck = MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + Offsets.m_iFOV);
+                var NohandsCheck = MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + 0x254);
+                var HitVal = MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + 0xA2C8);
+                bool EndFlash = (!Settings.NoFlash.Enabled);
+
                 ///////////////
                 //FOV CHANGER//
                 ///////////////
 
                 if (Settings.Fovchanger.Enabled)
                 {
-                    if (!Memory.ProcessMemory.ReadMemory<bool>(LocalPlayer.Base + netvars.m_bIsScoped))
+                    if (!MemoryManager.ReadMemory<bool>(LocalPlayer.m_iBase + Offsets.m_bIsScoped))
                     {
                         if (FovCheck != Settings.Fovchanger.Fov)
                         {
-                            Memory.ProcessMemory.WriteMemory<int>(LocalPlayer.Base + netvars.m_iFOV, Settings.Fovchanger.Fov);
+                            MemoryManager.WriteMemory<int>(LocalPlayer.m_iBase + Offsets.m_iFOV, Settings.Fovchanger.Fov);
                         }
                     }
                 }
@@ -45,24 +43,24 @@ namespace Fallen.Features
                 //NO FLASH//
                 ////////////
 
-                if (Settings.Noflash.Enabled || EndFlash)
+                if (Settings.NoFlash.Enabled || EndFlash)
                 {
-                    var FlashCheck = Memory.ProcessMemory.ReadMemory<float>(LocalPlayer.Base + netvars.m_flFlashMaxAlpha);
+                    var FlashCheck = MemoryManager.ReadMemory<float>(LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha);
 
                     if (EndFlash)
                     {
-                        if (FlashCheck == Settings.Noflash.Flash && FlashCheck != 255)
+                        if (FlashCheck == Settings.NoFlash.Flash && FlashCheck != 255)
                         {
-                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.Base + netvars.m_flFlashMaxAlpha, 255);
+                            MemoryManager.WriteMemory<float>(LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha, 255);
                             Console.WriteLine("Flash one");
                         }
                     }
                     else
                     {
-                        if (FlashCheck != Settings.Noflash.Flash && FlashCheck != 0)
+                        if (FlashCheck != Settings.NoFlash.Flash && FlashCheck != 0)
                         {
-                            Memory.ProcessMemory.WriteMemory<float>(LocalPlayer.Base + netvars.m_flFlashMaxAlpha, Settings.Noflash.Flash);
-                            Console.WriteLine(Memory.ProcessMemory.ReadMemory<float>(LocalPlayer.Base + netvars.m_flFlashMaxAlpha)); 
+                            MemoryManager.WriteMemory<float>(LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha, Settings.NoFlash.Flash);
+                            Console.WriteLine(MemoryManager.ReadMemory<float>(LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha));
                         }
                     }
                 }
@@ -73,25 +71,39 @@ namespace Fallen.Features
 
                 if (Settings.Nohands.Enabled && NohandsCheck != 0)
                 {
-                    Memory.ProcessMemory.WriteMemory<int>(LocalPlayer.Base + 0x254, 0);
+                    MemoryManager.WriteMemory<int>(LocalPlayer.m_iBase + 0x254, 0);
                 }
                 else if (!Settings.Nohands.Enabled && NohandsCheck != 317)
                 {
-                    Memory.ProcessMemory.WriteMemory<int>(LocalPlayer.Base + 0x254, 317);
+                    // MemoryManager.WriteMemory<int>(LocalPlayer.Base + 0x254, 317);
+                }
+
+                ///////////////
+                //AUTO PISTOL//
+                ///////////////
+
+                if (Settings.Autopistol.Enabled)
+                {
+                    if (Settings.Autopistol.Key && SDK.HeldWeapon == "PISTOL" || Settings.Autopistol.Key && Settings.Autopistol.AnyGun)
+                    {
+                        MemoryManager.WriteMemory<bool>(MainClass.ClientPointer + Offsets.dwForceAttack, true);
+                        await Task.Delay(10);
+                        MemoryManager.WriteMemory<bool>(MainClass.ClientPointer + Offsets.dwForceAttack, false);
+                    }
                 }
 
                 /////////////
                 //HIT SOUND//
                 /////////////
-                
+
                 if (Settings.Hitsound.Enabled)
                 {
                     if (Settings.Hitsound.Mode == 1)
                     {
                         if (HitAmmount != HitVal)
                         {
-                            player.Stream = Properties.Resources.cod;
-                            player.Play();
+                            Sound.Stream = Properties.Resources.cod;
+                            Sound.Play();
                             HitAmmount = HitVal;
                         }
                     }
@@ -99,8 +111,8 @@ namespace Fallen.Features
                     {
                         if (HitAmmount != HitVal)
                         {
-                            player.Stream = Properties.Resources.anime;
-                            player.Play();
+                            Sound.Stream = Properties.Resources.anime;
+                            Sound.Play();
                             HitAmmount = HitVal;
                         }
                     }
@@ -108,8 +120,8 @@ namespace Fallen.Features
                     {
                         if (HitAmmount != HitVal)
                         {
-                            player.Stream = Properties.Resources.bubble;
-                            player.Play();
+                            Sound.Stream = Properties.Resources.bubble;
+                            Sound.Play();
                             HitAmmount = HitVal;
                         }
                     }
@@ -118,6 +130,7 @@ namespace Fallen.Features
                         Settings.Hitsound.Mode = 1;
                     }
                 }
+
                 Thread.Sleep(10);
             }
         }

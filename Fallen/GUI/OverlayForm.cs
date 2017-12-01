@@ -1,27 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-using Fallen.API;
-using Fallen.Features;
-
-
+﻿using Fallen.API;
+using System;
 using System.Drawing;
 using System.Drawing.Text;
-using System.Drawing.Drawing2D;
+using System.Windows.Forms;
 
 namespace Fallen.GUI
 {
     public partial class OverlayForm : Form
     {
-
         ////////////
         //Booleans//
         ////////////
@@ -37,7 +23,6 @@ namespace Fallen.GUI
         public static bool Item9 = false;
         public static bool Item10 = false;
         public static bool Item11 = false;
-
 
         /////////////////
         //Render helper//
@@ -56,31 +41,18 @@ namespace Fallen.GUI
 
         public Pen PenBlack = new Pen(Color.Black);
 
-        Font SharpFont = new Font("Arial Bold", 15.0f);
+        private Font SharpFont = new Font("Arial Bold", 15.0f);
 
-        Pen Crosshair = new Pen(Color.FromArgb(255, 255, 0, 0));
+        private Pen Crosshair = new Pen(Color.FromArgb(255, 255, 0, 0));
 
-        RECT rect;
+        private RECT rect;
         public const string WINDOW_NAME = "Counter-Strike: Global Offensive";
-        IntPtr handle = FindWindow(null, WINDOW_NAME);
+        private IntPtr handle = SDK.FindWindow(null, WINDOW_NAME);
 
         public struct RECT
         {
             public int left, top, right, bottom;
         }
-
-        [DllImport("user32.dll")]
-        static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern int GetWindowLong(IntPtr hWnd, int nIndex);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
 
         public OverlayForm()
         {
@@ -95,8 +67,8 @@ namespace Fallen.GUI
             this.FormBorderStyle = FormBorderStyle.None;
             //Render.TextRenderingHint = TextRenderingHint.AntiAlias;
 
-            int initialStyle = GetWindowLong(this.Handle, -20);
-            SetWindowLong(this.Handle, -20, initialStyle | 0x80000 | 0x20);
+            int initialStyle = SDK.GetWindowLong(this.Handle, -20);
+            SDK.SetWindowLong(this.Handle, -20, initialStyle | 0x80000 | 0x20);
         }
 
         private void OverlayForm_Paint(object sender, PaintEventArgs e)
@@ -116,13 +88,13 @@ namespace Fallen.GUI
 
             RenderOverlay(sender, e);
 
-            GetWindowRect(handle, out rect);
+            SDK.GetWindowRect(handle, out rect);
         }
 
         public void RenderOverlay(object sender, PaintEventArgs e)
         {
             Render = e.Graphics;
-            
+
             TextRenderer.DrawText(e.Graphics, "Fallen Sharp CSGO.", this.Font,
                 new Rectangle(rect.left / 8, rect.top - 30, 200, 100), Color.FromArgb(255, 0, 200, 0));
 
@@ -138,8 +110,6 @@ namespace Fallen.GUI
             //////////////
             //TEST CLOSE//
             //////////////
-
-
         }
     }
 }

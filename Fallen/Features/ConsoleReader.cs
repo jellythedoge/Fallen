@@ -1,7 +1,7 @@
 ﻿#region
 
 using Fallen.API;
-using hazedumper;
+using Memory;
 using System;
 using System.IO;
 using System.Reflection;
@@ -22,8 +22,8 @@ namespace Fallen.Features
                 switch (input.ToLower())
                 {
                     case "test":
-                        Console.WriteLine(Memory.ProcessMemory.ReadMemory<int>(LocalPlayer.Base + netvars.m_iHealth));
-                        Memory.ProcessMemory.WriteMemory<int>(netvars.m_iHealth, 500);
+                        Console.WriteLine(MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + Offsets.m_iHealth));
+                        MemoryManager.WriteMemory<int>(Offsets.m_iHealth, 500);
                         break;
 
                     case "skins":
@@ -42,7 +42,7 @@ namespace Fallen.Features
 
                     case "change flash":
                         Console.WriteLine("Enter a number between 0-255");
-                        Settings.Noflash.Flash = float.Parse(Console.ReadLine());
+                        Settings.NoFlash.Flash = float.Parse(Console.ReadLine());
                         break;
 
                     case "change fov":
@@ -50,13 +50,13 @@ namespace Fallen.Features
                         Settings.Fovchanger.Fov = int.Parse(Console.ReadLine());
                         break;
 
-                    case "noflash":
-                        if (Settings.Noflash.Enabled)
+                    case "NoFlash":
+                        if (Settings.NoFlash.Enabled)
                             Console.WriteLine("NoFlash Off!");
-                        else if (!Settings.Noflash.Enabled)
+                        else if (!Settings.NoFlash.Enabled)
                             Console.WriteLine("NoFlash On!");
 
-                        Settings.Noflash.Enabled = !Settings.Noflash.Enabled;
+                        Settings.NoFlash.Enabled = !Settings.NoFlash.Enabled;
                         break;
 
                     case "fov":
@@ -77,20 +77,20 @@ namespace Fallen.Features
                         if (!glow)
                         {
                             Console.WriteLine("Glow On!");
-                            Settings.Glow.GlowEnemy = true;
-                            Settings.Glow.GlowTeam = true;
+                            Settings.GlowEnemy.Enabled = true;
+                            Settings.GlowTeam.Enabled = true;
                         }
                         else
                         {
                             Console.WriteLine("Glow Off!");
-                            Settings.Glow.GlowEnemy = false;
-                            Settings.Glow.GlowTeam = true;
+                            Settings.GlowEnemy.Enabled = false;
+                            Settings.GlowTeam.Enabled = true;
                         }
                         break;
 
                     case "chams":
-                        Settings.Glow.ChamsTeam = !Settings.Glow.ChamsTeam;
-                        Settings.Glow.ChamsEnemy = !Settings.Glow.ChamsEnemy;
+                        Settings.GlowTeam.ChamsEnabled = !Settings.GlowTeam.ChamsEnabled;
+                        Settings.GlowEnemy.ChamsEnabled = !Settings.GlowEnemy.ChamsEnabled;
                         break;
 
                     case "trigger":
@@ -111,37 +111,44 @@ namespace Fallen.Features
 
                     case "help":
                     case "commands":
-                        //Console.WriteLine("Available Commands are noFlash, glow, fov, bhop, trigger, chams 'ENABLED AFTER GLOW', change fov, change Flash");
+                        //Console.WriteLine("Available Commands are NoFlash, glow, fov, bhop, trigger, chams 'ENABLED AFTER GLOW', change fov, change Flash");
                         break;
 
                     case "clear":
+                        Console.Clear();
                         Console.Title = "Fallen Sharp CSGO - " + File.GetLastWriteTime(Assembly.GetExecutingAssembly().Location);
                         Console.ForegroundColor = ConsoleColor.White;
-                        Console.Clear();
                         Console.WriteLine("/////////////////////");
                         Console.WriteLine("//Fallen Sharp CSGO//");
                         Console.WriteLine("/////////////////////");
                         Console.WriteLine("");
-                        Console.WriteLine("GlowE status - " + Settings.Glow.GlowEnemy);
-                        Console.WriteLine("GlowT status - " + Settings.Glow.GlowTeam);
-                        Console.WriteLine("ChamsE status - " + Settings.Glow.ChamsEnemy);
-                        Console.WriteLine("ChamsT status - " + Settings.Glow.ChamsTeam);
-                        Console.WriteLine("Trigger status - " + Settings.Trigger.Enabled);
-                        Console.WriteLine("Bhop status - " + Settings.Bhop.Enabled);
-                        Console.WriteLine("NoFlash status - " + Settings.Noflash.Enabled);
+                        Console.WriteLine("GlowE status - " + Settings.GlowEnemy.Enabled);
+                        Console.WriteLine("GlowT status - " + Settings.GlowTeam.Enabled);
+                        Console.WriteLine("ChamsE status - " + Settings.GlowEnemy.ChamsEnabled);
+                        Console.WriteLine("ChamsT status - " + Settings.GlowTeam.ChamsEnabled);
                         Console.WriteLine("FOV status - " + Settings.Fovchanger.Enabled);
+                        Console.WriteLine("Bhop status - " + Settings.Bhop.Enabled);
+                        Console.WriteLine("NoFlash status - " + Settings.NoFlash.Enabled);
+                        Console.WriteLine("NoHands status - " + Settings.Nohands.Enabled);
+                        Console.WriteLine("Hitsound status - " + Settings.Hitsound.Enabled);
+                        Console.WriteLine("Trigger status - " + Settings.Trigger.Enabled);
+                        Console.WriteLine("Autopistol status - " + Settings.Autopistol.Enabled);
+                        Console.WriteLine("Radar status - " + Settings.Radar.Enabled);
+                        Console.WriteLine("Aimbot status - " + Settings.Aimbot.Enabled + " // DOES NOTHING AT THE MOMENT");
+                        Console.WriteLine("RCS status - " + Settings.RCS.Enabled);
                         Console.WriteLine("Skinchanger status - " + Settings.Skinchanger.Enabled);
+                        Console.WriteLine("");
                         break;
 
                     case "save":
                     case "save config":
-                        INI.INI.Ini.SaveConfig();
+                        INI.INI.SaveConfig();
                         Console.WriteLine("Config Saved!");
                         break;
 
                     case "load":
                     case "load config":
-                        INI.INI.Ini.LoadConfig();
+                        INI.INI.LoadConfig();
                         break;
 
                     case "exit":

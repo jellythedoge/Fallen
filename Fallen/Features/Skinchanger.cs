@@ -1,11 +1,8 @@
 ﻿#region
 
 using Fallen.API;
-using hazedumper;
-using System;
+using Memory;
 using System.Threading;
-using System.Threading.Tasks;
-using static Fallen.API.SDK;
 
 #endregion
 
@@ -19,6 +16,8 @@ namespace Fallen.Features
     internal class Skinchanger
     {
         public static bool bWasActive = false;
+
+        private static int KnifeModel = (int)SDK.WeaponIDs.WEAPON_KNIFE_KARAMBIT;
 
         public static void Run()
         {
@@ -38,244 +37,239 @@ namespace Fallen.Features
                     for (var i = 1; i < 16; ++i)
                     {
                         // Create A New Weapon Object
-                        Weapon Weapon = new Weapon();
+                        SDK.Weapon Weapon = new SDK.Weapon();
 
-                        // Get Adress To Current Weapon Out Of Array Of Currently Equipped Weapons
-                        var MyWeapons = (Memory.ProcessMemory.ReadMemory<int>(LocalPlayer.Base + netvars.m_hMyWeapons + (i - 1) * 0x4)) & 0xFFF;
-
-                        var CurWeapon = (Memory.ProcessMemory.ReadMemory<int>(LocalPlayer.Base + netvars.m_hActiveWeapon + (i - 1) * 0x4)) & 0xFFF;
+                        // My Weapons
+                        var MyWeapons = (MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + Offsets.m_hMyWeapons + (i - 1) * 0x4)) & 0xFFF;
 
                         // Get Baseadress of my Weapons
-                        Weapon.m_iBase = Memory.ProcessMemory.ReadMemory<int>(MainClass.ClientPointer + signatures.dwEntityList + (MyWeapons - 1) * 0x10);
-
-                        // Get Baseadress of held Weapon
-                        Weapon.Held = Memory.ProcessMemory.ReadMemory<int>(MainClass.ClientPointer + signatures.dwEntityList + (CurWeapon - 1) * 0x10);
+                        Weapon.m_iBase = MemoryManager.ReadMemory<int>(MainClass.ClientPointer + Offsets.dwEntityList + (MyWeapons - 1) * 0x10);
 
                         // Get The WeaponID
-                        Weapon.m_iItemDefinitionIndex = Memory.ProcessMemory.ReadMemory<int>(Weapon.m_iBase + netvars.m_iItemDefinitionIndex);
+                        Weapon.m_iItemDefinitionIndex = MemoryManager.ReadMemory<int>(Weapon.m_iBase + Offsets.m_iItemDefinitionIndex);
 
                         // Get EntityID Of WeaponOwner
-                        Weapon.m_iXuIDLow = Memory.ProcessMemory.ReadMemory<int>(Weapon.m_iBase + netvars.m_OriginalOwnerXuidLow);
+                        Weapon.m_iXuIDLow = MemoryManager.ReadMemory<int>(Weapon.m_iBase + Offsets.m_OriginalOwnerXuidLow);
 
                         // Get Weapon Skin
-                        Weapon.m_iTexture = Memory.ProcessMemory.ReadMemory<int>(Weapon.m_iBase + netvars.m_nFallbackPaintKit);
+                        Weapon.m_iTexture = MemoryManager.ReadMemory<int>(Weapon.m_iBase + Offsets.m_nFallbackPaintKit);
 
                         switch (Weapon.m_iItemDefinitionIndex)
                         {
                             #region RIFLES
 
-                            case (int)WeaponIDs.WEAPON_AK47:
+                            case (int)SDK.WeaponIDs.WEAPON_AK47:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_AK47;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_AK47;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_AK47;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_AUG:
+                            case (int)SDK.WeaponIDs.WEAPON_AUG:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_AUG;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_AUG;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_AUG;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_AWP:
+                            case (int)SDK.WeaponIDs.WEAPON_AWP:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_AWP;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_AWP;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_AWP;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_BIZON:
+                            case (int)SDK.WeaponIDs.WEAPON_BIZON:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_BIZON;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_BIZON;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_BIZON;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_FAMAS:
+                            case (int)SDK.WeaponIDs.WEAPON_FAMAS:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_FAMAS;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_FAMAS;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_FAMAS;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_G3SG1:
+                            case (int)SDK.WeaponIDs.WEAPON_G3SG1:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_G3SG1;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_G3SG1;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_G3SG1;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_GALILAR:
+                            case (int)SDK.WeaponIDs.WEAPON_GALILAR:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_GALILAR;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_GALILAR;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_GALILAR;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_M4A1:
+                            case (int)SDK.WeaponIDs.WEAPON_M4A1:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_M4A1;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_M4A1;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_M4A1;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_SCAR20:
+                            case (int)SDK.WeaponIDs.WEAPON_SCAR20:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_SCAR20;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_SCAR20;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_SCAR20;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_SG556:
+                            case (int)SDK.WeaponIDs.WEAPON_SG556:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_SG556;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_SG556;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_SG556;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_SSG08:
+                            case (int)SDK.WeaponIDs.WEAPON_SSG08:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_SSG08;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_SSG08;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_SSG08;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_M4A1_SILENCER:
+                            case (int)SDK.WeaponIDs.WEAPON_M4A1_SILENCER:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_M4A1_SILENCER;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_M4A1_SILENCER;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_M4A1_SILENCER;
                                 break;
 
                             #endregion
 
                             #region SMG
 
-                            case (int)WeaponIDs.WEAPON_MAC10:
+                            case (int)SDK.WeaponIDs.WEAPON_MAC10:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_MAC10;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_MAC10;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_MAC10;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_P90:
+                            case (int)SDK.WeaponIDs.WEAPON_P90:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_P90;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_P90;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_P90;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_UMP45:
+                            case (int)SDK.WeaponIDs.WEAPON_UMP45:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_UMP45;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_UMP45;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_UMP45;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_MP7:
+                            case (int)SDK.WeaponIDs.WEAPON_MP7:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_MP7;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_MP7;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_MP7;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_MP9:
+                            case (int)SDK.WeaponIDs.WEAPON_MP9:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_MP9;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_MP9;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_MP9;
                                 break;
 
                             #endregion
 
                             #region HEAVY
 
-                            case (int)WeaponIDs.WEAPON_NEGEV:
+                            case (int)SDK.WeaponIDs.WEAPON_NEGEV:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_NEGEV;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_NEGEV;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_NEGEV;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_M249:
+                            case (int)SDK.WeaponIDs.WEAPON_M249:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_M249;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_M249;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_M249;
                                 break;
 
                             #endregion
 
                             #region PISTOLS
 
-                            case (int)WeaponIDs.WEAPON_DEAGLE:
+                            case (int)SDK.WeaponIDs.WEAPON_DEAGLE:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_DEAGLE;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_DEAGLE;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_DEAGLE;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_ELITE:
+                            case (int)SDK.WeaponIDs.WEAPON_ELITE:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_ELITE;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_ELITE;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_ELITE;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_FIVESEVEN:
+                            case (int)SDK.WeaponIDs.WEAPON_FIVESEVEN:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_FIVESEVEN;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_FIVESEVEN;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_FIVESEVEN;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_GLOCK:
+                            case (int)SDK.WeaponIDs.WEAPON_GLOCK:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_GLOCK;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_GLOCK;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_GLOCK;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_TEC9:
+                            case (int)SDK.WeaponIDs.WEAPON_TEC9:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_TEC9;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_TEC9;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_TEC9;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_HKP2000:
+                            case (int)SDK.WeaponIDs.WEAPON_HKP2000:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_HKP2000;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_HKP2000;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_HKP2000;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_USP_SILENCER:
+                            case (int)SDK.WeaponIDs.WEAPON_USP_SILENCER:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_USP_SILENCER;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_USP_SILENCER;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_USP_SILENCER;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_CZ75A:
+                            case (int)SDK.WeaponIDs.WEAPON_CZ75A:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_CZ75A;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_CZ75A;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_CZ75A;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_REVOLVER:
+                            case (int)SDK.WeaponIDs.WEAPON_REVOLVER:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_REVOLVER;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_REVOLVER;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_REVOLVER;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_P250:
+                            case (int)SDK.WeaponIDs.WEAPON_P250:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_P250;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_P250;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_P250;
                                 break;
 
                             #endregion
 
                             #region SHOTGUNS
 
-                            case (int)WeaponIDs.WEAPON_XM1014:
+                            case (int)SDK.WeaponIDs.WEAPON_XM1014:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_XM1014;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_XM1014;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_XM1014;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_MAG7:
+                            case (int)SDK.WeaponIDs.WEAPON_MAG7:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_MAG7;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_MAG7;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_MAG7;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_SAWEDOFF:
+                            case (int)SDK.WeaponIDs.WEAPON_SAWEDOFF:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_SAWEDOFF;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_SAWEDOFF;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_SAWEDOFF;
                                 break;
 
-                            case (int)WeaponIDs.WEAPON_NOVA:
+                            case (int)SDK.WeaponIDs.WEAPON_NOVA:
                                 OverrideTexture = Settings.Skinchanger.WEAPON_NOVA;
                                 StatTrak = -1;
-                                ItemDefinition = (int)WeaponIDs.WEAPON_NOVA;
+                                ItemDefinition = (int)SDK.WeaponIDs.WEAPON_NOVA;
                                 break;
 
                             #endregion
@@ -287,11 +281,9 @@ namespace Fallen.Features
                                 break;
                         }
 
-                        // Check if current Weapon is knife!
-                       // if (Weapon.Held == int.Parse(WeaponIDs.WEAPON_KNIFE);
-                       // {
-                       //     Console.WriteLine("Holding knife...");
-                        //}
+                        if (SDK.HeldWeapon == "KNIFE")
+                        {
+                        }
 
                         // Check If The Weapon Doesn't Have The Skin Yet
                         if (Weapon.m_iTexture != OverrideTexture && OverrideTexture != 1337)
@@ -299,37 +291,31 @@ namespace Fallen.Features
                             #region SETSKIN
 
                             // Set New Item Values
-                            Memory.ProcessMemory.WriteMemory<int>(Weapon.m_iBase + netvars.m_iItemIDLow, -1);
-                            Memory.ProcessMemory.WriteMemory<int>(Weapon.m_iBase + netvars.m_nFallbackPaintKit, OverrideTexture);
-                            Memory.ProcessMemory.WriteMemory<int>(Weapon.m_iBase + netvars.m_nFallbackSeed, 661);
-                            Memory.ProcessMemory.WriteMemory<int>(Weapon.m_iBase + netvars.m_nFallbackStatTrak, StatTrak);
-                            Memory.ProcessMemory.WriteMemory<float>(Weapon.m_iBase + netvars.m_flFallbackWear, 0.00001f);
-                            Memory.ProcessMemory.WriteMemory<int>(Weapon.m_iBase + netvars.m_iAccountID, Weapon.m_iXuIDLow);
-                            Memory.ProcessMemory.WriteMemory<int>(Weapon.m_iBase + netvars.m_iItemDefinitionIndex, ItemDefinition);
+                            MemoryManager.WriteMemory<int>(Weapon.m_iBase + Offsets.m_iItemIDLow, -1);
+                            MemoryManager.WriteMemory<int>(Weapon.m_iBase + Offsets.m_nFallbackPaintKit, OverrideTexture);
+                            MemoryManager.WriteMemory<int>(Weapon.m_iBase + Offsets.m_nFallbackSeed, 661);
+                            MemoryManager.WriteMemory<int>(Weapon.m_iBase + Offsets.m_nFallbackStatTrak, StatTrak);
+                            MemoryManager.WriteMemory<float>(Weapon.m_iBase + Offsets.m_flFallbackWear, 0.00001f);
+                            MemoryManager.WriteMemory<int>(Weapon.m_iBase + Offsets.m_iAccountID, Weapon.m_iXuIDLow);
+                            MemoryManager.WriteMemory<int>(Weapon.m_iBase + Offsets.m_iItemDefinitionIndex, ItemDefinition);
 
                             #endregion
 
                             // Force Textures To Reload
-                            ForceFullUpdate();
+                            SDK.ForceFullUpdate();
                         }
                     }
                 }
                 else if (!Settings.Skinchanger.Enabled && bWasActive)
                 {
                     // If Skinchanger Was Active & Is Now Inactive Force Textures To Reload
-                    ForceFullUpdate();
+                    SDK.ForceFullUpdate();
 
                     bWasActive = false;
                 }
                 // (-.-)Zzz...
-                Thread.Sleep(5);
+                Thread.Sleep(3);
             }
-        }
-
-        internal static void ForceFullUpdate()
-        {
-            Memory.ProcessMemory.WriteMemory<int>(LocalPlayer.ClientState + 0x174, -1);
-            Task.Delay(100000);
         }
     }
 }

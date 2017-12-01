@@ -1,19 +1,18 @@
-﻿
-#region
+﻿#region
 
-using System;
 using Fallen.API;
 using IniParser;
+using System;
 using System.IO;
 
 #endregion
 
-namespace Fallen.INI.INI
+namespace Fallen.INI
 {
-    internal class Ini
+    internal class INI
     {
-		static bool LoadFailed;
-		
+        private static bool LoadFailed;
+
         public static void LoadConfig()
         {
             var path = Path.Combine(Directory.GetCurrentDirectory(), "Settings.ini");
@@ -33,132 +32,111 @@ namespace Fallen.INI.INI
                 LoadNoConfig = false;
                 SaveConfig();
             }
-			
-			try
+
+            try
             {
                 var parser = new FileIniDataParser();
                 var data = parser.ReadFile("Settings.ini");
                 //Keep ^^
 
                 //Features
-                var GlowTeam = data["GLOW TEAM"]["Enabled"];
-                var ChamsTeam = data["GLOW TEAM"]["Chams"];
-                var TeamRed = data["GLOW TEAM"]["Red"];
-                var TeamGreen = data["GLOW TEAM"]["Green"];
-                var TeamBlue = data["GLOW TEAM"]["Blue"];
+                Settings.GlowTeam.Enabled = bool.Parse(data["GLOW TEAM"]["Enabled"]);
+                Settings.GlowTeam.ChamsEnabled = bool.Parse(data["GLOW TEAM"]["Chams"]);
+                Settings.GlowTeam.Alpha = float.Parse(data["GLOW TEAM"]["Alpha"]);
+                Settings.GlowTeam.Red = float.Parse(data["GLOW TEAM"]["Red"]);
+                Settings.GlowTeam.Green = float.Parse(data["GLOW TEAM"]["Green"]);
+                Settings.GlowTeam.Blue = float.Parse(data["GLOW TEAM"]["Blue"]);
 
-                var GlowEnemy = data["GLOW ENEMY"]["Enabled"];
-                var ChamsEnemy = data["GLOW ENEMY"]["Chams"];
-                var EnemyRed = data["GLOW ENEMY"]["Red"];
-                var EnemyGreen = data["GLOW ENEMY"]["Green"];
-                var EnemyBlue = data["GLOW ENEMY"]["Blue"];
+                Settings.GlowEnemy.Enabled = bool.Parse(data["GLOW ENEMY"]["Enabled"]);
+                Settings.GlowEnemy.ChamsEnabled = bool.Parse(data["GLOW ENEMY"]["Chams"]);
+                Settings.GlowEnemy.Alpha = float.Parse(data["GLOW ENEMY"]["Alpha"]);
+                Settings.GlowEnemy.Red = float.Parse(data["GLOW ENEMY"]["Red"]);
+                Settings.GlowEnemy.Green = float.Parse(data["GLOW ENEMY"]["Green"]);
+                Settings.GlowEnemy.Blue = float.Parse(data["GLOW ENEMY"]["Blue"]);
 
-                var BhopEnabled = data["BUNNY"]["Enabled"];
+                Settings.Bhop.Enabled = bool.Parse(data["BUNNY"]["Enabled"]);
+                Settings.Bhop.JumpLimit = bool.Parse(data["BUNNY"]["JumpLimit"]);
+                Settings.Bhop.MaxJumps = int.Parse(data["BUNNY"]["MaxJumps"]);
 
-                var NoflashEnabled = data["NO FLASH"]["Enabled"];
-                var Flash = data["NO FLASH"]["Flash Amount"];
+                Settings.NoFlash.Enabled = bool.Parse(data["NO FLASH"]["Enabled"]);
 
-                var NohandsEnabled = data["NOHANDS"]["Enabled"];
+                Settings.NoFlash.Flash = float.Parse(data["NO FLASH"]["Flash Amount"]);
 
-                var FovchangerEnabled = data["FOV"]["Enabled"];
-                var Fov = data["FOV"]["Fov"];
+                Settings.NoFlash.Enabled = bool.Parse(data["NOHANDS"]["Enabled"]);
 
-                var HitsoundEnabled = data["HITSOUND"]["Enabled"];
-                var Hitsound = data["HITSOUND"]["Mode"];
+                Settings.Fovchanger.Enabled = bool.Parse(data["FOV"]["Enabled"]);
+                Settings.Fovchanger.Fov = int.Parse(data["FOV"]["Fov"]);
 
-                var TriggerEnabled = data["TRIGGER"]["Enabled"];
+                Settings.Hitsound.Enabled = bool.Parse(data["HITSOUND"]["Enabled"]);
+                Settings.Hitsound.Mode = int.Parse(data["HITSOUND"]["Mode"]);
 
-                var OverlayEnabled = data["OVERLAY"]["Enabled"];
-                var CrosshairEnabled = data["OVERLAY"]["Crosshair"];
+                Settings.Trigger.Enabled = bool.Parse(data["TRIGGER"]["Enabled"]);
 
-                //Skinchanger
-                var SkinchangerEnabled = data["SKINCHANGER"]["Enabled"];
-                var DEAGLESkin = data["SKINCHANGER"]["DEAGLESkin"];
-                var ELITESkin = data["SKINCHANGER"]["ELITESkin"];
-                var FIVESEVENSkin = data["SKINCHANGER"]["FIVESEVENSkin"];
-                var GLOCKSkin = data["SKINCHANGER"]["GLOCKSkin"];
-                var AK47Skin = data["SKINCHANGER"]["AK47Skin"];
-                var AUGSkin = data["SKINCHANGER"]["AUGSkin"];
-                var AWPSkin = data["SKINCHANGER"]["AWPSkin"];
-                var FAMASSkin = data["SKINCHANGER"]["FAMASSkin"];
-                var G3SG1Skin = data["SKINCHANGER"]["G3SG1Skin"];
-                var GALILSkin = data["SKINCHANGER"]["GALILSkin"];
-                var M249Skin = data["SKINCHANGER"]["M249Skin"];
-                var M4A1Skin = data["SKINCHANGER"]["M4A1Skin"];
-                var MAC10Skin = data["SKINCHANGER"]["MAC10Skin"];
+                Settings.Autopistol.Enabled = bool.Parse(data["AUTOPISTOL"]["Enabled"]);
+                Settings.Autopistol.AnyGun = bool.Parse(data["AUTOPISTOL"]["AnyGun"]);
 
+                Settings.Radar.Enabled = bool.Parse(data["RADAR"]["Enabled"]);
 
-                //Get value ^^
+                Settings.Aimbot.Enabled = bool.Parse(data["AIMBOT"]["Enabled"]);
 
-                Settings.Nohands.Enabled = bool.Parse(NohandsEnabled);
+                Settings.RCS.Enabled = bool.Parse(data["RCS"]["Enabled"]);
+                Settings.RCS.X = float.Parse(data["RCS"]["X"]);
+                Settings.RCS.Y = float.Parse(data["RCS"]["Y"]);
 
-                Settings.Glow.TeamRed = int.Parse(TeamRed);
-                Settings.Glow.TeamGreen = int.Parse(TeamGreen);
-                Settings.Glow.TeamBlue = int.Parse(TeamBlue);
+                Settings.Overlay.Enabled = bool.Parse(data["OVERLAY"]["Enabled"]);
+                Settings.Overlay.Crosshair = bool.Parse(data["OVERLAY"]["Crosshair"]);
 
-                Settings.Glow.EnemyRed = int.Parse(EnemyRed);
-                Settings.Glow.EnemyGreen = int.Parse(EnemyGreen);
-                Settings.Glow.EnemyBlue = int.Parse(EnemyBlue);
-
-                Settings.Fovchanger.Enabled = bool.Parse(FovchangerEnabled);
-                Settings.Fovchanger.Fov = int.Parse(Fov);
-
-                Settings.Glow.GlowTeam = bool.Parse(GlowTeam);
-                Settings.Glow.ChamsTeam = bool.Parse(ChamsTeam);
-                Settings.Glow.GlowEnemy = bool.Parse(GlowEnemy);
-                Settings.Glow.ChamsEnemy = bool.Parse(ChamsEnemy);
-
-                Settings.Hitsound.Enabled = bool.Parse(HitsoundEnabled);
-                Settings.Hitsound.Mode = int.Parse(Hitsound);
-
-                Settings.Trigger.Enabled = bool.Parse(TriggerEnabled);
-
-                Settings.Overlay.Enabled = bool.Parse(OverlayEnabled);
-                Settings.Overlay.Crosshair = bool.Parse(CrosshairEnabled);
-
-                Settings.Noflash.Enabled = bool.Parse(NoflashEnabled);
-                Settings.Noflash.Flash = float.Parse(Flash);
-
-                Settings.Bhop.Enabled = bool.Parse(BhopEnabled);
+                Settings.Skinchanger.Enabled = bool.Parse(data["SKINCHANGER"]["Enabled"]);
+                Settings.Skinchanger.WEAPON_DEAGLE = int.Parse(data["SKINCHANGER"]["DEAGLESkin"]);
+                Settings.Skinchanger.WEAPON_ELITE = int.Parse(data["SKINCHANGER"]["ELITESkin"]);
+                Settings.Skinchanger.WEAPON_FIVESEVEN = int.Parse(data["SKINCHANGER"]["FIVESEVENSkin"]);
+                Settings.Skinchanger.WEAPON_GLOCK = int.Parse(data["SKINCHANGER"]["GLOCKSkin"]);
+                Settings.Skinchanger.WEAPON_AK47 = int.Parse(data["SKINCHANGER"]["AK47Skin"]);
+                Settings.Skinchanger.WEAPON_AUG = int.Parse(data["SKINCHANGER"]["AUGSkin"]);
+                Settings.Skinchanger.WEAPON_AWP = int.Parse(data["SKINCHANGER"]["AWPSkin"]);
+                Settings.Skinchanger.WEAPON_FAMAS = int.Parse(data["SKINCHANGER"]["FAMASSkin"]);
+                Settings.Skinchanger.WEAPON_G3SG1 = int.Parse(data["SKINCHANGER"]["G3SG1Skin"]);
+                Settings.Skinchanger.WEAPON_GALILAR = int.Parse(data["SKINCHANGER"]["GALILSkin"]);
+                Settings.Skinchanger.WEAPON_M249 = int.Parse(data["SKINCHANGER"]["M249Skin"]);
+                Settings.Skinchanger.WEAPON_M4A1 = int.Parse(data["SKINCHANGER"]["M4A1Skin"]);
+                Settings.Skinchanger.WEAPON_MAC10 = int.Parse(data["SKINCHANGER"]["MAC10Skin"]);
+                Settings.Skinchanger.WEAPON_P90 = int.Parse(data["SKINCHANGER"]["P90Skin"]);
+                Settings.Skinchanger.WEAPON_UMP45 = int.Parse(data["SKINCHANGER"]["UMP45Skin"]);
+                Settings.Skinchanger.WEAPON_XM1014 = int.Parse(data["SKINCHANGER"]["XM1014Skin"]);
+                Settings.Skinchanger.WEAPON_BIZON = int.Parse(data["SKINCHANGER"]["BIZONSkin"]);
+                Settings.Skinchanger.WEAPON_BIZON = int.Parse(data["SKINCHANGER"]["BIZONSkin"]);
+                Settings.Skinchanger.WEAPON_MAG7 = int.Parse(data["SKINCHANGER"]["MAG7Skin"]);
+                Settings.Skinchanger.WEAPON_NEGEV = int.Parse(data["SKINCHANGER"]["NEGEVSkin"]);
+                Settings.Skinchanger.WEAPON_SAWEDOFF = int.Parse(data["SKINCHANGER"]["SAWEDOFFSkin"]);
+                Settings.Skinchanger.WEAPON_TEC9 = int.Parse(data["SKINCHANGER"]["TEC9Skin"]);
+                Settings.Skinchanger.WEAPON_HKP2000 = int.Parse(data["SKINCHANGER"]["HKP2000Skin"]);
+                Settings.Skinchanger.WEAPON_MP7 = int.Parse(data["SKINCHANGER"]["MP7Skin"]);
+                Settings.Skinchanger.WEAPON_MP9 = int.Parse(data["SKINCHANGER"]["MP9Skin"]);
+                Settings.Skinchanger.WEAPON_NOVA = int.Parse(data["SKINCHANGER"]["NOVASkin"]);
+                Settings.Skinchanger.WEAPON_P250 = int.Parse(data["SKINCHANGER"]["P250Skin"]);
+                Settings.Skinchanger.WEAPON_SCAR20 = int.Parse(data["SKINCHANGER"]["SCAR20Skin"]);
+                Settings.Skinchanger.WEAPON_SG556 = int.Parse(data["SKINCHANGER"]["SG556Skin"]);
+                Settings.Skinchanger.WEAPON_SSG08 = int.Parse(data["SKINCHANGER"]["SSG08Skin"]);
                 //Load config ^^
-
-                //Skinchanger
-                Settings.Skinchanger.Enabled = bool.Parse(SkinchangerEnabled);
-
-                Settings.Skinchanger.WEAPON_DEAGLE = int.Parse(DEAGLESkin);
-                Settings.Skinchanger.WEAPON_ELITE = int.Parse(ELITESkin);
-                Settings.Skinchanger.WEAPON_GLOCK = int.Parse(GLOCKSkin);
-                Settings.Skinchanger.WEAPON_AK47 = int.Parse(AK47Skin);
-                Settings.Skinchanger.WEAPON_AUG = int.Parse(AUGSkin);
-                Settings.Skinchanger.WEAPON_AWP = int.Parse(AWPSkin);
-                Settings.Skinchanger.WEAPON_FAMAS = int.Parse(FAMASSkin);
-                Settings.Skinchanger.WEAPON_G3SG1 = int.Parse(G3SG1Skin);
-                Settings.Skinchanger.WEAPON_GALILAR = int.Parse(GALILSkin);
-                Settings.Skinchanger.WEAPON_M249 = int.Parse(M249Skin);
-                Settings.Skinchanger.WEAPON_M4A1 = int.Parse(M4A1Skin);
-                Settings.Skinchanger.WEAPON_MAC10 = int.Parse(MAC10Skin);
-
-                //Special save & load flags ^^
             }
             catch
             {
-				Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Config cannot be Loaded!, Try to delete your old one!");
-				Console.ForegroundColor = ConsoleColor.White;
-				Console.WriteLine("");
-				
-				LoadFailed = true;
+                SDK.Error("Config cannot be Loaded!, Try to delete your old one!", true);
+                SDK.Error("IF YOU DONT HAVE A CONFIG STOP BITCHING AT ME ON UC!!!", true);
+                Console.WriteLine("");
+
+                LoadFailed = true;
             }
-			
-			if (!LoadFailed)
-			{
-				Console.WriteLine("Config Loaded!");
-			}
-			else
-			{
-				LoadFailed = false;
-			}
-		}
+
+            if (!LoadFailed)
+            {
+                SDK.Log("Config Loaded!", true);
+            }
+            else
+            {
+                LoadFailed = false;
+            }
+        }
 
         public static void SaveConfig()
         {
@@ -176,32 +154,47 @@ namespace Fallen.INI.INI
             var data = parser.ReadFile("Settings.ini");
             //Keep ^^
 
-            data["GLOW TEAM"]["Enabled"] = Settings.Glow.GlowTeam.ToString();
-            data["GLOW TEAM"]["Chams"] = Settings.Glow.ChamsTeam.ToString();
-            data["GLOW TEAM"]["Red"] = Settings.Glow.TeamRed.ToString();
-            data["GLOW TEAM"]["Green"] = Settings.Glow.TeamGreen.ToString();
-            data["GLOW TEAM"]["Blue"] = Settings.Glow.TeamBlue.ToString();
+            data["GLOW TEAM"]["Enabled"] = Settings.GlowTeam.Enabled.ToString();
+            data["GLOW TEAM"]["Chams"] = Settings.GlowTeam.ChamsEnabled.ToString();
+            data["GLOW TEAM"]["Alpha"] = Settings.GlowTeam.Alpha.ToString();
+            data["GLOW TEAM"]["Red"] = Settings.GlowTeam.Red.ToString();
+            data["GLOW TEAM"]["Green"] = Settings.GlowTeam.Green.ToString();
+            data["GLOW TEAM"]["Blue"] = Settings.GlowTeam.Blue.ToString();
 
-            data["GLOW ENEMY"]["Enabled"] = Settings.Glow.GlowEnemy.ToString();
-            data["GLOW ENEMY"]["Chams"] = Settings.Glow.ChamsEnemy.ToString();
-            data["GLOW ENEMY"]["Red"] = Settings.Glow.EnemyRed.ToString();
-            data["GLOW ENEMY"]["Green"] = Settings.Glow.EnemyGreen.ToString();
-            data["GLOW ENEMY"]["Blue"] = Settings.Glow.EnemyBlue.ToString();
+            data["GLOW ENEMY"]["Enabled"] = Settings.GlowEnemy.Enabled.ToString();
+            data["GLOW ENEMY"]["Chams"] = Settings.GlowEnemy.ChamsEnabled.ToString();
+            data["GLOW ENEMY"]["Alpha"] = Settings.GlowEnemy.Alpha.ToString();
+            data["GLOW ENEMY"]["Red"] = Settings.GlowEnemy.Red.ToString();
+            data["GLOW ENEMY"]["Green"] = Settings.GlowEnemy.Green.ToString();
+            data["GLOW ENEMY"]["Blue"] = Settings.GlowEnemy.Blue.ToString();
 
             data["FOV"]["Enabled"] = Settings.Fovchanger.Enabled.ToString();
             data["FOV"]["Fov"] = Settings.Fovchanger.Fov.ToString();
 
             data["BUNNY"]["Enabled"] = Settings.Bhop.Enabled.ToString();
+            data["BUNNY"]["JumpLimit"] = Settings.Bhop.JumpLimit.ToString();
+            data["BUNNY"]["MaxJumps"] = Settings.Bhop.MaxJumps.ToString();
 
-            data["NO FLASH"]["Enabled"] = Settings.Noflash.Enabled.ToString();
-            data["NO FLASH"]["Flash Amount"] = Settings.Noflash.Flash.ToString();
+            data["NO FLASH"]["Enabled"] = Settings.NoFlash.Enabled.ToString();
+            data["NO FLASH"]["Flash Amount"] = Settings.NoFlash.Flash.ToString();
 
-            data["NOHANDS"]["Enabled"] = Settings.Noflash.Enabled.ToString();
+            data["NOHANDS"]["Enabled"] = Settings.NoFlash.Enabled.ToString();
 
             data["HITSOUND"]["Enabled"] = Settings.Hitsound.Enabled.ToString();
             data["HITSOUND"]["Mode"] = Settings.Hitsound.Mode.ToString();
 
             data["TRIGGER"]["Enabled"] = Settings.Trigger.Enabled.ToString();
+
+            data["AUTOPISTOL"]["Enabled"] = Settings.Autopistol.Enabled.ToString();
+            data["AUTOPISTOL"]["AnyGun"] = Settings.Autopistol.AnyGun.ToString();
+
+            data["RADAR"]["Enabled"] = Settings.Radar.Enabled.ToString();
+
+            data["AIMBOT"]["Enabled"] = Settings.Aimbot.Enabled.ToString();
+
+            data["RCS"]["Enabled"] = Settings.RCS.Enabled.ToString();
+            data["RCS"]["X"] = Settings.RCS.X.ToString();
+            data["RCS"]["Y"] = Settings.RCS.Y.ToString();
 
             data["OVERLAY"]["Enabled"] = Settings.Overlay.Enabled.ToString();
             data["OVERLAY"]["Crosshair"] = Settings.Overlay.Crosshair.ToString();
@@ -220,6 +213,22 @@ namespace Fallen.INI.INI
             data["SKINCHANGER"]["M249Skin"] = Settings.Skinchanger.WEAPON_M249.ToString();
             data["SKINCHANGER"]["M4A1Skin"] = Settings.Skinchanger.WEAPON_M4A1.ToString();
             data["SKINCHANGER"]["MAC10Skin"] = Settings.Skinchanger.WEAPON_MAC10.ToString();
+            data["SKINCHANGER"]["P90Skin"] = Settings.Skinchanger.WEAPON_P90.ToString();
+            data["SKINCHANGER"]["UMP45Skin"] = Settings.Skinchanger.WEAPON_UMP45.ToString();
+            data["SKINCHANGER"]["XM1014Skin"] = Settings.Skinchanger.WEAPON_XM1014.ToString();
+            data["SKINCHANGER"]["BIZONSkin"] = Settings.Skinchanger.WEAPON_BIZON.ToString();
+            data["SKINCHANGER"]["MAG7Skin"] = Settings.Skinchanger.WEAPON_MAG7.ToString();
+            data["SKINCHANGER"]["NEGEVSkin"] = Settings.Skinchanger.WEAPON_NEGEV.ToString();
+            data["SKINCHANGER"]["SAWEDOFFSkin"] = Settings.Skinchanger.WEAPON_SAWEDOFF.ToString();
+            data["SKINCHANGER"]["TEC9Skin"] = Settings.Skinchanger.WEAPON_TEC9.ToString();
+            data["SKINCHANGER"]["HKP2000Skin"] = Settings.Skinchanger.WEAPON_HKP2000.ToString();
+            data["SKINCHANGER"]["MP7Skin"] = Settings.Skinchanger.WEAPON_MP7.ToString();
+            data["SKINCHANGER"]["MP9Skin"] = Settings.Skinchanger.WEAPON_MP9.ToString();
+            data["SKINCHANGER"]["NOVASkin"] = Settings.Skinchanger.WEAPON_NOVA.ToString();
+            data["SKINCHANGER"]["P250Skin"] = Settings.Skinchanger.WEAPON_P250.ToString();
+            data["SKINCHANGER"]["SCAR20Skin"] = Settings.Skinchanger.WEAPON_SCAR20.ToString();
+            data["SKINCHANGER"]["SG556Skin"] = Settings.Skinchanger.WEAPON_SG556.ToString();
+            data["SKINCHANGER"]["SSG08Skin"] = Settings.Skinchanger.WEAPON_SSG08.ToString();
 
             //Get value ^^
 
