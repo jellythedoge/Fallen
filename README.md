@@ -29,6 +29,7 @@
 
 #Other
 - Random ruski for mem class
+- Decimal the fat cunt
 
 ### If you straight rename this and post on UC im going to litteraly shank you!
  
