@@ -3,12 +3,16 @@
 ## Features
 - Glow
 - Chams
-- Trigger
+- Fov
 - Bhop
+- NoFlash
+- NoHands
+- Hitsound
+- Trigger
+- Autopistol
+- Radar
+- RCS
 - Skinchanger
-- Nohands
-- Noflash
-- Fovchanger
 
 ## Usage
 
