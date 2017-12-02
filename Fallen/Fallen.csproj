@@ -70,8 +70,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\Render\Direct2DRenderer.cs" />
-    <Compile Include="API\Render\OverlayWindow.cs" />
     <Compile Include="API\SDK.cs" />
     <Compile Include="API\Memory.cs" />
     <Compile Include="API\Offsets.cs" />
@@ -84,12 +82,7 @@
     <Compile Include="Features\Misc.cs" />
     <Compile Include="Features\Glow.cs" />
     <Compile Include="Features\Trigger.cs" />
-    <Compile Include="GUI\OverlayForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\OverlayForm.Designer.cs">
-      <DependentUpon>OverlayForm.cs</DependentUpon>
-    </Compile>
+    <Compile Include="GUI\OverlayForm.cs" />
     <Compile Include="INI\Config.cs" />
     <Compile Include="INI\Exceptions\ParsingException.cs" />
     <Compile Include="INI\FileIniParser.cs" />
@@ -125,9 +118,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GUI\OverlayForm.resx">
-      <DependentUpon>OverlayForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

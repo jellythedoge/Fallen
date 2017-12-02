@@ -19,6 +19,7 @@ namespace Fallen
     {
         public static int ClientPointer;
         public static int EnginePointer;
+        public static IntPtr mProc_H;
 
         private static void Main(string[] args)
         {
@@ -26,6 +27,7 @@ namespace Fallen
 
             ClientPointer = MemoryManager.GetModuleAdress("client");
             EnginePointer = MemoryManager.GetModuleAdress("engine");
+            mProc_H = MemoryManager.m_pProcessHandle;
 
             List<string> outdatedSignatures = Offsets.ScanPatterns();
 
@@ -204,9 +206,7 @@ namespace Fallen
 
         public static void GUICall()
         {
-            ///Application.Run(new GUI.OverlayForm());
-            ///DONT UNCOMMENT CRASHES AFTER 2 FRAMES!!!
-            ///GONNA FIX TOMMOROW MOST LIKELEY
+            GUI.OverlayForm.Run(mProc_H);
         }
     }
 }
