@@ -22,7 +22,10 @@ namespace Memory
                 m_Process = Process.GetProcessesByName(ProcessName)[0];
             else
             {
-                Console.WriteLine("Couldn't find " + ProcessName + ". Please start it first!");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Couldn't find " + ProcessName + ", Please start it first!");
+                Console.ResetColor();
+                Console.ReadKey();
                 Environment.Exit(1);
             }
             m_pProcessHandle = OpenProcess(PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE, false, m_Process.Id); // Sets Our ProcessHandle

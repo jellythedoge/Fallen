@@ -1,58 +1,18 @@
 ﻿using Fallen.API;
+using Overlay;
 using System;
 using System.Drawing;
 using System.Drawing.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Fallen.GUI
 {
     public partial class OverlayForm : Form
     {
-        ////////////
-        //Booleans//
-        ////////////
-
-        public static bool Item1 = true;
-        public static bool Item2 = false;
-        public static bool Item3 = false;
-        public static bool Item4 = false;
-        public static bool Item5 = false;
-        public static bool Item6 = false;
-        public static bool Item7 = false;
-        public static bool Item8 = false;
-        public static bool Item9 = false;
-        public static bool Item10 = false;
-        public static bool Item11 = false;
-
-        /////////////////
-        //Render helper//
-        /////////////////
-
-        public Graphics Render;
-
-        public SolidBrush CubeOn = new SolidBrush(Color.FromArgb(255, 0, 255, 0));
-        public SolidBrush CubeOff = new SolidBrush(Color.FromArgb(255, 255, 0, 0));
-
-        public SolidBrush CubeRed = new SolidBrush(Color.Red);
-        public SolidBrush CubeGreen = new SolidBrush(Color.Green);
-        public SolidBrush CubeBlue = new SolidBrush(Color.Blue);
-        public SolidBrush CubeBlack = new SolidBrush(Color.Black);
-        public SolidBrush CubeYellow = new SolidBrush(Color.Yellow);
-
-        public Pen PenBlack = new Pen(Color.Black);
-
-        private Font SharpFont = new Font("Arial Bold", 15.0f);
-
-        private Pen Crosshair = new Pen(Color.FromArgb(255, 255, 0, 0));
-
         private RECT rect;
         public const string WINDOW_NAME = "Counter-Strike: Global Offensive";
         private IntPtr handle = SDK.FindWindow(null, WINDOW_NAME);
-
-        public struct RECT
-        {
-            public int left, top, right, bottom;
-        }
 
         public OverlayForm()
         {
@@ -77,12 +37,11 @@ namespace Fallen.GUI
             //Window Size//
             ///////////////
 
-            var WinSize = new Size(rect.right - rect.left, rect.bottom - rect.top);
+            var WinSize = new Size(rect.Right - rect.Left, rect.Bottom - rect.Top);
 
             this.Size = WinSize;
-            this.Top = rect.top;
-            this.Left = rect.left;
-            this.Font = SharpFont;
+            this.Top = rect.Top;
+            this.Left = rect.Left;
 
             e.Graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
 
@@ -93,23 +52,22 @@ namespace Fallen.GUI
 
         public void RenderOverlay(object sender, PaintEventArgs e)
         {
-            Render = e.Graphics;
+            OverlayWindow overlay = new OverlayWindow(false);
 
-            TextRenderer.DrawText(e.Graphics, "Fallen Sharp CSGO.", this.Font,
-                new Rectangle(rect.left / 8, rect.top - 30, 200, 100), Color.FromArgb(255, 0, 200, 0));
+            var gfx = overlay.Graphics;
 
-            /////////////
-            //Crosshair//
-            /////////////
+            SDK.Vector2D window = new SDK.Vector2D(overlay.X, overlay.Y);
 
-            if (Settings.Overlay.Crosshair)
+            while (true)
             {
-                Render.DrawEllipse(Crosshair, rect.left + rect.right / 2 - 3, rect.top + rect.bottom / 2 - 3, 5, 5);
-            }
+                gfx.BeginScene();
+                gfx.ClearScene();
 
-            //////////////
-            //TEST CLOSE//
-            //////////////
+                gfx.FillCircle(100, 100, 100, Color.Red);
+
+                gfx.EndScene();
+                Thread.Sleep(1000);
+            }
         }
     }
 }

@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static Fallen.GUI.OverlayForm;
 using static System.Math;
 
 #endregion
@@ -41,6 +40,69 @@ namespace Fallen.API
     {
         public static Entity[] Entity = new Entity[64];
     }
+
+    #region Overlay
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct MARGIN
+    {
+        public int cxLeftWidth;
+        public int cxRightWidth;
+        public int cyTopHeight;
+        public int cyBottomHeight;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct MSG
+    {
+        public IntPtr hwnd;
+        public uint message;
+        public IntPtr wparam;
+        public IntPtr lparam;
+        public uint time;
+        public int x;
+        public int y;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct POINT
+    {
+        public int X;
+        public int Y;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct RECT
+    {
+        public int Left;        // x position of upper-left corner
+        public int Top;         // y position of upper-left corner
+        public int Right;       // x position of lower-right corner
+        public int Bottom;      // y position of lower-right corner
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct WNDCLASSEX
+    {
+        public uint cbSize;
+        public uint style;
+        public IntPtr lpfnWndProc;
+        public int cbClsExtra;
+        public int cbWndExtra;
+        public IntPtr hInstance;
+        public IntPtr hIcon;
+        public IntPtr hCursor;
+        public IntPtr hbrBackground;
+        public string lpszMenuName;
+        public string lpszClassName;
+        public IntPtr hIconSm;
+
+        public static uint Size()
+        {
+            return (uint)Marshal.SizeOf(typeof(WNDCLASSEX));
+        }
+    }
+
+    #endregion
 
     #endregion
 
@@ -128,63 +190,63 @@ namespace Fallen.API
                         #region RIFLE
 
                         case (int)WeaponIDs.WEAPON_AK47:
-                            HeldWeapon = "RIFLE";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "RIFLE";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_AUG:
-                            HeldWeapon = "RIFLE";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "RIFLE";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_AWP:
-                            HeldWeapon = "RIFLE";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "RIFLE";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_BIZON:
-                            HeldWeapon = "RIFLE";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "RIFLE";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_FAMAS:
-                            HeldWeapon = "RIFLE";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "RIFLE";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_G3SG1:
-                            HeldWeapon = "RIFLE";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "RIFLE";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_GALILAR:
-                            HeldWeapon = "RIFLE";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "RIFLE";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_M4A1:
-                            HeldWeapon = "RIFLE";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "RIFLE";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_SCAR20:
-                            HeldWeapon = "RIFLE";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "RIFLE";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_SG556:
-                            HeldWeapon = "RIFLE";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "RIFLE";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_SSG08:
-                            HeldWeapon = "RIFLE";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "RIFLE";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_M4A1_SILENCER:
-                            HeldWeapon = "RIFLE";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "RIFLE";
+                            await Task.Delay(20);
                             break;
 
                         #endregion
@@ -192,28 +254,28 @@ namespace Fallen.API
                         #region SMG
 
                         case (int)WeaponIDs.WEAPON_MAC10:
-                            HeldWeapon = "SMG";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "SMG";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_P90:
-                            HeldWeapon = "SMG";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "SMG";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_UMP45:
-                            HeldWeapon = "SMG";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "SMG";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_MP7:
-                            HeldWeapon = "SMG";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "SMG";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_MP9:
-                            HeldWeapon = "SMG";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "SMG";
+                            await Task.Delay(20);
                             break;
 
                         #endregion
@@ -221,13 +283,13 @@ namespace Fallen.API
                         #region HEAVY
 
                         case (int)WeaponIDs.WEAPON_NEGEV:
-                            HeldWeapon = "HEAVY";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "HEAVY";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_M249:
-                            HeldWeapon = "HEAVY";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "HEAVY";
+                            await Task.Delay(20);
                             break;
 
                         #endregion
@@ -235,53 +297,54 @@ namespace Fallen.API
                         #region PISTOL
 
                         case (int)WeaponIDs.WEAPON_DEAGLE:
-                            HeldWeapon = "PISTOL";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "PISTOL";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_ELITE:
-                            HeldWeapon = "PISTOL";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "PISTOL";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_FIVESEVEN:
-                            HeldWeapon = "PISTOL";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "PISTOL";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_GLOCK:
-                            HeldWeapon = "PISTOL";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "PISTOL";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_TEC9:
-                            HeldWeapon = "PISTOL";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "PISTOL";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_HKP2000:
-                            HeldWeapon = "PISTOL";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "PISTOL";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_USP_SILENCER:
-                            HeldWeapon = "PISTOL";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "PISTOL";
+                            Console.WriteLine("USP HELD");
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_CZ75A:
-                            HeldWeapon = "PISTOL";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "PISTOL";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_REVOLVER:
-                            HeldWeapon = "PISTOL";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "PISTOL";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_P250:
-                            HeldWeapon = "PISTOL";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "PISTOL";
+                            await Task.Delay(20);
                             break;
 
                         #endregion
@@ -289,23 +352,23 @@ namespace Fallen.API
                         #region SHOTGUN
 
                         case (int)WeaponIDs.WEAPON_XM1014:
-                            HeldWeapon = "SHOTGUN";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "SHOTGUN";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_MAG7:
-                            HeldWeapon = "SHOTGUN";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "SHOTGUN";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_SAWEDOFF:
-                            HeldWeapon = "SHOTGUN";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "SHOTGUN";
+                            await Task.Delay(20);
                             break;
 
                         case (int)WeaponIDs.WEAPON_NOVA:
-                            HeldWeapon = "SHOTGUN";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "SHOTGUN";
+                            await Task.Delay(20);
                             break;
 
                         #endregion
@@ -313,15 +376,14 @@ namespace Fallen.API
                         #region KNIFE
 
                         case (int)WeaponIDs.WEAPON_KNIFE:
-                            HeldWeapon = "KNIFE";
-                            await Task.Delay(40);
+                            SDK.HeldWeapon = "KNIFE";
+                            await Task.Delay(20);
                             break;
 
                         #endregion
 
                         default:
-                            HeldWeapon = "OTHER";
-                            await Task.Delay(40);
+                            await Task.Delay(20);
                             break;
                     }
 
@@ -335,7 +397,7 @@ namespace Fallen.API
 
         #endregion
 
-        public static async void ForceFullUpdate()
+        public static async Task ForceFullUpdate()
         {
             MemoryManager.WriteMemory<int>(LocalPlayer.m_iClientState + 0x174, -1);
 
@@ -667,22 +729,89 @@ namespace Fallen.API
         [DllImport("user32.dll")]
         public static extern IntPtr GetForegroundWindow();
 
-        ///////////
-        //OVERLAY//
-        ///////////
-
-        [DllImport("user32.dll")]
-        public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+        #region Overlay
 
         [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr CreateWindowEx(
+           uint dwExStyle,
+           string lpClassName,
+           string lpWindowName,
+           uint dwStyle,
+           int x,
+           int y,
+           int nWidth,
+           int nHeight,
+           IntPtr hWndParent,
+           IntPtr hMenu,
+           IntPtr hInstance,
+           IntPtr lpParam);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern ushort RegisterClassEx(ref WNDCLASSEX wndclassex);
+
+        [DllImport("user32.dll", SetLastError = false)]
+        public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+        [DllImport("user32.dll", SetLastError = false)]
         public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll", SetLastError = false)]
+        public static extern int DestroyWindow(IntPtr hwnd);
+
+        [DllImport("user32.dll", SetLastError = false)]
+        public static extern int SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+
+        [DllImport("user32.dll", SetLastError = false)]
+        public static extern IntPtr GetDesktopWindow();
+
+        [DllImport("user32.dll", SetLastError = false)]
+        public static extern int GetSystemMetrics(int index);
+
+        [DllImport("user32.dll", SetLastError = false)]
+        public static extern int ShowWindow(IntPtr hWnd, uint nCmdShow);
+
+        [DllImport("user32.dll", SetLastError = false)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool SetLayeredWindowAttributes(IntPtr hwnd, uint crKey, byte bAlpha, uint dwFlags);
+
+        [DllImport("user32.dll", SetLastError = false)]
+        public static extern bool UpdateLayeredWindow(IntPtr hwnd, IntPtr hdc, ref POINT point, ref POINT size, IntPtr hdcSrc, IntPtr pptSrc, int crKey, IntPtr blend, uint flags);
+
+        [DllImport("user32.dll", SetLastError = false)]
+        public static extern int TranslateMessage(ref MSG msg);
+
+        [DllImport("user32.dll", SetLastError = false)]
+        public static extern int PeekMessage(out MSG msg, IntPtr hwnd, uint filterMin, uint filterMax, uint removeMsg);
+
+        [DllImport("user32.dll", SetLastError = false)]
+        public static extern int DispatchMessage(ref MSG msg);
+
+        [DllImport("user32.dll", SetLastError = false)]
+        public static extern int MoveWindow(IntPtr hwnd, int x, int y, int width, int height, int repaint);
+
+        [DllImport("user32.dll", SetLastError = false)]
+        public static extern int DefWindowProc(IntPtr hwnd, uint msg, uint wparam, uint lparam);
+
+        [DllImport("user32.dll", SetLastError = false)]
+        public static extern int SendMessage(IntPtr hwnd, uint msg, uint wparam, uint lparam);
+
+        [DllImport("user32.dll")]
+        public static extern bool UpdateWindow(IntPtr hWnd);
+
+        [DllImport("dwmapi.dll", SetLastError = false)]
+        public static extern void DwmExtendFrameIntoClientArea(IntPtr hWnd, ref MARGIN pMargins);
+
+        ///Some GDI Magik right here
+        ///dont judge me :(
+        ///
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
+        #endregion
 
         #endregion
     }

@@ -41,6 +41,9 @@ namespace Fallen
             //INITIALIZE MESSAGE//
             //////////////////////
 
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
             INI.INI.LoadConfig();
 
             Console.Title = "Fallen Sharp CSGO - " + File.GetLastWriteTime(Assembly.GetExecutingAssembly().Location);
@@ -75,15 +78,8 @@ namespace Fallen
             SkinchangerCall();
             RadarCall();
             MischacksCall();
-
-            SDK.KeyboardProc();
-
-            if (Settings.Overlay.Enabled)
-            {
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new GUI.OverlayForm());
-            }
+            KeyProcCall();
+            GUICall();
         }
 
         /////////////////
@@ -190,6 +186,27 @@ namespace Fallen
 
             var MiscThread = new Thread(Misc.Run);
             MiscThread.Start();
+        }
+
+        //?//////////////
+        //KEYPROC THEAD//
+        /////////////////
+
+        public static void KeyProcCall()
+        {
+            var KeyPROCThread = new Thread(SDK.KeyboardProc);
+            KeyPROCThread.Start();
+        }
+
+        //////////////
+        //GUI THREAD//
+        //////////////
+
+        public static void GUICall()
+        {
+            ///Application.Run(new GUI.OverlayForm());
+            ///DONT UNCOMMENT CRASHES AFTER 2 FRAMES!!!
+            ///GONNA FIX TOMMOROW MOST LIKELEY
         }
     }
 }

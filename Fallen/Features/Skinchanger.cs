@@ -295,7 +295,7 @@ namespace Fallen.Features
                             MemoryManager.WriteMemory<int>(Weapon.m_iBase + Offsets.m_nFallbackPaintKit, OverrideTexture);
                             MemoryManager.WriteMemory<int>(Weapon.m_iBase + Offsets.m_nFallbackSeed, 661);
                             MemoryManager.WriteMemory<int>(Weapon.m_iBase + Offsets.m_nFallbackStatTrak, StatTrak);
-                            MemoryManager.WriteMemory<float>(Weapon.m_iBase + Offsets.m_flFallbackWear, 0.00001f);
+                            MemoryManager.WriteMemory<float>(Weapon.m_iBase + Offsets.m_flFallbackWear, 0.000000001f);
                             MemoryManager.WriteMemory<int>(Weapon.m_iBase + Offsets.m_iAccountID, Weapon.m_iXuIDLow);
                             MemoryManager.WriteMemory<int>(Weapon.m_iBase + Offsets.m_iItemDefinitionIndex, ItemDefinition);
 
