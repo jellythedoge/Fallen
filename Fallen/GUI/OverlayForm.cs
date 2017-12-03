@@ -1,13 +1,11 @@
-﻿using Fallen.API;
-using static Fallen.API.SDK;
+﻿#region
+
+using FormOverlayExamples.Objects;
+using Overlay;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+
+#endregion
 
 namespace Fallen.GUI
 {
@@ -39,17 +37,17 @@ namespace Fallen.GUI
 
             var font = gfx.CreateFont("Consolas", 22);
 
-
             while (true)
             {
                 Thread.Sleep(1000);
-
                 gfx.BeginScene();
-                gfx.ClearScene();
-
+                gfx.ClearScene(gfx.CreateBrush(0, 0, 0, 0));
+                
                 gfx.FillRectangle(100, 100, 100, 100, blueBrush);
 
                 gfx.EndScene();
+
+                Console.WriteLine("End scene");
             }
             Environment.Exit(0);
         }
