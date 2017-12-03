@@ -254,6 +254,7 @@ namespace Memory
         private const int PROCESS_VM_OPERATION = 0x0008;
         private const int PROCESS_VM_READ = 0x0010;
         private const int PROCESS_VM_WRITE = 0x0020;
+        private static IntPtr handle;
 
         #endregion Constants
     }

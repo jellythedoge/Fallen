@@ -2,6 +2,7 @@
 
 using Memory;
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -73,6 +74,9 @@ namespace Fallen.API
         #region GlobalFunctions
 
         public static string HeldWeapon;
+        public static bool m_bIsScoped;
+        public static int HitAmmount;
+        public static int HitVal;
 
         #region AddressReader
 
@@ -111,6 +115,10 @@ namespace Fallen.API
                     }
 
                     #region WeaponINFO
+
+                    m_bIsScoped = MemoryManager.ReadMemory<bool>(LocalPlayer.m_iBase + Offsets.m_bIsScoped);
+                    HitVal = MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + 0xA2C8);
+
                     Weapon Weapon = new Weapon();
 
                     #region CurrentWeapon
@@ -265,7 +273,6 @@ namespace Fallen.API
 
                         case (int)WeaponIDs.WEAPON_USP_SILENCER:
                             SDK.HeldWeapon = "PISTOL";
-                            Console.WriteLine("USP HELD");
                             await Task.Delay(20);
                             break;
 
@@ -342,6 +349,7 @@ namespace Fallen.API
         }
 
         public static Random Rand = new Random();
+        private static IntPtr handle;
 
         #endregion
 
@@ -389,6 +397,15 @@ namespace Fallen.API
                 {
                     ForceFullUpdate();
                     await Task.Delay(400);
+                }
+
+                ///Overlay MENU stuff
+                ///
+
+                if (KeyPressed(Keys.Insert))
+                {
+                    Settings.Overlay.MenuON = !Settings.Overlay.MenuON;
+                    Thread.Sleep(400);
                 }
 
                 #endregion
@@ -655,6 +672,29 @@ namespace Fallen.API
         }
 
         #endregion
+
+        #endregion
+
+        #region SPECIAL
+
+        public static IntPtr Open_pHandel(string processName)
+        {
+            Process[] proc = Process.GetProcessesByName(processName);
+            if (proc.Length == 0)
+            {
+                handle = IntPtr.Zero;
+                return handle;
+            }
+            else if (proc.Length > 1)
+            {
+                throw new Exception("More then one process found.");
+            }
+            else
+            {
+                handle = proc[0].MainWindowHandle;
+                return handle;
+            }
+        }
 
         #endregion
 

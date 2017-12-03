@@ -74,6 +74,7 @@
     <Compile Include="API\Render\Objects\OverlayManager.cs" />
     <Compile Include="API\Render\Objects\OverlayWindow.cs" />
     <Compile Include="API\Render\PInvoke.cs" />
+    <Compile Include="API\Render\RenderHelper.cs" />
     <Compile Include="API\SDK.cs" />
     <Compile Include="API\Memory.cs" />
     <Compile Include="API\Offsets.cs" />

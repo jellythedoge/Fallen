@@ -25,9 +25,10 @@ namespace Fallen
         {
             MemoryManager.Initialize("csgo");
 
+
             ClientPointer = MemoryManager.GetModuleAdress("client");
             EnginePointer = MemoryManager.GetModuleAdress("engine");
-            mProc_H = MemoryManager.m_pProcessHandle;
+            mProc_H = SDK.Open_pHandel("csgo");
 
             List<string> outdatedSignatures = Offsets.ScanPatterns();
 

@@ -14,14 +14,12 @@ namespace Fallen.Features
     {
         internal async void Run()
         {
-            var HitAmmount = MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + 0xA2C8);
             dynamic Sound = new System.Media.SoundPlayer();
 
             while (true)
             {
                 var FovCheck = MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + Offsets.m_iFOV);
                 var NohandsCheck = MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + 0x254);
-                var HitVal = MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + 0xA2C8);
                 bool EndFlash = (!Settings.NoFlash.Enabled);
 
                 ///////////////
@@ -30,7 +28,7 @@ namespace Fallen.Features
 
                 if (Settings.Fovchanger.Enabled)
                 {
-                    if (!MemoryManager.ReadMemory<bool>(LocalPlayer.m_iBase + Offsets.m_bIsScoped))
+                    if (!SDK.m_bIsScoped)
                     {
                         if (FovCheck != Settings.Fovchanger.Fov)
                         {
@@ -100,29 +98,29 @@ namespace Fallen.Features
                 {
                     if (Settings.Hitsound.Mode == 1)
                     {
-                        if (HitAmmount != HitVal)
+                        if (SDK.HitAmmount != SDK.HitVal)
                         {
                             Sound.Stream = Properties.Resources.cod;
                             Sound.Play();
-                            HitAmmount = HitVal;
+                            SDK.HitAmmount = SDK.HitVal;
                         }
                     }
                     else if (Settings.Hitsound.Mode == 2)
                     {
-                        if (HitAmmount != HitVal)
+                        if (SDK.HitAmmount != SDK.HitVal)
                         {
                             Sound.Stream = Properties.Resources.anime;
                             Sound.Play();
-                            HitAmmount = HitVal;
+                            SDK.HitAmmount = SDK.HitVal;
                         }
                     }
                     else if (Settings.Hitsound.Mode == 3)
                     {
-                        if (HitAmmount != HitVal)
+                        if (SDK.HitAmmount != SDK.HitVal)
                         {
                             Sound.Stream = Properties.Resources.bubble;
                             Sound.Play();
-                            HitAmmount = HitVal;
+                            SDK.HitAmmount = SDK.HitVal;
                         }
                     }
                     else

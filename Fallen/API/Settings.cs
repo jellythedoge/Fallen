@@ -93,6 +93,11 @@
         {
             public static bool Enabled = false;
             public static bool Crosshair = false;
+
+            ///Not used in config files, for menu control
+            ///
+
+            public static bool MenuON = false;
         }
 
         public struct Skinchanger
