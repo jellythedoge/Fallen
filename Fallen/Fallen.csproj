@@ -81,6 +81,7 @@
     <Compile Include="API\Memory.cs" />
     <Compile Include="API\Offsets.cs" />
     <Compile Include="API\Settings.cs" />
+    <Compile Include="Features\Autopistol.cs" />
     <Compile Include="Features\Bunny.cs" />
     <Compile Include="Features\ConsoleReader.cs" />
     <Compile Include="Features\Radar.cs" />

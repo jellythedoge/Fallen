@@ -16,6 +16,8 @@ namespace Fallen.Features
             var JumpsDone = 0;
             while (true)
             {
+                Thread.Sleep(1);
+
                 if (Settings.Bhop.Enabled)
                 {
                     var flag = MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + 0x100);
@@ -40,7 +42,6 @@ namespace Fallen.Features
                         JumpsDone = 0;
                     }
                 }
-                Thread.Sleep(1);
             }
         }
     }

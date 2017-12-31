@@ -4,6 +4,7 @@ using Fallen.API;
 using Memory;
 using System.Threading;
 using System.Drawing;
+using System;
 
 #endregion
 
@@ -26,7 +27,10 @@ namespace Fallen.Features
                     if (Arrays.Entity[i].m_iDormant == 1)
                         continue;
 
+                    int cEntity = MemoryManager.ReadMemory<int>(MainClass.ClientPointer + Offsets.dwEntityList + (i - 1) * 16);
+
                     SDK.GlowObject GlowObject = new SDK.GlowObject();
+                    SDK.ChamsObject ChamsObject = new SDK.ChamsObject();
 
                     if (Arrays.Entity[i].m_iTeam != LocalPlayer.m_iTeam)
                     {
@@ -42,6 +46,23 @@ namespace Fallen.Features
                             GlowObject.m_bRenderWhenUnoccluded = false;
                             GlowObject.m_bFullBloom = Settings.GlowEnemy.ChamsEnabled;
 
+                            if (Settings.GlowEnemy.ChamsEnabled)
+                            {
+                                GlowObject.m_bFullBloom = Settings.GlowEnemy.ChamsEnabled;
+
+                                ChamsObject.r = Convert.ToByte(Settings.GlowEnemy.Red);
+                                ChamsObject.g = Convert.ToByte(Settings.GlowEnemy.Green);
+                                ChamsObject.b = Convert.ToByte(Settings.GlowEnemy.Blue);
+                                ChamsObject.a = 254;
+
+                                MemoryManager.WriteMemory<SDK.ChamsObject>(cEntity + 0x70, ChamsObject);
+
+                            }
+                            else
+                            {
+                                GlowObject.m_bFullBloom = Settings.GlowEnemy.ChamsEnabled;
+                            }
+
                             MemoryManager.WriteMemory<SDK.GlowObject>(LocalPlayer.m_iGlowBase + Arrays.Entity[i].m_iGlowIndex * 0x38, GlowObject);
                         }
                     }
@@ -55,10 +76,27 @@ namespace Fallen.Features
                             GlowObject.r = Settings.GlowTeam.Red / 255;
                             GlowObject.g = Settings.GlowEnemy.Green / 255;
                             GlowObject.b = Settings.GlowTeam.Blue / 255;
-                            GlowObject.a = Settings.GlowTeam.Alpha / 255;
+                            GlowObject.a = Settings.GlowTeam.Alpha / 254;
                             GlowObject.m_bRenderWhenOccluded = true;
                             GlowObject.m_bRenderWhenUnoccluded = false;
-                            GlowObject.m_bFullBloom = Settings.GlowTeam.ChamsEnabled;
+
+                            if (Settings.GlowTeam.ChamsEnabled)
+                            {
+                                GlowObject.m_bFullBloom = Settings.GlowTeam.ChamsEnabled;
+
+                                ChamsObject.r = Convert.ToByte(Settings.GlowTeam.Red);
+                                ChamsObject.g = Convert.ToByte(Settings.GlowTeam.Green);
+                                ChamsObject.b = Convert.ToByte(Settings.GlowTeam.Blue);
+                                ChamsObject.a = 254;
+
+
+                                MemoryManager.WriteMemory<SDK.ChamsObject>(cEntity + 0x70, ChamsObject);
+
+                            }
+                            else
+                            {
+                                GlowObject.m_bFullBloom = Settings.GlowTeam.ChamsEnabled;
+                            }
 
                             MemoryManager.WriteMemory<SDK.GlowObject>(LocalPlayer.m_iGlowBase + Arrays.Entity[i].m_iGlowIndex * 0x38, GlowObject);
                         }

@@ -725,6 +725,17 @@ namespace Fallen.API
             [FieldOffset(0x2C)]
             public bool m_bFullBloom;
         };
+        
+        public struct ChamsObject
+        {
+            public byte r;
+
+            public byte g;
+
+            public byte b;
+
+            public byte a;
+        }
 
         #endregion
 

@@ -260,6 +260,7 @@ namespace Fallen.API
         public const Int32 m_bHasHelmet = 0xB22C;
         public const Int32 m_bInReload = 0x3245;
         public const Int32 m_bIsDefusing = 0x3888;
+        public const Int32 m_totalHitsOnServer = 0xA2C8;
         public const Int32 m_bIsScoped = 0x387E;
         public const Int32 m_bSpotted = 0x939;
         public const Int32 m_bSpottedByMask = 0x97C;

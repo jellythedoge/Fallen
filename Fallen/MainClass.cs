@@ -80,6 +80,7 @@ namespace Fallen
             BunnyCall();
             SkinchangerCall();
             RadarCall();
+            AutopistolCall();
             MischacksCall();
             KeyProcCall();
             GUICall();
@@ -165,6 +166,18 @@ namespace Fallen
 
             var RadarThread = new Thread(Radar.Run);
             RadarThread.Start();
+        }
+
+        //////////////////////
+        //AUTO PISTOL THREAD//
+        //////////////////////
+
+        public static void AutopistolCall()
+        {
+            var Autopistol = new Autopistol();
+
+            var AutopistolThread = new Thread(Autopistol.Run);
+            AutopistolThread.Start();
         }
 
         //////////////////////

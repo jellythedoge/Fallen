@@ -62,6 +62,7 @@
         public struct Trigger
         {
             public static bool Enabled = false;
+            public static int Delay = 0;
             public static bool Key = false;
         }
 

@@ -76,20 +76,6 @@ namespace Fallen.Features
                     // MemoryManager.WriteMemory<int>(LocalPlayer.Base + 0x254, 317);
                 }
 
-                ///////////////
-                //AUTO PISTOL//
-                ///////////////
-
-                if (Settings.Autopistol.Enabled)
-                {
-                    if (Settings.Autopistol.Key && SDK.HeldWeapon == "PISTOL" || Settings.Autopistol.Key && Settings.Autopistol.AnyGun)
-                    {
-                        MemoryManager.WriteMemory<bool>(MainClass.ClientPointer + Offsets.dwForceAttack, true);
-                        await Task.Delay(10);
-                        MemoryManager.WriteMemory<bool>(MainClass.ClientPointer + Offsets.dwForceAttack, false);
-                    }
-                }
-
                 /////////////
                 //HIT SOUND//
                 /////////////
