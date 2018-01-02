@@ -28,7 +28,7 @@
 - Me
 
 #Other
-- Random ruski for mem class
+- Anon for mem class
 
 ### If you straight rename this and post on UC im going to litteraly shank you!
  
