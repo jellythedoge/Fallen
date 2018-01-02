@@ -4,7 +4,6 @@ using Fallen.API;
 using Memory;
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 
 #endregion
 
@@ -18,8 +17,8 @@ namespace Fallen.Features
 
             while (true)
             {
-                var FovCheck = MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + Offsets.m_iFOV);
-                var NohandsCheck = MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + 0x254);
+                var FovCheck = MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + Offsets.m_iFOV);
+                var NohandsCheck = MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + 0x254);
                 bool EndFlash = (!Settings.NoFlash.Enabled);
 
                 ///////////////
@@ -32,7 +31,7 @@ namespace Fallen.Features
                     {
                         if (FovCheck != Settings.Fovchanger.Fov)
                         {
-                            MemoryManager.WriteMemory<int>(LocalPlayer.m_iBase + Offsets.m_iFOV, Settings.Fovchanger.Fov);
+                            MemoryManager.WriteMemory<int>(SDK.LocalPlayer.m_iBase + Offsets.m_iFOV, Settings.Fovchanger.Fov);
                         }
                     }
                 }
@@ -43,13 +42,13 @@ namespace Fallen.Features
 
                 if (Settings.NoFlash.Enabled || EndFlash)
                 {
-                    var FlashCheck = MemoryManager.ReadMemory<float>(LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha);
+                    var FlashCheck = MemoryManager.ReadMemory<float>(SDK.LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha);
 
                     if (EndFlash)
                     {
                         if (FlashCheck == Settings.NoFlash.Flash && FlashCheck != 255)
                         {
-                            MemoryManager.WriteMemory<float>(LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha, 255);
+                            MemoryManager.WriteMemory<float>(SDK.LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha, 255);
                             Console.WriteLine("Flash one");
                         }
                     }
@@ -57,8 +56,8 @@ namespace Fallen.Features
                     {
                         if (FlashCheck != Settings.NoFlash.Flash && FlashCheck != 0)
                         {
-                            MemoryManager.WriteMemory<float>(LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha, Settings.NoFlash.Flash);
-                            Console.WriteLine(MemoryManager.ReadMemory<float>(LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha));
+                            MemoryManager.WriteMemory<float>(SDK.LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha, Settings.NoFlash.Flash);
+                            Console.WriteLine(MemoryManager.ReadMemory<float>(SDK.LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha));
                         }
                     }
                 }
@@ -69,11 +68,11 @@ namespace Fallen.Features
 
                 if (Settings.Nohands.Enabled && NohandsCheck != 0)
                 {
-                    MemoryManager.WriteMemory<int>(LocalPlayer.m_iBase + 0x254, 0);
+                    MemoryManager.WriteMemory<int>(SDK.LocalPlayer.m_iBase + 0x254, 0);
                 }
                 else if (!Settings.Nohands.Enabled && NohandsCheck != 317)
                 {
-                    // MemoryManager.WriteMemory<int>(LocalPlayer.Base + 0x254, 317);
+                    // MemoryManager.WriteMemory<int>(SDK.LocalPlayer.Base + 0x254, 317);
                 }
 
                 /////////////

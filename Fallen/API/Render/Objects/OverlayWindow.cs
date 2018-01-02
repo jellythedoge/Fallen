@@ -1,16 +1,15 @@
-﻿using System;
+﻿using FormOverlayExamples;
+using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Threading.Tasks;
-
-using FormOverlayExamples;
-using System.Runtime.CompilerServices;
 
 namespace Overlay
 {
     public class OverlayWindow : IDisposable
     {
         private Random rng;
+
         private delegate IntPtr WndProc(IntPtr hWnd, PInvoke.WindowsMessage msg, IntPtr wParam, IntPtr lParam);
 
         private IntPtr wndProcPointer;
@@ -32,7 +31,8 @@ namespace Overlay
 
         public OverlayWindow()
         {
-            windowThread = new Thread(() => windowThreadMethod()) {
+            windowThread = new Thread(() => windowThreadMethod())
+            {
                 IsBackground = true,
                 Priority = ThreadPriority.BelowNormal
             };
@@ -43,7 +43,8 @@ namespace Overlay
 
         public OverlayWindow(int x, int y, int width, int height)
         {
-            windowThread = new Thread(() => windowThreadMethod(x, y, width, height)) {
+            windowThread = new Thread(() => windowThreadMethod(x, y, width, height))
+            {
                 IsBackground = true,
                 Priority = ThreadPriority.BelowNormal
             };
@@ -61,12 +62,14 @@ namespace Overlay
         {
             setupInstance(x, y, width, height);
 
-            while (true) {
+            while (true)
+            {
                 PInvoke.WaitMessage();
 
                 PInvoke.Message message = new PInvoke.Message();
 
-                if (PInvoke.PeekMessageW(ref message, WindowHandle, 0, 0, 1) != 0) {
+                if (PInvoke.PeekMessageW(ref message, WindowHandle, 0, 0, 1) != 0)
+                {
                     if (message.Msg == PInvoke.WindowsMessage.WM_QUIT) continue;
 
                     PInvoke.TranslateMessage(ref message);
@@ -94,7 +97,8 @@ namespace Overlay
             RuntimeHelpers.PrepareDelegate(wndProc);
             wndProcPointer = Marshal.GetFunctionPointerForDelegate(wndProc);
 
-            PInvoke.WNDCLASSEX wndClassEx = new PInvoke.WNDCLASSEX() {
+            PInvoke.WNDCLASSEX wndClassEx = new PInvoke.WNDCLASSEX()
+            {
                 cbSize = PInvoke.WNDCLASSEX.Size(),
                 style = 0,
                 lpfnWndProc = wndProcPointer,
@@ -131,19 +135,25 @@ namespace Overlay
 
         private IntPtr windowProcedure(IntPtr hwnd, PInvoke.WindowsMessage msg, IntPtr wParam, IntPtr lParam)
         {
-            switch (msg) {
+            switch (msg)
+            {
                 case PInvoke.WindowsMessage.WM_DESTROY:
-                return (IntPtr)0;
+                    return (IntPtr)0;
+
                 case PInvoke.WindowsMessage.WM_ERASEBKGND:
-                PInvoke.SendMessage(WindowHandle, PInvoke.WindowsMessage.WM_PAINT, (IntPtr)0, (IntPtr)0);
-                break;
+                    PInvoke.SendMessage(WindowHandle, PInvoke.WindowsMessage.WM_PAINT, (IntPtr)0, (IntPtr)0);
+                    break;
+
                 case PInvoke.WindowsMessage.WM_KEYDOWN:
-                return (IntPtr)0;
+                    return (IntPtr)0;
+
                 case PInvoke.WindowsMessage.WM_PAINT:
-                return (IntPtr)0;
+                    return (IntPtr)0;
+
                 case PInvoke.WindowsMessage.WM_DWMCOMPOSITIONCHANGED: // needed for windows 7 support
-                extendFrameIntoClientArea();
-                return (IntPtr)0;
+                    extendFrameIntoClientArea();
+                    return (IntPtr)0;
+
                 default: break;
             }
 
@@ -165,7 +175,8 @@ namespace Overlay
             //    cyTopHeight = this.Y
             //};
 
-            var margin = new PInvoke.MARGIN {
+            var margin = new PInvoke.MARGIN
+            {
                 cxLeftWidth = -1,
                 cxRightWidth = -1,
                 cyBottomHeight = -1,
@@ -183,7 +194,8 @@ namespace Overlay
 
             char[] chars = new char[len];
 
-            for (int i = 0; i < chars.Length; i++) {
+            for (int i = 0; i < chars.Length; i++)
+            {
                 chars[i] = (char)rng.Next(97, 123);
             }
 
@@ -234,21 +246,26 @@ namespace Overlay
         }
 
         #region IDisposable Support
+
         private bool disposedValue = false;
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue) {
-                if (disposing) {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
                     rng = null;
                 }
 
                 if (windowThread != null) windowThread.Abort();
 
-                try {
+                try
+                {
                     windowThread.Join();
-                } catch {
-
+                }
+                catch
+                {
                 }
 
                 PInvoke.DestroyWindow(WindowHandle);
@@ -263,6 +280,7 @@ namespace Overlay
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        #endregion
+
+        #endregion IDisposable Support
     }
 }

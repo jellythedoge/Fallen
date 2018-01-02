@@ -22,7 +22,7 @@ namespace Fallen.Features
                 switch (input.ToLower())
                 {
                     case "test":
-                        Console.WriteLine(MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + Offsets.m_iHealth));
+                        Console.WriteLine(MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + Offsets.m_iHealth));
                         MemoryManager.WriteMemory<int>(Offsets.m_iHealth, 500);
                         break;
 

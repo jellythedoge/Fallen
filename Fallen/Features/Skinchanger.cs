@@ -40,7 +40,7 @@ namespace Fallen.Features
                         SDK.Weapon Weapon = new SDK.Weapon();
 
                         // My Weapons
-                        var MyWeapons = (MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + Offsets.m_hMyWeapons + (i - 1) * 0x4)) & 0xFFF;
+                        var MyWeapons = (MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + Offsets.m_hMyWeapons + (i - 1) * 0x4)) & 0xFFF;
 
                         // Get Baseadress of my Weapons
                         Weapon.m_iBase = MemoryManager.ReadMemory<int>(MainClass.ClientPointer + Offsets.dwEntityList + (MyWeapons - 1) * 0x10);

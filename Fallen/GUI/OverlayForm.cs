@@ -13,9 +13,9 @@ namespace Fallen.GUI
 {
     internal class OverlayForm
     {
-        static int HitMark;
+        private static int HitMark;
 
-        struct RECT
+        private struct RECT
         {
             public static float Left;
             public static float Top;
@@ -63,10 +63,10 @@ namespace Fallen.GUI
                 Thread.Sleep(50);
                 gfx.BeginScene();
                 gfx.ClearScene(gfx.CreateBrush(0, 0, 0, 0));
-                
+
                 if (Settings.Overlay.MenuON && !SDK.m_bIsScoped)
                 {
-                    gfx.FillRectangle(RECT.Left + 100,  RECT.HCenter, 50, 50, blueBrush);
+                    gfx.FillRectangle(RECT.Left + 100, RECT.HCenter, 50, 50, blueBrush);
                 }
 
                 if (Settings.Overlay.Crosshair)
@@ -84,7 +84,7 @@ namespace Fallen.GUI
             Environment.Exit(0);
         }
 
-        static async Task HitMarker()
+        private static async Task HitMarker()
         {
             HitMark = HitMark + 1;
 
@@ -93,7 +93,7 @@ namespace Fallen.GUI
                 HitMark = 0;
             }
 
-            await Task.Delay (5);
+            await Task.Delay(5);
         }
     }
 }

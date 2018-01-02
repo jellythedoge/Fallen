@@ -205,7 +205,7 @@ namespace Fallen.API
                 SDK.Log($"dwPlayerResource: 0x{ dwPlayerResource.ToString("X") }", true);
             }
 
-            #endregion WorkingSigs
+            #endregion SigScanner
 
             ///
             ///TO DO

@@ -17,32 +17,6 @@ namespace Fallen.API
     //CSGO EXTERNAL SDK//
     /////////////////////
 
-    #region Structs
-
-    internal struct Entity
-    {
-        public int m_iBase;
-        public int m_iDormant;
-        public int m_iHealth;
-        public int m_iTeam;
-        public int m_iGlowIndex;
-    }
-
-    internal struct LocalPlayer
-    {
-        public static int m_iBase;
-        public static int m_iTeam;
-        public static int m_iClientState;
-        public static int m_iGlowBase;
-        public static int m_iJumpFlags;
-    }
-
-    internal class Arrays
-    {
-        public static Entity[] Entity = new Entity[64];
-    }
-
-    #endregion
 
     #region States
 
@@ -88,11 +62,11 @@ namespace Fallen.API
                 //LOCAL PLAYER//
                 ////////////////
 
-                LocalPlayer.m_iBase = MemoryManager.ReadMemory<int>(MainClass.ClientPointer + Offsets.dwLocalPlayer);
-                LocalPlayer.m_iTeam = MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + Offsets.m_iTeamNum);
-                LocalPlayer.m_iClientState = MemoryManager.ReadMemory<int>(MainClass.EnginePointer + Offsets.dwClientState);
-                LocalPlayer.m_iGlowBase = MemoryManager.ReadMemory<int>(MainClass.ClientPointer + Offsets.dwGlowObjectManager);
-                LocalPlayer.m_iJumpFlags = MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + Offsets.m_fFlags);
+                SDK.LocalPlayer.m_iBase = MemoryManager.ReadMemory<int>(MainClass.ClientPointer + Offsets.dwLocalPlayer);
+                SDK.LocalPlayer.m_iTeam = MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + Offsets.m_iTeamNum);
+                SDK.LocalPlayer.m_iClientState = MemoryManager.ReadMemory<int>(MainClass.EnginePointer + Offsets.dwClientState);
+                SDK.LocalPlayer.m_iGlowBase = MemoryManager.ReadMemory<int>(MainClass.ClientPointer + Offsets.dwGlowObjectManager);
+                SDK.LocalPlayer.m_iJumpFlags = MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + Offsets.m_fFlags);
 
                 ////////////////
                 //ENTITY STUFF//
@@ -100,7 +74,7 @@ namespace Fallen.API
 
                 for (var i = 0; i < 64; i++)
                 {
-                    var Entity = Arrays.Entity[i];
+                    var Entity = SDK.Arrays.Entity[i];
 
                     Entity.m_iBase = MemoryManager.ReadMemory<int>(MainClass.ClientPointer + Offsets.dwEntityList + i * 0x10);
 
@@ -111,20 +85,20 @@ namespace Fallen.API
                         Entity.m_iDormant = MemoryManager.ReadMemory<int>(Entity.m_iBase + 0xE9);
                         Entity.m_iGlowIndex = MemoryManager.ReadMemory<int>(Entity.m_iBase + Offsets.m_iGlowIndex);
 
-                        Arrays.Entity[i] = Entity;
+                        SDK.Arrays.Entity[i] = Entity;
                     }
 
                     #region WeaponINFO
 
-                    m_bIsScoped = MemoryManager.ReadMemory<bool>(LocalPlayer.m_iBase + Offsets.m_bIsScoped);
-                    HitVal = MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + 0xA2C8);
+                    m_bIsScoped = MemoryManager.ReadMemory<bool>(SDK.LocalPlayer.m_iBase + Offsets.m_bIsScoped);
+                    HitVal = MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + 0xA2C8);
 
                     Weapon Weapon = new Weapon();
 
                     #region CurrentWeapon
 
                     // My Current Weapon
-                    var CurrentWeapon = (MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + Offsets.m_hActiveWeapon + (i - 1) * 0x4)) & 0xFFF;
+                    var CurrentWeapon = (MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + Offsets.m_hActiveWeapon + (i - 1) * 0x4)) & 0xFFF;
 
                     var WepBaseC = MemoryManager.ReadMemory<int>(MainClass.ClientPointer + Offsets.dwEntityList + (CurrentWeapon - 1) * 0x10);
 
@@ -343,7 +317,7 @@ namespace Fallen.API
 
         public static async Task ForceFullUpdate()
         {
-            MemoryManager.WriteMemory<int>(LocalPlayer.m_iClientState + 0x174, -1);
+            MemoryManager.WriteMemory<int>(SDK.LocalPlayer.m_iClientState + 0x174, -1);
 
             await Task.Delay(1000);
         }
@@ -696,36 +670,59 @@ namespace Fallen.API
             }
         }
 
+        internal struct Entity
+        {
+            public int m_iBase;
+            public int m_iDormant;
+            public int m_iHealth;
+            public int m_iTeam;
+            public int m_iGlowIndex;
+        }
+
+        internal struct LocalPlayer
+        {
+            public static int m_iBase;
+            public static int m_iTeam;
+            public static int m_iClientState;
+            public static int m_iGlowBase;
+            public static int m_iJumpFlags;
+        }
+
+        internal class Arrays
+        {
+            public static Entity[] Entity = new Entity[64];
+        }
+
+        #region Reading
+
         [StructLayout(LayoutKind.Explicit)]
         public struct GlowObject
         {
             [FieldOffset(0x00)]
             public int EntityPointer;
+
             [FieldOffset(0x4)]
             public float r;
+
             [FieldOffset(0x8)]
             public float g;
+
             [FieldOffset(0xC)]
             public float b;
+
             [FieldOffset(0x10)]
             public float a;
-            [FieldOffset(0x14)]
-            public int jnk1;
-            [FieldOffset(0x18)]
-            public int jnk2;
-            [FieldOffset(0x1C)]
-            public float BloomAmount;
-            [FieldOffset(0x20)]
-            public int jnk3;
 
             [FieldOffset(0x24)]
             public bool m_bRenderWhenOccluded;
+
             [FieldOffset(0x25)]
             public bool m_bRenderWhenUnoccluded;
+
             [FieldOffset(0x2C)]
             public bool m_bFullBloom;
         };
-        
+
         public struct ChamsObject
         {
             public byte r;
@@ -736,6 +733,8 @@ namespace Fallen.API
 
             public byte a;
         }
+
+        #endregion
 
         #endregion
 

@@ -1,17 +1,14 @@
-﻿using System;
-using System.Runtime.CompilerServices;
-
+﻿using FormOverlayExamples;
 using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
-
-using FontFactory = SharpDX.DirectWrite.Factory;
-using Factory = SharpDX.Direct2D1.Factory;
-using System.IO;
+using System;
 using System.Diagnostics;
-using FormOverlayExamples;
+using System.IO;
+using Factory = SharpDX.Direct2D1.Factory;
+using FontFactory = SharpDX.DirectWrite.Factory;
 
 namespace Overlay
 {
@@ -40,7 +37,7 @@ namespace Overlay
 
         private int internalFps;
 
-        #endregion
+        #endregion private vars
 
         #region public vars
 
@@ -53,7 +50,7 @@ namespace Overlay
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-        #endregion
+        #endregion public vars
 
         #region construct & destruct
 
@@ -64,7 +61,8 @@ namespace Overlay
 
         public Direct2DRenderer(IntPtr hwnd)
         {
-            var options = new Direct2DRendererOptions() {
+            var options = new Direct2DRendererOptions()
+            {
                 Hwnd = hwnd,
                 VSync = false,
                 MeasureFps = false,
@@ -75,7 +73,8 @@ namespace Overlay
 
         public Direct2DRenderer(IntPtr hwnd, bool vsync)
         {
-            var options = new Direct2DRendererOptions() {
+            var options = new Direct2DRendererOptions()
+            {
                 Hwnd = hwnd,
                 VSync = vsync,
                 MeasureFps = false,
@@ -86,7 +85,8 @@ namespace Overlay
 
         public Direct2DRenderer(IntPtr hwnd, bool vsync, bool measureFps)
         {
-            var options = new Direct2DRendererOptions() {
+            var options = new Direct2DRendererOptions()
+            {
                 Hwnd = hwnd,
                 VSync = vsync,
                 MeasureFps = measureFps,
@@ -97,7 +97,8 @@ namespace Overlay
 
         public Direct2DRenderer(IntPtr hwnd, bool vsync, bool measureFps, bool antiAliasing)
         {
-            var options = new Direct2DRendererOptions() {
+            var options = new Direct2DRendererOptions()
+            {
                 Hwnd = hwnd,
                 VSync = vsync,
                 MeasureFps = measureFps,
@@ -116,7 +117,7 @@ namespace Overlay
             Dispose(false);
         }
 
-        #endregion
+        #endregion construct & destruct
 
         #region init & delete
 
@@ -138,7 +139,8 @@ namespace Overlay
             this.VSync = options.VSync;
             this.MeasureFPS = options.MeasureFps;
 
-            deviceProperties = new HwndRenderTargetProperties() {
+            deviceProperties = new HwndRenderTargetProperties()
+            {
                 Hwnd = options.Hwnd,
                 PixelSize = new Size2(this.Width, this.Height),
                 PresentOptions = options.VSync ? PresentOptions.None : PresentOptions.Immediately
@@ -165,17 +167,19 @@ namespace Overlay
 
         private void deleteInstance()
         {
-            try {
+            try
+            {
                 sharedBrush.Dispose();
                 fontFactory.Dispose();
                 factory.Dispose();
                 device.Dispose();
-            } catch {
-
+            }
+            catch
+            {
             }
         }
 
-        #endregion
+        #endregion init & delete
 
         #region Scenes
 
@@ -191,11 +195,13 @@ namespace Overlay
             if (device == null) return;
             if (isDrawing) return;
 
-            if (MeasureFPS && !stopwatch.IsRunning) {
+            if (MeasureFPS && !stopwatch.IsRunning)
+            {
                 stopwatch.Restart();
             }
 
-            if (resize) {
+            if (resize)
+            {
                 device.Resize(new Size2(resizeWidth, resizeHeight));
                 resize = false;
             }
@@ -219,15 +225,18 @@ namespace Overlay
             long tag_0 = 0L, tag_1 = 0L;
             var result = device.TryEndDraw(out tag_0, out tag_1);
 
-            if (result.Failure) {
+            if (result.Failure)
+            {
                 deleteInstance();
                 SetupInstance(rendererOptions);
             }
 
-            if (MeasureFPS && stopwatch.IsRunning) {
+            if (MeasureFPS && stopwatch.IsRunning)
+            {
                 internalFps++;
 
-                if (stopwatch.ElapsedMilliseconds > 1000) {
+                if (stopwatch.ElapsedMilliseconds > 1000)
+                {
                     FPS = internalFps;
                     internalFps = 0;
                     stopwatch.Stop();
@@ -252,7 +261,7 @@ namespace Overlay
             device.Clear(brush);
         }
 
-        #endregion
+        #endregion Scenes
 
         #region Fonts & Brushes & Bitmaps
 
@@ -299,7 +308,7 @@ namespace Overlay
             return new Direct2DBitmap(device, bytes);
         }
 
-        #endregion
+        #endregion Fonts & Brushes & Bitmaps
 
         #region Primitives
 
@@ -427,7 +436,7 @@ namespace Overlay
             device.DrawEllipse(new Ellipse(new RawVector2(x, y), radius_x, radius_y), sharedBrush, stroke);
         }
 
-        #endregion
+        #endregion Primitives
 
         #region Filled
 
@@ -464,7 +473,7 @@ namespace Overlay
             device.FillEllipse(new Ellipse(new RawVector2(x, y), radius_x, radius_y), sharedBrush);
         }
 
-        #endregion
+        #endregion Filled
 
         #region Bordered
 
@@ -600,7 +609,7 @@ namespace Overlay
             device.DrawEllipse(ellipse, borderBrush, half);
         }
 
-        #endregion
+        #endregion Bordered
 
         #region Geometry
 
@@ -684,7 +693,7 @@ namespace Overlay
             geometry.Dispose();
         }
 
-        #endregion
+        #endregion Geometry
 
         #region Special
 
@@ -877,24 +886,35 @@ namespace Overlay
         {
             sharedBrush.Color = color;
 
-            if (style == CrosshairStyle.Dot) {
+            if (style == CrosshairStyle.Dot)
+            {
                 FillCircle(x, y, size, color);
-            } else if (style == CrosshairStyle.Plus) {
+            }
+            else if (style == CrosshairStyle.Plus)
+            {
                 DrawLine(x - size, y, x + size, y, stroke, color);
                 DrawLine(x, y - size, x, y + size, stroke, color);
-            } else if (style == CrosshairStyle.Cross) {
+            }
+            else if (style == CrosshairStyle.Cross)
+            {
                 DrawLine(x - size, y - size, x + size, y + size, stroke, color);
                 DrawLine(x + size, y - size, x - size, y + size, stroke, color);
-            } else if (style == CrosshairStyle.Gap) {
+            }
+            else if (style == CrosshairStyle.Gap)
+            {
                 DrawLine(x - size - stroke, y, x - stroke, y, stroke, color);
                 DrawLine(x + size + stroke, y, x + stroke, y, stroke, color);
 
                 DrawLine(x, y - size - stroke, x, y - stroke, stroke, color);
                 DrawLine(x, y + size + stroke, x, y + stroke, stroke, color);
-            } else if (style == CrosshairStyle.Diagonal) {
+            }
+            else if (style == CrosshairStyle.Diagonal)
+            {
                 DrawLine(x - size, y - size, x + size, y + size, stroke, color);
                 DrawLine(x + size, y - size, x - size, y + size, stroke, color);
-            } else if (style == CrosshairStyle.Swastika) {
+            }
+            else if (style == CrosshairStyle.Swastika)
+            {
                 RawVector2 first = new RawVector2(x - size, y);
                 RawVector2 second = new RawVector2(x + size, y);
 
@@ -918,24 +938,35 @@ namespace Overlay
 
         public void DrawCrosshair(CrosshairStyle style, float x, float y, float size, float stroke, Direct2DBrush brush)
         {
-            if (style == CrosshairStyle.Dot) {
+            if (style == CrosshairStyle.Dot)
+            {
                 FillCircle(x, y, size, brush);
-            } else if (style == CrosshairStyle.Plus) {
+            }
+            else if (style == CrosshairStyle.Plus)
+            {
                 DrawLine(x - size, y, x + size, y, stroke, brush);
                 DrawLine(x, y - size, x, y + size, stroke, brush);
-            } else if (style == CrosshairStyle.Cross) {
+            }
+            else if (style == CrosshairStyle.Cross)
+            {
                 DrawLine(x - size, y - size, x + size, y + size, stroke, brush);
                 DrawLine(x + size, y - size, x - size, y + size, stroke, brush);
-            } else if (style == CrosshairStyle.Gap) {
+            }
+            else if (style == CrosshairStyle.Gap)
+            {
                 DrawLine(x - size - stroke, y, x - stroke, y, stroke, brush);
                 DrawLine(x + size + stroke, y, x + stroke, y, stroke, brush);
 
                 DrawLine(x, y - size - stroke, x, y - stroke, stroke, brush);
                 DrawLine(x, y + size + stroke, x, y + stroke, stroke, brush);
-            } else if (style == CrosshairStyle.Diagonal) {
+            }
+            else if (style == CrosshairStyle.Diagonal)
+            {
                 DrawLine(x - size, y - size, x + size, y + size, stroke, brush);
                 DrawLine(x + size, y - size, x - size, y + size, stroke, brush);
-            } else if (style == CrosshairStyle.Swastika) {
+            }
+            else if (style == CrosshairStyle.Swastika)
+            {
                 RawVector2 first = new RawVector2(x - size, y);
                 RawVector2 second = new RawVector2(x + size, y);
 
@@ -958,22 +989,25 @@ namespace Overlay
         }
 
         private Stopwatch swastikaDeltaTimer = new Stopwatch();
-        float rotationState = 0.0f;
-        int lastTime = 0;
+        private float rotationState = 0.0f;
+        private int lastTime = 0;
+
         public void RotateSwastika(float x, float y, float size, float stroke, Direct2DColor color)
         {
             if (!swastikaDeltaTimer.IsRunning) swastikaDeltaTimer.Start();
 
             int thisTime = (int)swastikaDeltaTimer.ElapsedMilliseconds;
 
-            if (Math.Abs(thisTime - lastTime) >= 3) {
+            if (Math.Abs(thisTime - lastTime) >= 3)
+            {
                 rotationState += 0.1f;
                 lastTime = (int)swastikaDeltaTimer.ElapsedMilliseconds;
             }
 
             if (thisTime >= 1000) swastikaDeltaTimer.Restart();
 
-            if (rotationState > size) {
+            if (rotationState > size)
+            {
                 rotationState = size * -1.0f;
             }
 
@@ -1011,7 +1045,7 @@ namespace Overlay
             device.DrawBitmap(bitmap, new RawRectangleF(x, y, x + width, y + height), opacity, BitmapInterpolationMode.Linear, new RawRectangleF(0, 0, bitmap.PixelSize.Width, bitmap.PixelSize.Height));
         }
 
-        #endregion
+        #endregion Special
 
         #region Text
 
@@ -1114,15 +1148,18 @@ namespace Overlay
             layout.Dispose();
         }
 
-        #endregion
+        #endregion Text
 
         #region IDisposable Support
+
         private bool disposedValue = false;
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue) {
-                if (disposing) {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
                     // Free managed objects
                 }
 
@@ -1131,12 +1168,14 @@ namespace Overlay
                 disposedValue = true;
             }
         }
+
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        #endregion
+
+        #endregion IDisposable Support
     }
 
     public enum CrosshairStyle
@@ -1228,11 +1267,14 @@ namespace Overlay
 
     public class Direct2DBrush
     {
-        public Direct2DColor Color {
-            get {
+        public Direct2DColor Color
+        {
+            get
+            {
                 return Brush.Color;
             }
-            set {
+            set
+            {
                 Brush.Color = value;
             }
         }
@@ -1281,11 +1323,14 @@ namespace Overlay
 
         public TextFormat Font;
 
-        public string FontFamilyName {
-            get {
+        public string FontFamilyName
+        {
+            get
+            {
                 return Font.FontFamilyName;
             }
-            set {
+            set
+            {
                 float size = FontSize;
                 bool bold = Bold;
                 FontStyle style = Italic ? FontStyle.Italic : FontStyle.Normal;
@@ -1298,11 +1343,14 @@ namespace Overlay
             }
         }
 
-        public float FontSize {
-            get {
+        public float FontSize
+        {
+            get
+            {
                 return Font.FontSize;
             }
-            set {
+            set
+            {
                 string familyName = FontFamilyName;
                 bool bold = Bold;
                 FontStyle style = Italic ? FontStyle.Italic : FontStyle.Normal;
@@ -1315,11 +1363,14 @@ namespace Overlay
             }
         }
 
-        public bool Bold {
-            get {
+        public bool Bold
+        {
+            get
+            {
                 return Font.FontWeight == FontWeight.Bold;
             }
-            set {
+            set
+            {
                 string familyName = FontFamilyName;
                 float size = FontSize;
                 FontStyle style = Italic ? FontStyle.Italic : FontStyle.Normal;
@@ -1332,11 +1383,14 @@ namespace Overlay
             }
         }
 
-        public bool Italic {
-            get {
+        public bool Italic
+        {
+            get
+            {
                 return Font.FontStyle == FontStyle.Italic;
             }
-            set {
+            set
+            {
                 string familyName = FontFamilyName;
                 float size = FontSize;
                 bool bold = Bold;
@@ -1349,11 +1403,14 @@ namespace Overlay
             }
         }
 
-        public bool WordWrapping {
-            get {
+        public bool WordWrapping
+        {
+            get
+            {
                 return Font.WordWrapping != SharpDX.DirectWrite.WordWrapping.NoWrap;
             }
-            set {
+            set
+            {
                 Font.WordWrapping = value ? SharpDX.DirectWrite.WordWrapping.Wrap : SharpDX.DirectWrite.WordWrapping.NoWrap;
             }
         }
@@ -1414,12 +1471,15 @@ namespace Overlay
         }
 
         #region IDisposable Support
+
         private bool disposedValue = false;
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue) {
-                if (disposing) {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
                 }
 
                 Renderer.EndScene();
@@ -1432,7 +1492,8 @@ namespace Overlay
         {
             Dispose(true);
         }
-        #endregion
+
+        #endregion IDisposable Support
     }
 
     public class Direct2DBitmap
@@ -1443,7 +1504,6 @@ namespace Overlay
 
         private Direct2DBitmap()
         {
-
         }
 
         public Direct2DBitmap(RenderTarget device, byte[] bytes)
@@ -1467,10 +1527,13 @@ namespace Overlay
             SharpDX.WIC.BitmapDecoder decoder = new SharpDX.WIC.BitmapDecoder(factory, stream, SharpDX.WIC.DecodeOptions.CacheOnDemand);
             var frame = decoder.GetFrame(0);
             SharpDX.WIC.FormatConverter converter = new SharpDX.WIC.FormatConverter(factory);
-            try {
+            try
+            {
                 // normal ARGB images (Bitmaps / png tested)
                 converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppRGBA1010102);
-            } catch {
+            }
+            catch
+            {
                 // falling back to RGB if unsupported
                 converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppRGB);
             }

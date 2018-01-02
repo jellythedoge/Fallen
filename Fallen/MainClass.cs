@@ -25,7 +25,6 @@ namespace Fallen
         {
             MemoryManager.Initialize("csgo");
 
-
             ClientPointer = MemoryManager.GetModuleAdress("client");
             EnginePointer = MemoryManager.GetModuleAdress("engine");
             mProc_H = SDK.Open_pHandel("csgo");

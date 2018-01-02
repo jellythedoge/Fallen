@@ -30,10 +30,10 @@ namespace Fallen.Features
 
                 if (Settings.RCS.Enabled)
                 {
-                    vPunch = MemoryManager.ReadMemory<SDK.Vector3D>(LocalPlayer.m_iBase + Offsets.m_aimPunchAngle);
-                    ShotsFired = MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + Offsets.m_iShotsFired);
+                    vPunch = MemoryManager.ReadMemory<SDK.Vector3D>(SDK.LocalPlayer.m_iBase + Offsets.m_aimPunchAngle);
+                    ShotsFired = MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + Offsets.m_iShotsFired);
 
-                    CurrentViewAngles = MemoryManager.ReadMemory<SDK.Vector3D>(LocalPlayer.m_iClientState + Offsets.dwClientState_ViewAngles);
+                    CurrentViewAngles = MemoryManager.ReadMemory<SDK.Vector3D>(SDK.LocalPlayer.m_iClientState + Offsets.dwClientState_ViewAngles);
 
                     if (ShotsFired > 2 && SDK.HeldWeapon != "PISTOL")
                     {
@@ -47,7 +47,7 @@ namespace Fallen.Features
                         OldAimPunch.y = vPunch.y * Settings.RCS.Y;
                         OldAimPunch.z = 0;
 
-                        MemoryManager.WriteMemory<SDK.Vector3D>(LocalPlayer.m_iClientState + Offsets.dwClientState_ViewAngles, NewViewAngles);
+                        MemoryManager.WriteMemory<SDK.Vector3D>(SDK.LocalPlayer.m_iClientState + Offsets.dwClientState_ViewAngles, NewViewAngles);
                     }
                     else
                     {

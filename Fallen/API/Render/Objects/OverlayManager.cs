@@ -1,7 +1,5 @@
 ﻿using Overlay;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 
 namespace FormOverlayExamples.Objects
@@ -20,12 +18,12 @@ namespace FormOverlayExamples.Objects
 
         private OverlayManager()
         {
-
         }
 
         public OverlayManager(IntPtr parentWindowHandle, bool vsync = false, bool measurefps = false, bool antialiasing = true)
         {
-            Direct2DRendererOptions options = new Direct2DRendererOptions() {
+            Direct2DRendererOptions options = new Direct2DRendererOptions()
+            {
                 AntiAliasing = antialiasing,
                 Hwnd = IntPtr.Zero,
                 MeasureFps = measurefps,
@@ -65,7 +63,8 @@ namespace FormOverlayExamples.Objects
 
             Graphics = new Direct2DRenderer(options);
 
-            serviceThread = new Thread(new ThreadStart(windowServiceThread)) {
+            serviceThread = new Thread(new ThreadStart(windowServiceThread))
+            {
                 IsBackground = true,
                 Priority = ThreadPriority.BelowNormal
             };
@@ -77,12 +76,14 @@ namespace FormOverlayExamples.Objects
         {
             PInvoke.RECT bounds = new PInvoke.RECT();
 
-            while (!exitThread) {
+            while (!exitThread)
+            {
                 Thread.Sleep(100);
 
                 IsParentWindowVisible = PInvoke.IsWindowVisible(ParentWindowHandle) != 0;
 
-                if (!IsParentWindowVisible) {
+                if (!IsParentWindowVisible)
+                {
                     if (Window.IsVisible) Window.HideWindow();
                     continue;
                 }
@@ -108,24 +109,30 @@ namespace FormOverlayExamples.Objects
         }
 
         #region IDisposable Support
+
         private bool disposedValue = false;
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue) {
-                if (disposing) {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
                     // managed
                 }
 
                 // unmanaged
 
-                if (serviceThread != null) {
+                if (serviceThread != null)
+                {
                     exitThread = true;
 
-                    try {
+                    try
+                    {
                         serviceThread.Join();
-                    } catch {
-
+                    }
+                    catch
+                    {
                     }
                 }
 
@@ -141,6 +148,7 @@ namespace FormOverlayExamples.Objects
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        #endregion
+
+        #endregion IDisposable Support
     }
 }

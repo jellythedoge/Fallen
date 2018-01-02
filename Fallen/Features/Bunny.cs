@@ -20,7 +20,7 @@ namespace Fallen.Features
 
                 if (Settings.Bhop.Enabled)
                 {
-                    var flag = MemoryManager.ReadMemory<int>(LocalPlayer.m_iBase + 0x100);
+                    var flag = MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + 0x100);
 
                     if (flag == 257 && (Settings.Bhop.Key) || flag == 263 && (Settings.Bhop.Key))
                     {
