@@ -13,21 +13,6 @@ namespace IniParser.Model
     /// </summary>
     public class KeyData : ICloneable
     {
-        #region ICloneable Members
-
-        /// <summary>
-        ///     Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>
-        ///     A new object that is a copy of this instance.
-        /// </returns>
-        public object Clone()
-        {
-            return new KeyData(this);
-        }
-
-        #endregion
-
         #region Initialization
 
         /// <summary>
@@ -38,9 +23,9 @@ namespace IniParser.Model
             if (string.IsNullOrEmpty(keyName))
                 throw new ArgumentException("key name can not be empty");
 
-            _comments = new List<string>();
+            comments = new List<string>();
             Value = string.Empty;
-            _keyName = keyName;
+            this.keyName = keyName;
         }
 
         /// <summary>
@@ -57,9 +42,21 @@ namespace IniParser.Model
         public KeyData(KeyData ori)
         {
             Value = ori.Value;
-            _keyName = ori._keyName;
-            _comments = new List<string>(ori._comments);
+            keyName = ori.keyName;
+            comments = new List<string>(ori.comments);
         }
+
+        #endregion
+
+        #region ICloneable Members
+
+        /// <summary>
+        ///     Creates a new object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>
+        ///     A new object that is a copy of this instance.
+        /// </returns>
+        public object Clone() => new KeyData(this);
 
         #endregion Constructors
 
@@ -70,8 +67,8 @@ namespace IniParser.Model
         /// </summary>
         public List<string> Comments
         {
-            get { return _comments; }
-            set { _comments = new List<string>(value); }
+            get { return comments; }
+            set { comments = new List<string>(value); }
         }
 
         /// <summary>
@@ -86,13 +83,13 @@ namespace IniParser.Model
         {
             get
             {
-                return _keyName;
+                return keyName;
             }
 
             set
             {
                 if (value != string.Empty)
-                    _keyName = value;
+                    keyName = value;
             }
         }
 
@@ -101,12 +98,12 @@ namespace IniParser.Model
         #region Non-public Members
 
         // List with comment lines associated to this key
-        private List<string> _comments;
+        List<string> comments;
 
         // Unique value associated to this key
 
         // Name of the current key
-        private string _keyName;
+        string keyName;
 
         #endregion
     }

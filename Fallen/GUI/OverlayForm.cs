@@ -13,7 +13,7 @@ namespace Fallen.GUI
 {
     internal class OverlayForm
     {
-        private static int HitMark;
+        static int HitMark;
 
         private struct RECT
         {
@@ -37,7 +37,7 @@ namespace Fallen.GUI
                 VSync = false
             };
 
-            OverlayManager manager = new OverlayManager(parentWindowHandle, rendererOptions);
+            var manager = new OverlayManager(parentWindowHandle, rendererOptions);
 
             var overlay = manager.Window;
             var gfx = manager.Graphics;
@@ -81,10 +81,11 @@ namespace Fallen.GUI
 
                 gfx.EndScene();
             }
+
             Environment.Exit(0);
         }
 
-        private static async Task HitMarker()
+        static async Task HitMarker()
         {
             HitMark = HitMark + 1;
 

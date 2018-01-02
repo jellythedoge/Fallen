@@ -39,10 +39,7 @@ namespace IniParser
         /// <param name="filePath">
         ///     Path to the file
         /// </param>
-        public IniData ReadFile(string filePath)
-        {
-            return ReadFile(filePath, Encoding.ASCII);
-        }
+        public IniData ReadFile(string filePath) => ReadFile(filePath, Encoding.ASCII);
 
         /// <summary>
         ///     Implements reading ini data from a file.
@@ -65,9 +62,7 @@ namespace IniParser
                 using (var fs = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     using (var sr = new StreamReader(fs, fileEncoding))
-                    {
                         return ReadData(sr);
-                    }
                 }
             }
             catch (IOException ex)
@@ -122,9 +117,7 @@ namespace IniParser
             using (var fs = File.Open(filePath, FileMode.Create, FileAccess.Write))
             {
                 using (var sr = new StreamWriter(fs, fileEncoding))
-                {
                     WriteData(sr, parsedData);
-                }
             }
         }
 

@@ -20,7 +20,37 @@ namespace IniParser.Parser
         #region Private
 
         // Holds a list of the exceptions catched while parsing
-        private readonly List<Exception> _errorExceptions;
+        readonly List<Exception> errorExceptions;
+
+        #endregion
+
+        #region Initialization
+
+        /// <summary>
+        ///     Ctor
+        /// </summary>
+        /// <remarks>
+        ///     The parser uses a <see cref="IniParserConfiguration" by default
+        /// </remarks>
+        public IniDataParser()
+            : this(new IniParserConfiguration())
+        { }
+
+        /// <summary>
+        ///     Ctor
+        /// </summary>
+        /// <param name="parserConfiguration">
+        ///     Parser's <see cref="IniParserConfiguration" instance.
+        /// </param>
+        public IniDataParser(IniParserConfiguration parserConfiguration)
+        {
+            if (parserConfiguration == null)
+                throw new ArgumentNullException("parserConfiguration");
+
+            Configuration = parserConfiguration;
+
+            errorExceptions = new List<Exception>();
+        }
 
         #endregion
 
@@ -47,9 +77,9 @@ namespace IniParser.Parser
             if (string.IsNullOrEmpty(iniDataString))
                 return iniData;
 
-            _errorExceptions.Clear();
-            _currentCommentListTemp.Clear();
-            _currentSectionNameTemp = null;
+            errorExceptions.Clear();
+            currentCommentListTemp.Clear();
+            currentSectionNameTemp = null;
 
             try
             {
@@ -69,29 +99,29 @@ namespace IniParser.Parser
                         var errorEx = new ParsingException(ex.Message, lineNumber + 1, line, ex);
                         if (Configuration.ThrowExceptionsOnError)
                             throw errorEx;
-                        _errorExceptions.Add(errorEx);
+                        errorExceptions.Add(errorEx);
                     }
                 }
 
                 // Orphan comments, assing to last section/key value
-                if (_currentCommentListTemp.Count > 0)
+                if (currentCommentListTemp.Count > 0)
                 {
                     // Check if there are actually sections in the file
                     if (iniData.Sections.Count > 0)
-                        iniData.Sections.GetSectionData(_currentSectionNameTemp).Comments
-                            .AddRange(_currentCommentListTemp);
+                        iniData.Sections.GetSectionData(currentSectionNameTemp).Comments
+                            .AddRange(currentCommentListTemp);
                     // No sections, put the comment in the last key value pair
                     // but only if the ini file contains at least one key-value pair
                     else if (iniData.Global.Count > 0)
                         iniData.Global.GetLast().Comments
-                            .AddRange(_currentCommentListTemp);
+                            .AddRange(currentCommentListTemp);
 
-                    _currentCommentListTemp.Clear();
+                    currentCommentListTemp.Clear();
                 }
             }
             catch (Exception ex)
             {
-                _errorExceptions.Add(ex);
+                errorExceptions.Add(ex);
                 if (Configuration.ThrowExceptionsOnError)
                     throw;
             }
@@ -121,7 +151,7 @@ namespace IniParser.Parser
         ///     Name of the section where the <see cref="KeyDataCollection" is contained.
         ///     Used only for logging purposes.
         /// </param>
-        private void AddKeyToKeyValueCollection(string key, string value, KeyDataCollection keyDataCollection, string sectionName)
+        void AddKeyToKeyValueCollection(string key, string value, KeyDataCollection keyDataCollection, string sectionName)
         {
             // Check for duplicated keys
             if (keyDataCollection.ContainsKey(key))
@@ -129,38 +159,8 @@ namespace IniParser.Parser
             else
                 keyDataCollection.AddKey(key, value);
 
-            keyDataCollection.GetKeyData(key).Comments = _currentCommentListTemp;
-            _currentCommentListTemp.Clear();
-        }
-
-        #endregion
-
-        #region Initialization
-
-        /// <summary>
-        ///     Ctor
-        /// </summary>
-        /// <remarks>
-        ///     The parser uses a <see cref="IniParserConfiguration" by default
-        /// </remarks>
-        public IniDataParser()
-            : this(new IniParserConfiguration())
-        { }
-
-        /// <summary>
-        ///     Ctor
-        /// </summary>
-        /// <param name="parserConfiguration">
-        ///     Parser's <see cref="IniParserConfiguration" instance.
-        /// </param>
-        public IniDataParser(IniParserConfiguration parserConfiguration)
-        {
-            if (parserConfiguration == null)
-                throw new ArgumentNullException("parserConfiguration");
-
-            Configuration = parserConfiguration;
-
-            _errorExceptions = new List<Exception>();
+            keyDataCollection.GetKeyData(key).Comments = currentCommentListTemp;
+            currentCommentListTemp.Clear();
         }
 
         #endregion
@@ -176,7 +176,7 @@ namespace IniParser.Parser
         /// <summary>
         /// True is the parsing operation encounter any problem
         /// </summary>
-        public bool HasError { get { return _errorExceptions.Count > 0; } }
+        public bool HasError => errorExceptions.Count > 0;
 
         /// <summary>
         /// Returns the list of errors found while parsing the ini file.
@@ -187,7 +187,7 @@ namespace IniParser.Parser
         /// exception that was raised.
         /// </remarks>
 
-        public ReadOnlyCollection<Exception> Errors { get { return _errorExceptions.AsReadOnly(); } }
+        public ReadOnlyCollection<Exception> Errors => errorExceptions.AsReadOnly();
 
         #endregion
 
@@ -260,7 +260,7 @@ namespace IniParser.Parser
         {
             var comment = Configuration.CommentRegex.Match(line).Value.Trim();
 
-            _currentCommentListTemp.Add(comment.Substring(1, comment.Length - 1));
+            currentCommentListTemp.Add(comment.Substring(1, comment.Length - 1));
 
             return line.Replace(comment, "").Trim();
         }
@@ -293,14 +293,14 @@ namespace IniParser.Parser
             if (currentLine == string.Empty)
                 return;
 
-            //Process sections
+            // Process sections
             if (LineMatchesASection(currentLine))
             {
                 ProcessSection(currentLine, currentIniData);
                 return;
             }
 
-            //Process keys
+            // Process keys
             if (LineMatchesAKeyValuePair(currentLine))
             {
                 ProcessKeyValuePair(currentLine, currentIniData);
@@ -333,9 +333,9 @@ namespace IniParser.Parser
                 throw new ParsingException("Section name is empty");
 
             // Temporally save section name.
-            _currentSectionNameTemp = sectionName;
+            currentSectionNameTemp = sectionName;
 
-            //Checks if the section already exists
+            // Checks if the section already exists
             if (currentIniData.Sections.ContainsSection(sectionName))
             {
                 if (Configuration.AllowDuplicateSections)
@@ -348,8 +348,8 @@ namespace IniParser.Parser
             currentIniData.Sections.AddSection(sectionName);
 
             // Save comments read until now and assign them to this section
-            currentIniData.Sections.GetSectionData(sectionName).LeadingComments = _currentCommentListTemp;
-            _currentCommentListTemp.Clear();
+            currentIniData.Sections.GetSectionData(sectionName).LeadingComments = currentCommentListTemp;
+            currentCommentListTemp.Clear();
         }
 
         /// <summary>
@@ -368,7 +368,7 @@ namespace IniParser.Parser
             var value = ExtractValue(line);
 
             // Check if we haven't read any section yet
-            if (string.IsNullOrEmpty(_currentSectionNameTemp))
+            if (string.IsNullOrEmpty(currentSectionNameTemp))
             {
                 if (!Configuration.AllowKeysWithoutSection)
                     throw new ParsingException("key value pairs must be enclosed in a section");
@@ -377,9 +377,9 @@ namespace IniParser.Parser
             }
             else
             {
-                var currentSection = currentIniData.Sections.GetSectionData(_currentSectionNameTemp);
+                var currentSection = currentIniData.Sections.GetSectionData(currentSectionNameTemp);
 
-                AddKeyToKeyValueCollection(key, value, currentSection.Keys, _currentSectionNameTemp);
+                AddKeyToKeyValueCollection(key, value, currentSection.Keys, currentSectionNameTemp);
             }
         }
 
@@ -433,12 +433,12 @@ namespace IniParser.Parser
         /// <summary>
         ///     Temp list of comments
         /// </summary>
-        private readonly List<string> _currentCommentListTemp = new List<string>();
+        readonly List<string> currentCommentListTemp = new List<string>();
 
         /// <summary>
         ///     Tmp var with the name of the seccion which is being process
         /// </summary>
-        private string _currentSectionNameTemp;
+        string currentSectionNameTemp;
 
         #endregion
     }

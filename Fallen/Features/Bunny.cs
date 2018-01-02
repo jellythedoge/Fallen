@@ -13,7 +13,7 @@ namespace Fallen.Features
     {
         internal async void Run()
         {
-            var JumpsDone = 0;
+            var jumpsDone = 0;
             while (true)
             {
                 Thread.Sleep(1);
@@ -24,10 +24,10 @@ namespace Fallen.Features
 
                     if (flag == 257 && (Settings.Bhop.Key) || flag == 263 && (Settings.Bhop.Key))
                     {
-                        if (Settings.Bhop.MaxJumps > JumpsDone || !Settings.Bhop.JumpLimit)
+                        if (Settings.Bhop.MaxJumps > jumpsDone || !Settings.Bhop.JumpLimit)
                         {
                             MemoryManager.WriteMemory<bool>(MainClass.ClientPointer + Offsets.dwForceJump, true);
-                            JumpsDone++;
+                            jumpsDone++;
                             await Task.Delay(50);
                         }
                     }
@@ -36,10 +36,10 @@ namespace Fallen.Features
                         MemoryManager.WriteMemory<bool>(MainClass.ClientPointer + Offsets.dwForceJump, false);
                     }
 
-                    if (!Settings.Bhop.Key && Settings.Bhop.JumpLimit && JumpsDone > 1)
+                    if (!Settings.Bhop.Key && Settings.Bhop.JumpLimit && jumpsDone > 1)
                     {
                         await Task.Delay(50);
-                        JumpsDone = 0;
+                        jumpsDone = 0;
                     }
                 }
             }

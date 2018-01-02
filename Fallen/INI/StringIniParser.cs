@@ -46,10 +46,7 @@ namespace IniParser
         /// <returns>
         /// A new <see cref="IniData" instance with the data parsed from the string.
         /// </returns>
-        public IniData ParseString(string dataStr)
-        {
-            return Parser.Parse(dataStr);
-        }
+        public IniData ParseString(string dataStr) => Parser.Parse(dataStr);
 
         /// <summary>
         /// Creates a string from the INI data.
@@ -59,9 +56,6 @@ namespace IniParser
         /// A formatted string with the contents of the
         /// <see cref="IniData" instance object.
         /// </returns>
-        public string WriteString(IniData iniData)
-        {
-            return iniData.ToString();
-        }
+        public string WriteString(IniData iniData) => iniData.ToString();
     }
 }

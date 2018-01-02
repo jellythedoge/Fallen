@@ -18,57 +18,11 @@ namespace IniParser.Model
         /// <summary>
         /// Data associated to this section
         /// </summary>
-        private readonly Dictionary<string, SectionData> _sectionData;
+        readonly Dictionary<string, SectionData> sectionData;
 
         #endregion
 
-        private readonly IEqualityComparer<string> _searchComparer;
-
-        #region ICloneable Members
-
-        /// <summary>
-        /// Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>
-        /// A new object that is a copy of this instance.
-        /// </returns>
-        public object Clone()
-        {
-            return new SectionDataCollection(this, _searchComparer);
-        }
-
-        #endregion
-
-        #region IEnumerable<SectionData> Members
-
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="T:System.Collections.Generic.IEnumerator`1" that can be used to iterate through the collection.
-        /// </returns>
-        public IEnumerator<SectionData> GetEnumerator()
-        {
-            foreach (var sectionName in _sectionData.Keys)
-                yield return _sectionData[sectionName];
-        }
-
-        #endregion
-
-        #region IEnumerable Members
-
-        /// <summary>
-        /// Returns an enumerator that iterates through a collection.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="T:System.Collections.IEnumerator" object that can be used to iterate through the collection.
-        /// </returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        #endregion
+        readonly IEqualityComparer<string> searchComparer;
 
         #region Initialization
 
@@ -87,9 +41,9 @@ namespace IniParser.Model
         /// </param>
         public SectionDataCollection(IEqualityComparer<string> searchComparer)
         {
-            _searchComparer = searchComparer;
+            this.searchComparer = searchComparer;
 
-            _sectionData = new Dictionary<string, SectionData>(_searchComparer);
+            sectionData = new Dictionary<string, SectionData>(this.searchComparer);
         }
 
         /// <summary>
@@ -104,13 +58,53 @@ namespace IniParser.Model
         /// used to create the new instance.</param>
         public SectionDataCollection(SectionDataCollection ori, IEqualityComparer<string> searchComparer)
         {
-            _searchComparer = searchComparer ?? EqualityComparer<string>.Default;
+            this.searchComparer = searchComparer ?? EqualityComparer<string>.Default;
 
-            _sectionData = new Dictionary<string, SectionData>(_searchComparer);
+            sectionData = new Dictionary<string, SectionData>(this.searchComparer);
             foreach (var sectionData in ori)
-                _sectionData.Add(sectionData.SectionName, (SectionData)sectionData.Clone());
+                this.sectionData.Add(sectionData.SectionName, (SectionData)sectionData.Clone());
             ;
         }
+
+        #endregion
+
+        #region ICloneable Members
+
+        /// <summary>
+        /// Creates a new object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>
+        /// A new object that is a copy of this instance.
+        /// </returns>
+        public object Clone() => new SectionDataCollection(this, searchComparer);
+
+        #endregion
+
+        #region IEnumerable<SectionData> Members
+
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.Collections.Generic.IEnumerator`1" that can be used to iterate through the collection.
+        /// </returns>
+        public IEnumerator<SectionData> GetEnumerator()
+        {
+            foreach (var sectionName in sectionData.Keys)
+                yield return sectionData[sectionName];
+        }
+
+        #endregion
+
+        #region IEnumerable Members
+
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="T:System.Collections.IEnumerator" object that can be used to iterate through the collection.
+        /// </returns>
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         #endregion
 
@@ -119,7 +113,7 @@ namespace IniParser.Model
         /// <summary>
         /// Returns the number of SectionData elements in the collection
         /// </summary>
-        public int Count { get { return _sectionData.Count; } }
+        public int Count => sectionData.Count;
 
         /// <summary>
         /// Gets the key data associated to a specified section name.
@@ -131,8 +125,8 @@ namespace IniParser.Model
         {
             get
             {
-                if (_sectionData.ContainsKey(sectionName))
-                    return _sectionData[sectionName].Keys;
+                if (sectionData.ContainsKey(sectionName))
+                    return sectionData[sectionName].Keys;
 
                 return null;
             }
@@ -154,13 +148,13 @@ namespace IniParser.Model
         /// <exception cref="ArgumentException">If the section name is not valid.</exception>
         public bool AddSection(string keyName)
         {
-            //Checks valid section name
-            //if ( !Assert.StringHasNoBlankSpaces(keyName) )
+            // Checks valid section name
+            // if ( !Assert.StringHasNoBlankSpaces(keyName) )
             //    throw new ArgumentException("Section name contain whitespaces");
 
             if (!ContainsSection(keyName))
             {
-                _sectionData.Add(keyName, new SectionData(keyName, _searchComparer));
+                sectionData.Add(keyName, new SectionData(keyName, searchComparer));
                 return true;
             }
 
@@ -174,18 +168,15 @@ namespace IniParser.Model
         public void Add(SectionData data)
         {
             if (ContainsSection(data.SectionName))
-                SetSectionData(data.SectionName, new SectionData(data, _searchComparer));
+                SetSectionData(data.SectionName, new SectionData(data, searchComparer));
             else
-                _sectionData.Add(data.SectionName, new SectionData(data, _searchComparer));
+                sectionData.Add(data.SectionName, new SectionData(data, searchComparer));
         }
 
         /// <summary>
         /// Removes all entries from this collection
         /// </summary>
-        public void Clear()
-        {
-            _sectionData.Clear();
-        }
+        public void Clear() => sectionData.Clear();
 
         /// <summary>
         /// Gets if a section with a specified name exists in the collection.
@@ -195,10 +186,7 @@ namespace IniParser.Model
         /// <c>true</c> if a section with the specified name exists in the
         ///  collection <c>false</c> otherwise
         /// </returns>
-        public bool ContainsSection(string keyName)
-        {
-            return _sectionData.ContainsKey(keyName);
-        }
+        public bool ContainsSection(string keyName) => sectionData.ContainsKey(keyName);
 
         /// <summary>
         /// Returns the section data from a specify section given its name.
@@ -210,8 +198,8 @@ namespace IniParser.Model
         /// </returns>
         public SectionData GetSectionData(string sectionName)
         {
-            if (_sectionData.ContainsKey(sectionName))
-                return _sectionData[sectionName];
+            if (sectionData.ContainsKey(sectionName))
+                return sectionData[sectionName];
 
             return null;
         }
@@ -237,7 +225,7 @@ namespace IniParser.Model
         public void SetSectionData(string sectionName, SectionData data)
         {
             if (data != null)
-                _sectionData[sectionName] = data;
+                sectionData[sectionName] = data;
         }
 
         /// <summary>
@@ -246,10 +234,7 @@ namespace IniParser.Model
         /// <param name="keyName"></param>
         /// <return><c>true</c> if the section with the specified name was removed,
         /// <c>false</c> otherwise</return>
-        public bool RemoveSection(string keyName)
-        {
-            return _sectionData.Remove(keyName);
-        }
+        public bool RemoveSection(string keyName) => sectionData.Remove(keyName);
 
         #endregion
     }

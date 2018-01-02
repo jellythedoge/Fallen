@@ -13,40 +13,40 @@ namespace Fallen.Features
     {
         internal async void Run()
         {
-            dynamic Sound = new System.Media.SoundPlayer();
+            dynamic sound = new System.Media.SoundPlayer();
 
             while (true)
             {
-                var FovCheck = MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + Offsets.m_iFOV);
-                var NohandsCheck = MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + 0x254);
-                bool EndFlash = (!Settings.NoFlash.Enabled);
+                var fovCheck = MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + Offsets.m_iFOV);
+                var nohandsCheck = MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + 0x254);
+                var endFlash = (!Settings.NoFlash.Enabled);
 
-                ///////////////
-                //FOV CHANGER//
-                ///////////////
+                // /////////////
+                // FOV CHANGER//
+                // /////////////
 
                 if (Settings.Fovchanger.Enabled)
                 {
                     if (!SDK.m_bIsScoped)
                     {
-                        if (FovCheck != Settings.Fovchanger.Fov)
+                        if (fovCheck != Settings.Fovchanger.Fov)
                         {
                             MemoryManager.WriteMemory<int>(SDK.LocalPlayer.m_iBase + Offsets.m_iFOV, Settings.Fovchanger.Fov);
                         }
                     }
                 }
 
-                ////////////
-                //NO FLASH//
-                ////////////
+                // //////////
+                // NO FLASH//
+                // //////////
 
-                if (Settings.NoFlash.Enabled || EndFlash)
+                if (Settings.NoFlash.Enabled || endFlash)
                 {
-                    var FlashCheck = MemoryManager.ReadMemory<float>(SDK.LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha);
+                    var flashCheck = MemoryManager.ReadMemory<float>(SDK.LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha);
 
-                    if (EndFlash)
+                    if (endFlash)
                     {
-                        if (FlashCheck == Settings.NoFlash.Flash && FlashCheck != 255)
+                        if (flashCheck == Settings.NoFlash.Flash && flashCheck != 255)
                         {
                             MemoryManager.WriteMemory<float>(SDK.LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha, 255);
                             Console.WriteLine("Flash one");
@@ -54,7 +54,7 @@ namespace Fallen.Features
                     }
                     else
                     {
-                        if (FlashCheck != Settings.NoFlash.Flash && FlashCheck != 0)
+                        if (flashCheck != Settings.NoFlash.Flash && flashCheck != 0)
                         {
                             MemoryManager.WriteMemory<float>(SDK.LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha, Settings.NoFlash.Flash);
                             Console.WriteLine(MemoryManager.ReadMemory<float>(SDK.LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha));
@@ -62,22 +62,22 @@ namespace Fallen.Features
                     }
                 }
 
-                ////////////
-                //NO HANDS//
-                ////////////
+                // //////////
+                // NO HANDS//
+                // //////////
 
-                if (Settings.Nohands.Enabled && NohandsCheck != 0)
+                if (Settings.Nohands.Enabled && nohandsCheck != 0)
                 {
                     MemoryManager.WriteMemory<int>(SDK.LocalPlayer.m_iBase + 0x254, 0);
                 }
-                else if (!Settings.Nohands.Enabled && NohandsCheck != 317)
+                else if (!Settings.Nohands.Enabled && nohandsCheck != 317)
                 {
                     // MemoryManager.WriteMemory<int>(SDK.LocalPlayer.Base + 0x254, 317);
                 }
 
-                /////////////
-                //HIT SOUND//
-                /////////////
+                // ///////////
+                // HIT SOUND//
+                // ///////////
 
                 if (Settings.Hitsound.Enabled)
                 {
@@ -85,8 +85,8 @@ namespace Fallen.Features
                     {
                         if (SDK.HitAmmount != SDK.HitVal)
                         {
-                            Sound.Stream = Properties.Resources.cod;
-                            Sound.Play();
+                            sound.Stream = Properties.Resources.cod;
+                            sound.Play();
                             SDK.HitAmmount = SDK.HitVal;
                         }
                     }
@@ -94,8 +94,8 @@ namespace Fallen.Features
                     {
                         if (SDK.HitAmmount != SDK.HitVal)
                         {
-                            Sound.Stream = Properties.Resources.anime;
-                            Sound.Play();
+                            sound.Stream = Properties.Resources.anime;
+                            sound.Play();
                             SDK.HitAmmount = SDK.HitVal;
                         }
                     }
@@ -103,8 +103,8 @@ namespace Fallen.Features
                     {
                         if (SDK.HitAmmount != SDK.HitVal)
                         {
-                            Sound.Stream = Properties.Resources.bubble;
-                            Sound.Play();
+                            sound.Stream = Properties.Resources.bubble;
+                            sound.Play();
                             SDK.HitAmmount = SDK.HitVal;
                         }
                     }

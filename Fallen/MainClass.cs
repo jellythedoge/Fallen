@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading;
-
 using System.Windows.Forms;
 
 #endregion
@@ -21,7 +20,7 @@ namespace Fallen
         public static int EnginePointer;
         public static IntPtr mProc_H;
 
-        private static void Main(string[] args)
+        static void Main(string[] args)
         {
             MemoryManager.Initialize("csgo");
 
@@ -39,9 +38,9 @@ namespace Fallen
         [STAThread]
         public static void Initialize()
         {
-            //////////////////////
-            //INITIALIZE MESSAGE//
-            //////////////////////
+            // ////////////////////
+            // INITIALIZE MESSAGE//
+            // ////////////////////
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -85,9 +84,9 @@ namespace Fallen
             GUICall();
         }
 
-        /////////////////
-        //ADRESS READER//
-        /////////////////
+        // ///////////////
+        // ADRESS READER//
+        // ///////////////
 
         public static void AddressReaderCall()
         {
@@ -95,9 +94,9 @@ namespace Fallen
             AddressReaderThread.Start();
         }
 
-        //////////////////
-        //CONSOLE READER//
-        //////////////////
+        // ////////////////
+        // CONSOLE READER//
+        // ////////////////
 
         public static void ConsoleReaderCall()
         {
@@ -107,9 +106,9 @@ namespace Fallen
             ConsoleReaderThread.Start();
         }
 
-        ///////////////
-        //GLOW THREAD//
-        ///////////////
+        // /////////////
+        // GLOW THREAD//
+        // /////////////
 
         public static void GlowCall()
         {
@@ -119,9 +118,9 @@ namespace Fallen
             GlowThread.Start();
         }
 
-        //////////////////
-        //TRIGGER THREAD//
-        //////////////////
+        // ////////////////
+        // TRIGGER THREAD//
+        // ////////////////
 
         public static void TriggerCall()
         {
@@ -131,9 +130,9 @@ namespace Fallen
             TriggerThread.Start();
         }
 
-        /////////////////////////
-        //RECOIL CONTROL THREAD//
-        /////////////////////////
+        // ///////////////////////
+        // RECOIL CONTROL THREAD//
+        // ///////////////////////
 
         public static void AimbotCall()
         {
@@ -143,9 +142,9 @@ namespace Fallen
             RCSThread.Start();
         }
 
-        ////////////////
-        //BUNNY THREAD//
-        ////////////////
+        // //////////////
+        // BUNNY THREAD//
+        // //////////////
 
         public static void BunnyCall()
         {
@@ -155,9 +154,9 @@ namespace Fallen
             BunnyThread.Start();
         }
 
-        ////////////////
-        //RADAR THREAD//
-        ////////////////
+        // //////////////
+        // RADAR THREAD//
+        // //////////////
 
         public static void RadarCall()
         {
@@ -167,9 +166,9 @@ namespace Fallen
             RadarThread.Start();
         }
 
-        //////////////////////
-        //AUTO PISTOL THREAD//
-        //////////////////////
+        // ////////////////////
+        // AUTO PISTOL THREAD//
+        // ////////////////////
 
         public static void AutopistolCall()
         {
@@ -179,9 +178,9 @@ namespace Fallen
             AutopistolThread.Start();
         }
 
-        //////////////////////
-        //SKINCHANGER THREAD//
-        //////////////////////
+        // ////////////////////
+        // SKINCHANGER THREAD//
+        // ////////////////////
 
         public static void SkinchangerCall()
         {
@@ -191,9 +190,9 @@ namespace Fallen
             SkinchangerThread.Start();
         }
 
-        ///////////////
-        //MISC THREAD//
-        ///////////////
+        // /////////////
+        // MISC THREAD//
+        // /////////////
 
         public static void MischacksCall()
         {
@@ -203,9 +202,9 @@ namespace Fallen
             MiscThread.Start();
         }
 
-        //?//////////////
-        //KEYPROC THEAD//
-        /////////////////
+        // ?//////////////
+        // KEYPROC THEAD//
+        // ///////////////
 
         public static void KeyProcCall()
         {
@@ -213,13 +212,10 @@ namespace Fallen
             KeyPROCThread.Start();
         }
 
-        //////////////
-        //GUI THREAD//
-        //////////////
+        // ////////////
+        // GUI THREAD//
+        // ////////////
 
-        public static void GUICall()
-        {
-            GUI.OverlayForm.Run(mProc_H);
-        }
+        public static void GUICall() => GUI.OverlayForm.Run(mProc_H);
     }
 }

@@ -11,7 +11,20 @@ namespace IniParser.Model.Formatting
 {
     public class DefaultIniDataFormatter : IIniDataFormatter
     {
-        private IniParserConfiguration _configuration;
+        IniParserConfiguration configuration;
+
+        #region Initialization
+
+        public DefaultIniDataFormatter() : this(new IniParserConfiguration())
+        {
+        }
+
+        public DefaultIniDataFormatter(IniParserConfiguration configuration)
+        {
+            if (configuration == null)
+                throw new ArgumentNullException("configuration");
+            Configuration = configuration;
+        }
 
         public virtual string IniDataToString(IniData iniData)
         {
@@ -20,9 +33,9 @@ namespace IniParser.Model.Formatting
             if (Configuration.AllowKeysWithoutSection)
                 WriteKeyValueData(iniData.Global, sb);
 
-            //Write sections
+            // Write sections
             foreach (var section in iniData.Sections)
-                //Write current section
+                // Write current section
                 WriteSection(section, sb);
 
             return sb.ToString();
@@ -41,28 +54,15 @@ namespace IniParser.Model.Formatting
         /// </remarks>
         public IniParserConfiguration Configuration
         {
-            get { return _configuration; }
-            set { _configuration = value.Clone(); }
-        }
-
-        #region Initialization
-
-        public DefaultIniDataFormatter() : this(new IniParserConfiguration())
-        {
-        }
-
-        public DefaultIniDataFormatter(IniParserConfiguration configuration)
-        {
-            if (configuration == null)
-                throw new ArgumentNullException("configuration");
-            Configuration = configuration;
+            get { return configuration; }
+            set { configuration = value.Clone(); }
         }
 
         #endregion
 
         #region Helpers
 
-        private void WriteSection(SectionData section, StringBuilder sb)
+        void WriteSection(SectionData section, StringBuilder sb)
         {
             // Write blank line before section, but not if it is the first line
             if (sb.Length > 0) sb.Append(Configuration.NewLineStr);
@@ -70,7 +70,7 @@ namespace IniParser.Model.Formatting
             // Leading comments
             WriteComments(section.Comments, sb);
 
-            //Write section name
+            // Write section name
             sb.Append(string.Format("{0}{1}{2}{3}",
                 Configuration.SectionStartChar,
                 section.SectionName,
@@ -83,7 +83,7 @@ namespace IniParser.Model.Formatting
             WriteComments(section.Comments, sb);
         }
 
-        private void WriteKeyValueData(KeyDataCollection keyDataCollection, StringBuilder sb)
+        void WriteKeyValueData(KeyDataCollection keyDataCollection, StringBuilder sb)
         {
             foreach (var keyData in keyDataCollection)
             {
@@ -93,7 +93,7 @@ namespace IniParser.Model.Formatting
                 // Write key comments
                 WriteComments(keyData.Comments, sb);
 
-                //Write key and value
+                // Write key and value
                 sb.Append(string.Format("{0}{3}{1}{3}{2}{4}",
                     keyData.KeyName,
                     Configuration.KeyValueAssigmentChar,
@@ -103,7 +103,7 @@ namespace IniParser.Model.Formatting
             }
         }
 
-        private void WriteComments(List<string> comments, StringBuilder sb)
+        void WriteComments(List<string> comments, StringBuilder sb)
         {
             foreach (var comment in comments)
                 sb.Append(string.Format("{0}{1}{2}", Configuration.CommentString, comment, Configuration.NewLineStr));

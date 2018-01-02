@@ -13,22 +13,7 @@ namespace IniParser.Model
     /// </summary>
     public class SectionData : ICloneable
     {
-        private readonly IEqualityComparer<string> _searchComparer;
-
-        #region ICloneable Members
-
-        /// <summary>
-        ///     Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>
-        ///     A new object that is a copy of this instance.
-        /// </returns>
-        public object Clone()
-        {
-            return new SectionData(this);
-        }
-
-        #endregion
+        readonly IEqualityComparer<string> searchComparer;
 
         #region Initialization
 
@@ -42,13 +27,13 @@ namespace IniParser.Model
         /// </summary>
         public SectionData(string sectionName, IEqualityComparer<string> searchComparer)
         {
-            _searchComparer = searchComparer;
+            this.searchComparer = searchComparer;
 
             if (string.IsNullOrEmpty(sectionName))
                 throw new ArgumentException("section name can not be empty");
 
             Comments = new List<string>();
-            Keys = new KeyDataCollection(_searchComparer);
+            Keys = new KeyDataCollection(this.searchComparer);
             SectionName = sectionName;
         }
 
@@ -70,10 +55,22 @@ namespace IniParser.Model
         {
             SectionName = ori.SectionName;
 
-            _searchComparer = searchComparer;
+            this.searchComparer = searchComparer;
             Comments = new List<string>(ori.Comments);
-            Keys = new KeyDataCollection(ori.Keys, searchComparer ?? ori._searchComparer);
+            Keys = new KeyDataCollection(ori.Keys, searchComparer ?? ori.searchComparer);
         }
+
+        #endregion
+
+        #region ICloneable Members
+
+        /// <summary>
+        ///     Creates a new object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>
+        ///     A new object that is a copy of this instance.
+        /// </returns>
+        public object Clone() => new SectionData(this);
 
         #endregion
 
@@ -92,10 +89,7 @@ namespace IniParser.Model
         /// <summary>
         /// Deletes all the key-value pairs in this section.
         /// </summary>
-		public void ClearKeyData()
-        {
-            Keys.RemoveAllKeys();
-        }
+		public void ClearKeyData() => Keys.RemoveAllKeys();
 
         /// <summary>
         ///     Merges otherSection into this, adding new keys if they don't exists
@@ -131,13 +125,13 @@ namespace IniParser.Model
         {
             get
             {
-                return _sectionName;
+                return sectionName;
             }
 
             set
             {
                 if (!string.IsNullOrEmpty(value))
-                    _sectionName = value;
+                    sectionName = value;
             }
         }
 
@@ -168,12 +162,12 @@ namespace IniParser.Model
         {
             get
             {
-                return _trailingComments;
+                return trailingComments;
             }
 
             internal set
             {
-                _trailingComments = new List<string>(value);
+                trailingComments = new List<string>(value);
             }
         }
 
@@ -191,11 +185,11 @@ namespace IniParser.Model
 
         // Comments associated to this section
 
-        private List<string> _trailingComments = new List<string>();
+        List<string> trailingComments = new List<string>();
 
         // Keys associated to this section
 
-        private string _sectionName;
+        string sectionName;
 
         #endregion
     }

@@ -23,65 +23,6 @@ namespace IniParser.Model.Configuration
     ///     or conservative should it be when parsing files with "strange" formats.
     public class IniParserConfiguration : ICloneable
     {
-        #region Helpers
-
-        private void RecreateSectionRegex(char value)
-        {
-            if (char.IsControl(value)
-                || char.IsWhiteSpace(value)
-                || CommentString.Contains(new string(new[] { value }))
-                || value == KeyValueAssigmentChar)
-                throw new Exception(string.Format("Invalid character for section delimiter: '{0}", value));
-
-            var builtRegexString = StrSectionRegexStart;
-
-            if (StrSpecialRegexChars.Contains(new string(_sectionStartChar, 1)))
-                builtRegexString += "\\" + _sectionStartChar;
-            else builtRegexString += _sectionStartChar;
-
-            builtRegexString += StrSectionRegexMiddle;
-
-            if (StrSpecialRegexChars.Contains(new string(_sectionEndChar, 1)))
-                builtRegexString += "\\" + _sectionEndChar;
-            else
-                builtRegexString += _sectionEndChar;
-
-            builtRegexString += StrSectionRegexEnd;
-
-            SectionRegex = new Regex(builtRegexString);
-        }
-
-        #endregion
-
-        public override int GetHashCode()
-        {
-            var hash = 27;
-            foreach (var property in GetType().GetProperties())
-                hash = hash * 7 + property.GetValue(this, null).GetHashCode();
-
-            return hash;
-        }
-
-        public override bool Equals(object obj)
-        {
-            var copyObj = obj as IniParserConfiguration;
-            if (copyObj == null) return false;
-
-            var oriType = GetType();
-            try
-            {
-                foreach (var property in oriType.GetProperties())
-                    if (property.GetValue(copyObj, null).Equals(property.GetValue(this, null)))
-                        return false;
-            }
-            catch
-            {
-                return false;
-            }
-
-            return true;
-        }
-
         #region Initialization
 
         /// <summary>
@@ -144,6 +85,64 @@ namespace IniParser.Model.Configuration
             ThrowExceptionsOnError = ori.ThrowExceptionsOnError;
 
             // Regex values should recreate themselves.
+        }
+        #region Helpers
+
+        void RecreateSectionRegex(char value)
+        {
+            if (char.IsControl(value)
+                || char.IsWhiteSpace(value)
+                || CommentString.Contains(new string(new[] { value }))
+                || value == KeyValueAssigmentChar)
+                throw new Exception(string.Format("Invalid character for section delimiter: '{0}", value));
+
+            var builtRegexString = StrSectionRegexStart;
+
+            if (StrSpecialRegexChars.Contains(new string(_sectionStartChar, 1)))
+                builtRegexString += "\\" + _sectionStartChar;
+            else builtRegexString += _sectionStartChar;
+
+            builtRegexString += StrSectionRegexMiddle;
+
+            if (StrSpecialRegexChars.Contains(new string(_sectionEndChar, 1)))
+                builtRegexString += "\\" + _sectionEndChar;
+            else
+                builtRegexString += _sectionEndChar;
+
+            builtRegexString += StrSectionRegexEnd;
+
+            SectionRegex = new Regex(builtRegexString);
+        }
+
+        #endregion
+
+        public override int GetHashCode()
+        {
+            var hash = 27;
+            foreach (var property in GetType().GetProperties())
+                hash = hash * 7 + property.GetValue(this, null).GetHashCode();
+
+            return hash;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var copyObj = obj as IniParserConfiguration;
+            if (copyObj == null) return false;
+
+            var oriType = GetType();
+            try
+            {
+                foreach (var property in oriType.GetProperties())
+                    if (property.GetValue(copyObj, null).Equals(property.GetValue(this, null)))
+                        return false;
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
         }
 
         #endregion
@@ -343,9 +342,9 @@ namespace IniParser.Model.Configuration
 
         #region Fields
 
-        private char _sectionStartChar;
-        private char _sectionEndChar;
-        private string _commentString;
+        char _sectionStartChar;
+        char _sectionEndChar;
+        string _commentString;
 
         #endregion
 
@@ -370,15 +369,9 @@ namespace IniParser.Model.Configuration
         /// A new object that is a copy of this instance.
         /// </returns>
         /// <filterpriority>2</filterpriority>
-        public IniParserConfiguration Clone()
-        {
-            return MemberwiseClone() as IniParserConfiguration;
-        }
+        public IniParserConfiguration Clone() => MemberwiseClone() as IniParserConfiguration;
 
-        object ICloneable.Clone()
-        {
-            return Clone();
-        }
+        object ICloneable.Clone() => Clone();
 
         #endregion
     }

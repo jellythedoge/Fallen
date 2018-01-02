@@ -2,9 +2,9 @@
 {
     internal class Settings
     {
-        ///////////////////
-        //Feature Toggles//
-        ///////////////////
+        // /////////////////
+        // Feature Toggles//
+        // /////////////////
 
         public struct GlowTeam
         {
@@ -30,80 +30,80 @@
 
         public struct Fovchanger
         {
-            public static bool Enabled = false;
+            public static bool Enabled;
             public static int Fov = 90;
         }
 
         public struct Bhop
         {
-            public static bool Enabled = false;
-            public static bool Key = false;
-            public static bool JumpLimit = false;
+            public static bool Enabled;
+            public static bool Key;
+            public static bool JumpLimit;
             public static int MaxJumps = 5;
         }
 
         public struct NoFlash
         {
-            public static bool Enabled = false;
+            public static bool Enabled;
             public static float Flash = 255;
         }
 
         public struct Nohands
         {
-            public static bool Enabled = false;
+            public static bool Enabled;
         }
 
         public struct Hitsound
         {
-            public static bool Enabled = false;
+            public static bool Enabled;
             public static int Mode = 1;
         }
 
         public struct Trigger
         {
-            public static bool Enabled = false;
-            public static int Delay = 0;
-            public static bool Key = false;
+            public static bool Enabled;
+            public static int Delay;
+            public static bool Key;
         }
 
         public struct Autopistol
         {
-            public static bool Enabled = false;
-            public static bool Key = false;
-            public static bool AnyGun = false;
+            public static bool Enabled;
+            public static bool Key;
+            public static bool AnyGun;
         }
 
         public struct Radar
         {
-            public static bool Enabled = false;
+            public static bool Enabled;
         }
 
         public struct Aimbot
         {
-            public static bool Enabled = false;
+            public static bool Enabled;
         }
 
         public struct RCS
         {
-            public static bool Enabled = false;
+            public static bool Enabled;
             public static float X = 2f;
             public static float Y = 2f;
         }
 
         public struct Overlay
         {
-            public static bool Enabled = false;
-            public static bool Crosshair = false;
+            public static bool Enabled;
+            public static bool Crosshair;
 
             ///Not used in config files, for menu control
             ///
 
-            public static bool MenuON = false;
+            public static bool MenuON;
         }
 
         public struct Skinchanger
         {
-            public static bool Enabled = false;
+            public static bool Enabled;
 
             public static int INVALID = -1;
             public static int WEAPON_DEAGLE = 231;

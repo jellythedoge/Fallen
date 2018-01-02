@@ -16,26 +16,26 @@ namespace Overlay
     {
         #region private vars
 
-        private Direct2DRendererOptions rendererOptions;
+        Direct2DRendererOptions rendererOptions;
 
-        private WindowRenderTarget device;
-        private HwndRenderTargetProperties deviceProperties;
+        WindowRenderTarget device;
+        HwndRenderTargetProperties deviceProperties;
 
-        private FontFactory fontFactory;
-        private Factory factory;
+        FontFactory fontFactory;
+        Factory factory;
 
-        private SolidColorBrush sharedBrush;
-        private TextFormat sharedFont;
+        SolidColorBrush sharedBrush;
+        TextFormat sharedFont;
 
-        private bool isDrawing;
+        bool isDrawing;
 
-        private bool resize;
-        private int resizeWidth;
-        private int resizeHeight;
+        bool resize;
+        int resizeWidth;
+        int resizeHeight;
 
-        private Stopwatch stopwatch = new Stopwatch();
+        Stopwatch stopwatch = new Stopwatch();
 
-        private int internalFps;
+        int internalFps;
 
         #endregion private vars
 
@@ -121,7 +121,7 @@ namespace Overlay
 
         #region init & delete
 
-        private void SetupInstance(Direct2DRendererOptions options)
+        void SetupInstance(Direct2DRendererOptions options)
         {
             rendererOptions = options;
 
@@ -129,20 +129,20 @@ namespace Overlay
 
             if (PInvoke.IsWindow(options.Hwnd) == 0) throw new ArgumentException("The window does not exist (hwnd = 0x" + options.Hwnd.ToString("X") + ")");
 
-            PInvoke.RECT bounds = new PInvoke.RECT();
+            var bounds = new PInvoke.RECT();
 
             if (PInvoke.GetRealWindowRect(options.Hwnd, out bounds) == 0) throw new Exception("Failed to get the size of the given window (hwnd = 0x" + options.Hwnd.ToString("X") + ")");
 
-            this.Width = bounds.Right - bounds.Left;
-            this.Height = bounds.Bottom - bounds.Top;
+            Width = bounds.Right - bounds.Left;
+            Height = bounds.Bottom - bounds.Top;
 
-            this.VSync = options.VSync;
-            this.MeasureFPS = options.MeasureFps;
+            VSync = options.VSync;
+            MeasureFPS = options.MeasureFps;
 
             deviceProperties = new HwndRenderTargetProperties()
             {
                 Hwnd = options.Hwnd,
-                PixelSize = new Size2(this.Width, this.Height),
+                PixelSize = new Size2(Width, Height),
                 PresentOptions = options.VSync ? PresentOptions.None : PresentOptions.Immediately
             };
 
@@ -165,7 +165,7 @@ namespace Overlay
             sharedBrush = new SolidColorBrush(device, default(RawColor4));
         }
 
-        private void deleteInstance()
+        void deleteInstance()
         {
             try
             {
@@ -246,20 +246,11 @@ namespace Overlay
             isDrawing = false;
         }
 
-        public void ClearScene()
-        {
-            device.Clear(null);
-        }
+        public void ClearScene() => device.Clear(null);
 
-        public void ClearScene(Direct2DColor color)
-        {
-            device.Clear(color);
-        }
+        public void ClearScene(Direct2DColor color) => device.Clear(color);
 
-        public void ClearScene(Direct2DBrush brush)
-        {
-            device.Clear(brush);
-        }
+        public void ClearScene(Direct2DBrush brush) => device.Clear(brush);
 
         #endregion Scenes
 
@@ -271,10 +262,7 @@ namespace Overlay
             sharedFont.WordWrapping = SharpDX.DirectWrite.WordWrapping.NoWrap;
         }
 
-        public Direct2DBrush CreateBrush(Direct2DColor color)
-        {
-            return new Direct2DBrush(device, color);
-        }
+        public Direct2DBrush CreateBrush(Direct2DColor color) => new Direct2DBrush(device, color);
 
         public Direct2DBrush CreateBrush(int r, int g, int b, int a = 255)
         {
@@ -293,20 +281,14 @@ namespace Overlay
 
         public Direct2DFont CreateFont(Direct2DFontCreationOptions options)
         {
-            TextFormat font = new TextFormat(fontFactory, options.FontFamilyName, options.Bold ? FontWeight.Bold : FontWeight.Normal, options.GetStyle(), options.FontSize);
+            var font = new TextFormat(fontFactory, options.FontFamilyName, options.Bold ? FontWeight.Bold : FontWeight.Normal, options.GetStyle(), options.FontSize);
             font.WordWrapping = options.WordWrapping ? WordWrapping.Wrap : WordWrapping.NoWrap;
             return new Direct2DFont(font);
         }
 
-        public Direct2DBitmap LoadBitmap(string file)
-        {
-            return new Direct2DBitmap(device, file);
-        }
+        public Direct2DBitmap LoadBitmap(string file) => new Direct2DBitmap(device, file);
 
-        public Direct2DBitmap LoadBitmap(byte[] bytes)
-        {
-            return new Direct2DBitmap(device, bytes);
-        }
+        public Direct2DBitmap LoadBitmap(byte[] bytes) => new Direct2DBitmap(device, bytes);
 
         #endregion Fonts & Brushes & Bitmaps
 
@@ -336,11 +318,11 @@ namespace Overlay
 
         public void DrawRectangleEdges(float x, float y, float width, float height, float stroke, Direct2DBrush brush)
         {
-            int length = (int)(((width + height) / 2.0f) * 0.2f);
+            var length = (int)(((width + height) / 2.0f) * 0.2f);
 
-            RawVector2 first = new RawVector2(x, y);
-            RawVector2 second = new RawVector2(x, y + length);
-            RawVector2 third = new RawVector2(x + length, y);
+            var first = new RawVector2(x, y);
+            var second = new RawVector2(x, y + length);
+            var third = new RawVector2(x + length, y);
 
             device.DrawLine(first, second, brush, stroke);
             device.DrawLine(first, third, brush, stroke);
@@ -377,11 +359,11 @@ namespace Overlay
         {
             sharedBrush.Color = color;
 
-            int length = (int)(((width + height) / 2.0f) * 0.2f);
+            var length = (int)(((width + height) / 2.0f) * 0.2f);
 
-            RawVector2 first = new RawVector2(x, y);
-            RawVector2 second = new RawVector2(x, y + length);
-            RawVector2 third = new RawVector2(x + length, y);
+            var first = new RawVector2(x, y);
+            var second = new RawVector2(x, y + length);
+            var third = new RawVector2(x + length, y);
 
             device.DrawLine(first, second, sharedBrush, stroke);
             device.DrawLine(first, third, sharedBrush, stroke);
@@ -483,8 +465,8 @@ namespace Overlay
 
             var sink = geometry.Open();
 
-            float half = stroke / 2.0f;
-            float quarter = half / 2.0f;
+            var half = stroke / 2.0f;
+            var quarter = half / 2.0f;
 
             sink.BeginFigure(new RawVector2(start_x, start_y - half), FigureBegin.Filled);
 
@@ -514,8 +496,8 @@ namespace Overlay
 
             var sink = geometry.Open();
 
-            float half = stroke / 2.0f;
-            float quarter = half / 2.0f;
+            var half = stroke / 2.0f;
+            var quarter = half / 2.0f;
 
             sink.BeginFigure(new RawVector2(start_x, start_y - half), FigureBegin.Filled);
 
@@ -537,7 +519,7 @@ namespace Overlay
 
         public void BorderedRectangle(float x, float y, float width, float height, float stroke, Direct2DColor color, Direct2DColor borderColor)
         {
-            float half = stroke / 2.0f;
+            var half = stroke / 2.0f;
 
             width += x;
             height += y;
@@ -555,7 +537,7 @@ namespace Overlay
 
         public void BorderedRectangle(float x, float y, float width, float height, float stroke, Direct2DBrush brush, Direct2DBrush borderBrush)
         {
-            float half = stroke / 2.0f;
+            var half = stroke / 2.0f;
 
             width += x;
             height += y;
@@ -575,7 +557,7 @@ namespace Overlay
 
             device.DrawEllipse(ellipse, sharedBrush, stroke);
 
-            float half = stroke / 2.0f;
+            var half = stroke / 2.0f;
 
             sharedBrush.Color = borderColor;
 
@@ -596,7 +578,7 @@ namespace Overlay
 
             device.DrawEllipse(ellipse, brush, stroke);
 
-            float half = stroke / 2.0f;
+            var half = stroke / 2.0f;
 
             ellipse.RadiusX += half;
             ellipse.RadiusY += half;
@@ -747,21 +729,21 @@ namespace Overlay
 
         public void DrawArrowLine(float start_x, float start_y, float end_x, float end_y, float size, Direct2DColor color)
         {
-            float delta_x = end_x >= start_x ? end_x - start_x : start_x - end_x;
-            float delta_y = end_y >= start_y ? end_y - start_y : start_y - end_y;
+            var delta_x = end_x >= start_x ? end_x - start_x : start_x - end_x;
+            var delta_y = end_y >= start_y ? end_y - start_y : start_y - end_y;
 
-            float length = (float)Math.Sqrt(delta_x * delta_x + delta_y * delta_y);
+            var length = (float)Math.Sqrt(delta_x * delta_x + delta_y * delta_y);
 
-            float xm = length - size;
-            float xn = xm;
+            var xm = length - size;
+            var xn = xm;
 
-            float ym = size;
-            float yn = -ym;
+            var ym = size;
+            var yn = -ym;
 
-            float sin = delta_y / length;
-            float cos = delta_x / length;
+            var sin = delta_y / length;
+            var cos = delta_x / length;
 
-            float x = xm * cos - ym * sin + end_x;
+            var x = xm * cos - ym * sin + end_x;
             ym = xm * sin + ym * cos + end_y;
             xm = x;
 
@@ -774,21 +756,21 @@ namespace Overlay
 
         public void DrawArrowLine(float start_x, float start_y, float end_x, float end_y, float size, Direct2DBrush brush)
         {
-            float delta_x = end_x >= start_x ? end_x - start_x : start_x - end_x;
-            float delta_y = end_y >= start_y ? end_y - start_y : start_y - end_y;
+            var delta_x = end_x >= start_x ? end_x - start_x : start_x - end_x;
+            var delta_y = end_y >= start_y ? end_y - start_y : start_y - end_y;
 
-            float length = (float)Math.Sqrt(delta_x * delta_x + delta_y * delta_y);
+            var length = (float)Math.Sqrt(delta_x * delta_x + delta_y * delta_y);
 
-            float xm = length - size;
-            float xn = xm;
+            var xm = length - size;
+            var xn = xm;
 
-            float ym = size;
-            float yn = -ym;
+            var ym = size;
+            var yn = -ym;
 
-            float sin = delta_y / length;
-            float cos = delta_x / length;
+            var sin = delta_y / length;
+            var cos = delta_x / length;
 
-            float x = xm * cos - ym * sin + end_x;
+            var x = xm * cos - ym * sin + end_x;
             ym = xm * sin + ym * cos + end_y;
             xm = x;
 
@@ -801,8 +783,8 @@ namespace Overlay
 
         public void DrawVerticalBar(float percentage, float x, float y, float width, float height, float stroke, Direct2DColor interiorColor, Direct2DColor color)
         {
-            float half = stroke / 2.0f;
-            float quarter = half / 2.0f;
+            var half = stroke / 2.0f;
+            var quarter = half / 2.0f;
 
             sharedBrush.Color = color;
 
@@ -824,8 +806,8 @@ namespace Overlay
 
         public void DrawVerticalBar(float percentage, float x, float y, float width, float height, float stroke, Direct2DBrush interiorBrush, Direct2DBrush brush)
         {
-            float half = stroke / 2.0f;
-            float quarter = half / 2.0f;
+            var half = stroke / 2.0f;
+            var quarter = half / 2.0f;
 
             var rect = new RawRectangleF(x - half, y - half, x + width + half, y + height + half);
 
@@ -843,7 +825,7 @@ namespace Overlay
 
         public void DrawHorizontalBar(float percentage, float x, float y, float width, float height, float stroke, Direct2DColor interiorColor, Direct2DColor color)
         {
-            float half = stroke / 2.0f;
+            var half = stroke / 2.0f;
 
             sharedBrush.Color = color;
 
@@ -865,8 +847,8 @@ namespace Overlay
 
         public void DrawHorizontalBar(float percentage, float x, float y, float width, float height, float stroke, Direct2DBrush interiorBrush, Direct2DBrush brush)
         {
-            float half = stroke / 2.0f;
-            float quarter = half / 2.0f;
+            var half = stroke / 2.0f;
+            var quarter = half / 2.0f;
 
             var rect = new RawRectangleF(x - half, y - half, x + width + half, y + height + half);
 
@@ -915,16 +897,16 @@ namespace Overlay
             }
             else if (style == CrosshairStyle.Swastika)
             {
-                RawVector2 first = new RawVector2(x - size, y);
-                RawVector2 second = new RawVector2(x + size, y);
+                var first = new RawVector2(x - size, y);
+                var second = new RawVector2(x + size, y);
 
-                RawVector2 third = new RawVector2(x, y - size);
-                RawVector2 fourth = new RawVector2(x, y + size);
+                var third = new RawVector2(x, y - size);
+                var fourth = new RawVector2(x, y + size);
 
-                RawVector2 haken_1 = new RawVector2(third.X + size, third.Y);
-                RawVector2 haken_2 = new RawVector2(second.X, second.Y + size);
-                RawVector2 haken_3 = new RawVector2(fourth.X - size, fourth.Y);
-                RawVector2 haken_4 = new RawVector2(first.X, first.Y - size);
+                var haken_1 = new RawVector2(third.X + size, third.Y);
+                var haken_2 = new RawVector2(second.X, second.Y + size);
+                var haken_3 = new RawVector2(fourth.X - size, fourth.Y);
+                var haken_4 = new RawVector2(first.X, first.Y - size);
 
                 device.DrawLine(first, second, sharedBrush, stroke);
                 device.DrawLine(third, fourth, sharedBrush, stroke);
@@ -967,16 +949,16 @@ namespace Overlay
             }
             else if (style == CrosshairStyle.Swastika)
             {
-                RawVector2 first = new RawVector2(x - size, y);
-                RawVector2 second = new RawVector2(x + size, y);
+                var first = new RawVector2(x - size, y);
+                var second = new RawVector2(x + size, y);
 
-                RawVector2 third = new RawVector2(x, y - size);
-                RawVector2 fourth = new RawVector2(x, y + size);
+                var third = new RawVector2(x, y - size);
+                var fourth = new RawVector2(x, y + size);
 
-                RawVector2 haken_1 = new RawVector2(third.X + size, third.Y);
-                RawVector2 haken_2 = new RawVector2(second.X, second.Y + size);
-                RawVector2 haken_3 = new RawVector2(fourth.X - size, fourth.Y);
-                RawVector2 haken_4 = new RawVector2(first.X, first.Y - size);
+                var haken_1 = new RawVector2(third.X + size, third.Y);
+                var haken_2 = new RawVector2(second.X, second.Y + size);
+                var haken_3 = new RawVector2(fourth.X - size, fourth.Y);
+                var haken_4 = new RawVector2(first.X, first.Y - size);
 
                 device.DrawLine(first, second, brush, stroke);
                 device.DrawLine(third, fourth, brush, stroke);
@@ -988,15 +970,15 @@ namespace Overlay
             }
         }
 
-        private Stopwatch swastikaDeltaTimer = new Stopwatch();
-        private float rotationState = 0.0f;
-        private int lastTime = 0;
+        Stopwatch swastikaDeltaTimer = new Stopwatch();
+        float rotationState;
+        int lastTime;
 
         public void RotateSwastika(float x, float y, float size, float stroke, Direct2DColor color)
         {
             if (!swastikaDeltaTimer.IsRunning) swastikaDeltaTimer.Start();
 
-            int thisTime = (int)swastikaDeltaTimer.ElapsedMilliseconds;
+            var thisTime = (int)swastikaDeltaTimer.ElapsedMilliseconds;
 
             if (Math.Abs(thisTime - lastTime) >= 3)
             {
@@ -1013,16 +995,16 @@ namespace Overlay
 
             sharedBrush.Color = color;
 
-            RawVector2 first = new RawVector2(x - size, y - rotationState);
-            RawVector2 second = new RawVector2(x + size, y + rotationState);
+            var first = new RawVector2(x - size, y - rotationState);
+            var second = new RawVector2(x + size, y + rotationState);
 
-            RawVector2 third = new RawVector2(x + rotationState, y - size);
-            RawVector2 fourth = new RawVector2(x - rotationState, y + size);
+            var third = new RawVector2(x + rotationState, y - size);
+            var fourth = new RawVector2(x - rotationState, y + size);
 
-            RawVector2 haken_1 = new RawVector2(third.X + size, third.Y + rotationState);
-            RawVector2 haken_2 = new RawVector2(second.X - rotationState, second.Y + size);
-            RawVector2 haken_3 = new RawVector2(fourth.X - size, fourth.Y - rotationState);
-            RawVector2 haken_4 = new RawVector2(first.X + rotationState, first.Y - size);
+            var haken_1 = new RawVector2(third.X + size, third.Y + rotationState);
+            var haken_2 = new RawVector2(second.X - rotationState, second.Y + size);
+            var haken_3 = new RawVector2(fourth.X - size, fourth.Y - rotationState);
+            var haken_4 = new RawVector2(first.X + rotationState, first.Y - size);
 
             device.DrawLine(first, second, sharedBrush, stroke);
             device.DrawLine(third, fourth, sharedBrush, stroke);
@@ -1088,7 +1070,7 @@ namespace Overlay
         {
             var layout = new TextLayout(fontFactory, text, font, float.MaxValue, float.MaxValue);
 
-            float modifier = layout.FontSize / 4.0f;
+            var modifier = layout.FontSize / 4.0f;
 
             sharedBrush.Color = backgroundColor;
 
@@ -1105,7 +1087,7 @@ namespace Overlay
         {
             var layout = new TextLayout(fontFactory, text, font, float.MaxValue, float.MaxValue);
 
-            float modifier = layout.FontSize / 4.0f;
+            var modifier = layout.FontSize / 4.0f;
 
             device.FillRectangle(new RawRectangleF(x - modifier, y - modifier, x + layout.Metrics.Width + modifier, y + layout.Metrics.Height + modifier), backgroundBrush);
 
@@ -1120,7 +1102,7 @@ namespace Overlay
 
             layout.SetFontSize(fontSize, new TextRange(0, text.Length));
 
-            float modifier = fontSize / 4.0f;
+            var modifier = fontSize / 4.0f;
 
             sharedBrush.Color = backgroundColor;
 
@@ -1139,7 +1121,7 @@ namespace Overlay
 
             layout.SetFontSize(fontSize, new TextRange(0, text.Length));
 
-            float modifier = fontSize / 4.0f;
+            var modifier = fontSize / 4.0f;
 
             device.FillRectangle(new RawRectangleF(x - modifier, y - modifier, x + layout.Metrics.Width + modifier, y + layout.Metrics.Height + modifier), backgroundBrush);
 
@@ -1152,7 +1134,7 @@ namespace Overlay
 
         #region IDisposable Support
 
-        private bool disposedValue = false;
+        bool disposedValue;
 
         protected virtual void Dispose(bool disposing)
         {
@@ -1319,7 +1301,7 @@ namespace Overlay
 
     public class Direct2DFont
     {
-        private FontFactory factory;
+        FontFactory factory;
 
         public TextFormat Font;
 
@@ -1331,10 +1313,10 @@ namespace Overlay
             }
             set
             {
-                float size = FontSize;
-                bool bold = Bold;
-                FontStyle style = Italic ? FontStyle.Italic : FontStyle.Normal;
-                bool wordWrapping = WordWrapping;
+                var size = FontSize;
+                var bold = Bold;
+                var style = Italic ? FontStyle.Italic : FontStyle.Normal;
+                var wordWrapping = WordWrapping;
 
                 Font.Dispose();
 
@@ -1351,10 +1333,10 @@ namespace Overlay
             }
             set
             {
-                string familyName = FontFamilyName;
-                bool bold = Bold;
-                FontStyle style = Italic ? FontStyle.Italic : FontStyle.Normal;
-                bool wordWrapping = WordWrapping;
+                var familyName = FontFamilyName;
+                var bold = Bold;
+                var style = Italic ? FontStyle.Italic : FontStyle.Normal;
+                var wordWrapping = WordWrapping;
 
                 Font.Dispose();
 
@@ -1371,10 +1353,10 @@ namespace Overlay
             }
             set
             {
-                string familyName = FontFamilyName;
-                float size = FontSize;
-                FontStyle style = Italic ? FontStyle.Italic : FontStyle.Normal;
-                bool wordWrapping = WordWrapping;
+                var familyName = FontFamilyName;
+                var size = FontSize;
+                var style = Italic ? FontStyle.Italic : FontStyle.Normal;
+                var wordWrapping = WordWrapping;
 
                 Font.Dispose();
 
@@ -1391,10 +1373,10 @@ namespace Overlay
             }
             set
             {
-                string familyName = FontFamilyName;
-                float size = FontSize;
-                bool bold = Bold;
-                bool wordWrapping = WordWrapping;
+                var familyName = FontFamilyName;
+                var size = FontSize;
+                var bold = Bold;
+                var wordWrapping = WordWrapping;
 
                 Font.Dispose();
 
@@ -1472,7 +1454,7 @@ namespace Overlay
 
         #region IDisposable Support
 
-        private bool disposedValue = false;
+        bool disposedValue;
 
         protected virtual void Dispose(bool disposing)
         {
@@ -1488,17 +1470,14 @@ namespace Overlay
             }
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-        }
+        public void Dispose() => Dispose(true);
 
         #endregion IDisposable Support
     }
 
     public class Direct2DBitmap
     {
-        private static SharpDX.WIC.ImagingFactory factory = new SharpDX.WIC.ImagingFactory();
+        static SharpDX.WIC.ImagingFactory factory = new SharpDX.WIC.ImagingFactory();
 
         public Bitmap SharpDXBitmap;
 
@@ -1521,12 +1500,12 @@ namespace Overlay
             SharpDXBitmap.Dispose();
         }
 
-        private void loadBitmap(RenderTarget device, byte[] bytes)
+        void loadBitmap(RenderTarget device, byte[] bytes)
         {
             var stream = new MemoryStream(bytes);
-            SharpDX.WIC.BitmapDecoder decoder = new SharpDX.WIC.BitmapDecoder(factory, stream, SharpDX.WIC.DecodeOptions.CacheOnDemand);
+            var decoder = new SharpDX.WIC.BitmapDecoder(factory, stream, SharpDX.WIC.DecodeOptions.CacheOnDemand);
             var frame = decoder.GetFrame(0);
-            SharpDX.WIC.FormatConverter converter = new SharpDX.WIC.FormatConverter(factory);
+            var converter = new SharpDX.WIC.FormatConverter(factory);
             try
             {
                 // normal ARGB images (Bitmaps / png tested)
@@ -1537,6 +1516,7 @@ namespace Overlay
                 // falling back to RGB if unsupported
                 converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppRGB);
             }
+
             SharpDXBitmap = Bitmap.FromWicBitmap(device, converter);
 
             converter.Dispose();

@@ -18,7 +18,7 @@ namespace IniParser.Model
         /// <summary>
         ///     See property <see cref="Configuration" for more information.
         /// </summary>
-        private IniParserConfiguration _configuration;
+        IniParserConfiguration configuration;
 
         #endregion
 
@@ -27,7 +27,37 @@ namespace IniParser.Model
         /// <summary>
         ///     Represents all sections from an INI file
         /// </summary>
-        private SectionDataCollection _sections;
+        SectionDataCollection sections;
+
+        #region Initialization
+
+        /// <summary>
+        ///     Initializes an empty IniData instance.
+        /// </summary>
+        public IniData()
+            : this(new SectionDataCollection())
+        { }
+
+        /// <summary>
+        ///     Initializes a new IniData instance using a previous
+        ///     <see cref="SectionDataCollection".
+        /// </summary>
+        /// <param name="sdc">
+        ///     <see cref="SectionDataCollection" object containing the
+        ///     data with the sections of the file
+        /// </param>
+        public IniData(SectionDataCollection sdc)
+        {
+            sections = (SectionDataCollection)sdc.Clone();
+            Global = new KeyDataCollection();
+            SectionKeySeparator = '.';
+        }
+
+        public IniData(IniData ori) : this(ori.Sections)
+        {
+            Global = (KeyDataCollection)ori.Global.Clone();
+            Configuration = ori.Configuration.Clone();
+        }
 
         #endregion
 
@@ -39,10 +69,7 @@ namespace IniParser.Model
         /// <returns>
         ///     A new object that is a copy of this instance.
         /// </returns>
-        public object Clone()
-        {
-            return new IniData(this);
-        }
+        public object Clone() => new IniData(this);
 
         #endregion
 
@@ -118,9 +145,9 @@ namespace IniParser.Model
             var section = splitKey[0];
             key = splitKey[1];
 
-            if (!_sections.ContainsSection(section))
+            if (!sections.ContainsSection(section))
                 return false;
-            var sectionData = _sections[section];
+            var sectionData = sections[section];
             if (!sectionData.ContainsKey(key))
                 return false;
 
@@ -153,7 +180,7 @@ namespace IniParser.Model
         /// <summary>
         ///     Merge the sections into this by overwriting this sections.
         /// </summary>
-        private void MergeSection(SectionData otherSection)
+        void MergeSection(SectionData otherSection)
         {
             // no overlap -> create no section
             if (!Sections.ContainsSection(otherSection.SectionName))
@@ -166,40 +193,10 @@ namespace IniParser.Model
         /// <summary>
         ///     Merges the given global values into this globals by overwriting existing values.
         /// </summary>
-        private void MergeGlobal(KeyDataCollection globals)
+        void MergeGlobal(KeyDataCollection globals)
         {
             foreach (var globalValue in globals)
                 Global[globalValue.KeyName] = globalValue.Value;
-        }
-
-        #region Initialization
-
-        /// <summary>
-        ///     Initializes an empty IniData instance.
-        /// </summary>
-        public IniData()
-            : this(new SectionDataCollection())
-        { }
-
-        /// <summary>
-        ///     Initializes a new IniData instance using a previous
-        ///     <see cref="SectionDataCollection".
-        /// </summary>
-        /// <param name="sdc">
-        ///     <see cref="SectionDataCollection" object containing the
-        ///     data with the sections of the file
-        /// </param>
-        public IniData(SectionDataCollection sdc)
-        {
-            _sections = (SectionDataCollection)sdc.Clone();
-            Global = new KeyDataCollection();
-            SectionKeySeparator = '.';
-        }
-
-        public IniData(IniData ori) : this(ori.Sections)
-        {
-            Global = (KeyDataCollection)ori.Global.Clone();
-            Configuration = ori.Configuration.Clone();
         }
 
         #endregion
@@ -222,13 +219,13 @@ namespace IniParser.Model
             get
             {
                 // Lazy initialization
-                if (_configuration == null)
-                    _configuration = new IniParserConfiguration();
+                if (configuration == null)
+                    configuration = new IniParserConfiguration();
 
-                return _configuration;
+                return configuration;
             }
 
-            set { _configuration = value.Clone(); }
+            set { configuration = value.Clone(); }
         }
 
         /// <summary>
@@ -246,13 +243,13 @@ namespace IniParser.Model
         {
             get
             {
-                if (!_sections.ContainsSection(sectionName))
+                if (!sections.ContainsSection(sectionName))
                     if (Configuration.AllowCreateSectionsOnFly)
-                        _sections.AddSection(sectionName);
+                        sections.AddSection(sectionName);
                     else
                         return null;
 
-                return _sections[sectionName];
+                return sections[sectionName];
             }
         }
 
@@ -262,8 +259,8 @@ namespace IniParser.Model
         /// </summary>
         public SectionDataCollection Sections
         {
-            get { return _sections; }
-            set { _sections = value; }
+            get { return sections; }
+            set { sections = value; }
         }
 
         /// <summary>
@@ -279,15 +276,9 @@ namespace IniParser.Model
 
         #region Object Methods
 
-        public override string ToString()
-        {
-            return ToString(new DefaultIniDataFormatter(Configuration));
-        }
+        public override string ToString() => ToString(new DefaultIniDataFormatter(Configuration));
 
-        public virtual string ToString(IIniDataFormatter formatter)
-        {
-            return formatter.IniDataToString(this);
-        }
+        public virtual string ToString(IIniDataFormatter formatter) => formatter.IniDataToString(this);
 
         #endregion
     }

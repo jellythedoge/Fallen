@@ -10,9 +10,9 @@ namespace Fallen.API
         {
             List<string> outdatedSignatures = new List<string> { };
 
-            //////////////////////////////////////////////////////////////////////
-            //TO ADD A NEW SIG DOUBLE THE QUESTION MARKS SUCH AS ???? = ????????//
-            //////////////////////////////////////////////////////////////////////
+            // ////////////////////////////////////////////////////////////////////
+            // TO ADD A NEW SIG DOUBLE THE QUESTION MARKS SUCH AS ???? = ????????//
+            // ////////////////////////////////////////////////////////////////////
 
             #region SigScanner
 
@@ -246,117 +246,117 @@ namespace Fallen.API
 
         #region Netvars
 
-        public const Int32 m_ArmorValue = 0xB238;
-        public const Int32 m_Collision = 0x318;
-        public const Int32 m_CollisionGroup = 0x470;
-        public const Int32 m_Local = 0x2FAC;
-        public const Int32 m_MoveType = 0x258;
-        public const Int32 m_OriginalOwnerXuidHigh = 0x316C;
-        public const Int32 m_OriginalOwnerXuidLow = 0x3168;
-        public const Int32 m_aimPunchAngle = 0x301C;
-        public const Int32 m_aimPunchAngleVel = 0x3028;
-        public const Int32 m_bGunGameImmunity = 0x3894;
-        public const Int32 m_bHasDefuser = 0xB248;
-        public const Int32 m_bHasHelmet = 0xB22C;
-        public const Int32 m_bInReload = 0x3245;
-        public const Int32 m_bIsDefusing = 0x3888;
-        public const Int32 m_totalHitsOnServer = 0xA2C8;
-        public const Int32 m_bIsScoped = 0x387E;
-        public const Int32 m_bSpotted = 0x939;
-        public const Int32 m_bSpottedByMask = 0x97C;
-        public const Int32 m_dwBoneMatrix = 0x2698;
-        public const Int32 m_fAccuracyPenalty = 0x32B0;
-        public const Int32 m_fFlags = 0x100;
-        public const Int32 m_flFallbackWear = 0x3178;
-        public const Int32 m_flFlashDuration = 0xA2F8;
-        public const Int32 m_flFlashMaxAlpha = 0xA2F4;
-        public const Int32 m_flNextPrimaryAttack = 0x31D8;
-        public const Int32 m_hActiveWeapon = 0x2EE8;
-        public const Int32 m_hMyWeapons = 0x2DE8;
-        public const Int32 m_hObserverTarget = 0x3360;
-        public const Int32 m_hOwner = 0x29BC;
-        public const Int32 m_hOwnerEntity = 0x148;
-        public const Int32 m_iAccountID = 0x2FA8;
-        public const Int32 m_iClip1 = 0x3204;
-        public const Int32 m_iCompetitiveRanking = 0x1A44;
-        public const Int32 m_iCompetitiveWins = 0x1B48;
-        public const Int32 m_iCrosshairId = 0xB2A4;
-        public const Int32 m_iEntityQuality = 0x2F8C;
-        public const Int32 m_iFOVStart = 0x31D8;
-        public const Int32 m_iFOV = 0x31D4;
-        public const Int32 m_iGlowIndex = 0xA310;
-        public const Int32 m_iHealth = 0xFC;
-        public const Int32 m_iItemDefinitionIndex = 0x2F88;
-        public const Int32 m_iItemIDHigh = 0x2FA0;
-        public const Int32 m_iItemIDLow = 0x2FA4;
-        public const Int32 m_iObserverMode = 0x334C;
-        public const Int32 m_iShotsFired = 0xA2B0;
-        public const Int32 m_iState = 0x31F8;
-        public const Int32 m_iTeamNum = 0xF0;
-        public const Int32 m_lifeState = 0x25B;
-        public const Int32 m_nFallbackPaintKit = 0x3170;
-        public const Int32 m_nFallbackSeed = 0x3174;
-        public const Int32 m_nFallbackStatTrak = 0x317C;
-        public const Int32 m_nForceBone = 0x267C;
-        public const Int32 m_nTickBase = 0x3404;
-        public const Int32 m_rgflCoordinateFrame = 0x440;
-        public const Int32 m_szCustomName = 0x301C;
-        public const Int32 m_szLastPlaceName = 0x3588;
-        public const Int32 m_vecOrigin = 0x134;
-        public const Int32 m_vecVelocity = 0x110;
-        public const Int32 m_vecViewOffset = 0x104;
-        public const Int32 m_viewPunchAngle = 0x3010;
-        public const Int32 m_szArmsModel = 0x38D7;
-        public const Int32 m_hViewModel = 0x32DC;
-        public const Int32 m_nModelIndex = 0x254;
-        public const Int32 m_flLowerBodyYawTarget = 0x39DC;
-        public const Int32 m_angEyeAngles = 0xB23C;
+        public const int m_ArmorValue = 0xB238;
+        public const int m_Collision = 0x318;
+        public const int m_CollisionGroup = 0x470;
+        public const int m_Local = 0x2FAC;
+        public const int m_MoveType = 0x258;
+        public const int m_OriginalOwnerXuidHigh = 0x316C;
+        public const int m_OriginalOwnerXuidLow = 0x3168;
+        public const int m_aimPunchAngle = 0x301C;
+        public const int m_aimPunchAngleVel = 0x3028;
+        public const int m_bGunGameImmunity = 0x3894;
+        public const int m_bHasDefuser = 0xB248;
+        public const int m_bHasHelmet = 0xB22C;
+        public const int m_bInReload = 0x3245;
+        public const int m_bIsDefusing = 0x3888;
+        public const int m_totalHitsOnServer = 0xA2C8;
+        public const int m_bIsScoped = 0x387E;
+        public const int m_bSpotted = 0x939;
+        public const int m_bSpottedByMask = 0x97C;
+        public const int m_dwBoneMatrix = 0x2698;
+        public const int m_fAccuracyPenalty = 0x32B0;
+        public const int m_fFlags = 0x100;
+        public const int m_flFallbackWear = 0x3178;
+        public const int m_flFlashDuration = 0xA2F8;
+        public const int m_flFlashMaxAlpha = 0xA2F4;
+        public const int m_flNextPrimaryAttack = 0x31D8;
+        public const int m_hActiveWeapon = 0x2EE8;
+        public const int m_hMyWeapons = 0x2DE8;
+        public const int m_hObserverTarget = 0x3360;
+        public const int m_hOwner = 0x29BC;
+        public const int m_hOwnerEntity = 0x148;
+        public const int m_iAccountID = 0x2FA8;
+        public const int m_iClip1 = 0x3204;
+        public const int m_iCompetitiveRanking = 0x1A44;
+        public const int m_iCompetitiveWins = 0x1B48;
+        public const int m_iCrosshairId = 0xB2A4;
+        public const int m_iEntityQuality = 0x2F8C;
+        public const int m_iFOVStart = 0x31D8;
+        public const int m_iFOV = 0x31D4;
+        public const int m_iGlowIndex = 0xA310;
+        public const int m_iHealth = 0xFC;
+        public const int m_iItemDefinitionIndex = 0x2F88;
+        public const int m_iItemIDHigh = 0x2FA0;
+        public const int m_iItemIDLow = 0x2FA4;
+        public const int m_iObserverMode = 0x334C;
+        public const int m_iShotsFired = 0xA2B0;
+        public const int m_iState = 0x31F8;
+        public const int m_iTeamNum = 0xF0;
+        public const int m_lifeState = 0x25B;
+        public const int m_nFallbackPaintKit = 0x3170;
+        public const int m_nFallbackSeed = 0x3174;
+        public const int m_nFallbackStatTrak = 0x317C;
+        public const int m_nForceBone = 0x267C;
+        public const int m_nTickBase = 0x3404;
+        public const int m_rgflCoordinateFrame = 0x440;
+        public const int m_szCustomName = 0x301C;
+        public const int m_szLastPlaceName = 0x3588;
+        public const int m_vecOrigin = 0x134;
+        public const int m_vecVelocity = 0x110;
+        public const int m_vecViewOffset = 0x104;
+        public const int m_viewPunchAngle = 0x3010;
+        public const int m_szArmsModel = 0x38D7;
+        public const int m_hViewModel = 0x32DC;
+        public const int m_nModelIndex = 0x254;
+        public const int m_flLowerBodyYawTarget = 0x39DC;
+        public const int m_angEyeAngles = 0xB23C;
 
         #endregion Netvars
 
         #region Signatures
 
-        public static Int32 dwClientState = 0x0;
-        public static Int32 dwClientState_GetLocalPlayer = 0x0;
-        public static Int32 dwClientState_Map = 0x0;
-        public static Int32 dwClientState_MapDirectory = 0x0;
-        public static Int32 dwClientState_MaxPlayer = 0x0;
-        public static Int32 dwClientState_PlayerInfo = 0x0;
-        public static Int32 dwClientState_State = 0x0;
-        public static Int32 dwClientState_ViewAngles = 0x0;
-        public static Int32 dwClientState_IsHLTV = 0x0;
-        public static Int32 dwEntityList = 0x0;
-        public static Int32 dwForceAttack = 0x0;
-        public static Int32 dwForceAttack2 = 0x0;
-        public static Int32 dwForceBackward = 0x0;
-        public static Int32 dwForceForward = 0x0;
-        public static Int32 dwForceJump = 0x0;
-        public static Int32 dwForceLeft = 0x0;
-        public static Int32 dwForceRight = 0x0;
-        public static Int32 dwGameDir = 0x0;
-        public static Int32 dwGameRulesProxy = 0x0;
-        public static Int32 dwGetAllClasses = 0x0;
-        public static Int32 dwGlobalVars = 0x0;
-        public static Int32 dwGlowObjectManager = 0x0;
-        public static Int32 dwInput = 0x0;
-        public static Int32 dwInterfaceLinkList = 0x0;
-        public static Int32 dwLocalPlayer = 0x0;
-        public static Int32 dwMouseEnable = 0x0;
-        public static Int32 dwMouseEnablePtr = 0x0;
-        public static Int32 dwPlayerResource = 0x0;
+        public static int dwClientState;
+        public static int dwClientState_GetLocalPlayer;
+        public static int dwClientState_Map;
+        public static int dwClientState_MapDirectory;
+        public static int dwClientState_MaxPlayer;
+        public static int dwClientState_PlayerInfo;
+        public static int dwClientState_State;
+        public static int dwClientState_ViewAngles;
+        public static int dwClientState_IsHLTV;
+        public static int dwEntityList;
+        public static int dwForceAttack;
+        public static int dwForceAttack2;
+        public static int dwForceBackward;
+        public static int dwForceForward;
+        public static int dwForceJump;
+        public static int dwForceLeft;
+        public static int dwForceRight;
+        public static int dwGameDir;
+        public static int dwGameRulesProxy;
+        public static int dwGetAllClasses;
+        public static int dwGlobalVars;
+        public static int dwGlowObjectManager;
+        public static int dwInput;
+        public static int dwInterfaceLinkList;
+        public static int dwLocalPlayer;
+        public static int dwMouseEnable;
+        public static int dwMouseEnablePtr;
+        public static int dwPlayerResource;
 
-        public static Int32 dwRadarBase = 0x0;
-        public static Int32 dwSensitivity = 0x0;
-        public static Int32 dwSensitivityPtr = 0x0;
-        public static Int32 dwViewMatrix = 0x0;
-        public static Int32 dwWeaponTable = 0x0;
-        public static Int32 dwWeaponTableIndex = 0x0;
-        public static Int32 dwYawPtr = 0x0;
-        public static Int32 dwZoomSensitivityRatioPtr = 0x0;
-        public static Int32 dwbSendPackets = 0x0;
-        public static Int32 dwppDirect3DDevice9 = 0x0;
-        public static Int32 dwSetClanTag = 0x0;
-        public static Int32 m_pStudioHdr = 0x0;
+        public static int dwRadarBase;
+        public static int dwSensitivity;
+        public static int dwSensitivityPtr;
+        public static int dwViewMatrix;
+        public static int dwWeaponTable;
+        public static int dwWeaponTableIndex;
+        public static int dwYawPtr;
+        public static int dwZoomSensitivityRatioPtr;
+        public static int dwbSendPackets;
+        public static int dwppDirect3DDevice9;
+        public static int dwSetClanTag;
+        public static int m_pStudioHdr;
 
         #endregion Signatures
     }

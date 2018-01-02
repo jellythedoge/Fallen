@@ -13,22 +13,7 @@ namespace IniParser.Model
     /// </summary>
     public class KeyDataCollection : ICloneable, IEnumerable<KeyData>
     {
-        private readonly IEqualityComparer<string> _searchComparer;
-
-        #region ICloneable Members
-
-        /// <summary>
-        /// Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>
-        /// A new object that is a copy of this instance.
-        /// </returns>
-        public object Clone()
-        {
-            return new KeyDataCollection(this, _searchComparer);
-        }
-
-        #endregion
+        readonly IEqualityComparer<string> searchComparer;
 
         #region Initialization
 
@@ -48,8 +33,8 @@ namespace IniParser.Model
         /// </param>
         public KeyDataCollection(IEqualityComparer<string> searchComparer)
         {
-            _searchComparer = searchComparer;
-            _keyData = new Dictionary<string, KeyData>(_searchComparer);
+            this.searchComparer = searchComparer;
+            keyData = new Dictionary<string, KeyData>(this.searchComparer);
         }
 
         /// <summary>
@@ -67,11 +52,23 @@ namespace IniParser.Model
             : this(searchComparer)
         {
             foreach (var key in ori)
-                if (_keyData.ContainsKey(key.KeyName))
-                    _keyData[key.KeyName] = (KeyData)key.Clone();
+                if (keyData.ContainsKey(key.KeyName))
+                    keyData[key.KeyName] = (KeyData)key.Clone();
                 else
-                    _keyData.Add(key.KeyName, (KeyData)key.Clone());
+                    keyData.Add(key.KeyName, (KeyData)key.Clone());
         }
+
+        #endregion
+
+        #region ICloneable Members
+
+        /// <summary>
+        /// Creates a new object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>
+        /// A new object that is a copy of this instance.
+        /// </returns>
+        public object Clone() => new KeyDataCollection(this, searchComparer);
 
         #endregion
 
@@ -94,28 +91,25 @@ namespace IniParser.Model
         {
             get
             {
-                if (_keyData.ContainsKey(keyName))
-                    return _keyData[keyName].Value;
+                if (keyData.ContainsKey(keyName))
+                    return keyData[keyName].Value;
 
                 return null;
             }
 
             set
             {
-                if (!_keyData.ContainsKey(keyName))
+                if (!keyData.ContainsKey(keyName))
                     AddKey(keyName);
 
-                _keyData[keyName].Value = value;
+                keyData[keyName].Value = value;
             }
         }
 
         /// <summary>
         ///     Return the number of keys in the collection
         /// </summary>
-        public int Count
-        {
-            get { return _keyData.Count; }
-        }
+        public int Count => keyData.Count;
 
         #endregion
 
@@ -132,9 +126,9 @@ namespace IniParser.Model
         /// </returns>
         public bool AddKey(string keyName)
         {
-            if (!_keyData.ContainsKey(keyName))
+            if (!keyData.ContainsKey(keyName))
             {
-                _keyData.Add(keyName, new KeyData(keyName));
+                keyData.Add(keyName, new KeyData(keyName));
                 return true;
             }
 
@@ -149,7 +143,7 @@ namespace IniParser.Model
             // which doesn't make any sense
             if (AddKey(keyName))
             {
-                _keyData[keyName] = keyData;
+                this.keyData[keyName] = keyData;
                 return true;
             }
 
@@ -170,7 +164,7 @@ namespace IniParser.Model
         {
             if (AddKey(keyData.KeyName))
             {
-                _keyData[keyData.KeyName] = keyData;
+                this.keyData[keyData.KeyName] = keyData;
                 return true;
             }
 
@@ -194,7 +188,7 @@ namespace IniParser.Model
         {
             if (AddKey(keyName))
             {
-                _keyData[keyName].Value = keyValue;
+                keyData[keyName].Value = keyValue;
                 return true;
             }
 
@@ -216,10 +210,7 @@ namespace IniParser.Model
         /// <param name="keyName">Key name to search</param>
         /// <returns><c>true</c> if a key with the specified name exists in the collectoin
         /// <c>false</c> otherwise</returns>
-        public bool ContainsKey(string keyName)
-        {
-            return _keyData.ContainsKey(keyName);
-        }
+        public bool ContainsKey(string keyName) => keyData.ContainsKey(keyName);
 
         /// <summary>
         /// Retrieves the data for a specified key given its name
@@ -231,8 +222,8 @@ namespace IniParser.Model
         /// </returns>
         public KeyData GetKeyData(string keyName)
         {
-            if (_keyData.ContainsKey(keyName))
-                return _keyData[keyName];
+            if (keyData.ContainsKey(keyName))
+                return keyData[keyName];
             return null;
         }
 
@@ -249,10 +240,7 @@ namespace IniParser.Model
         /// <summary>
         /// 	Deletes all keys in this collection.
         /// </summary>
-        public void RemoveAllKeys()
-        {
-            _keyData.Clear();
-        }
+        public void RemoveAllKeys() => keyData.Clear();
 
         /// <summary>
         /// Deletes a previously existing key, including its associated data.
@@ -262,10 +250,7 @@ namespace IniParser.Model
         /// <c>true</c> if a key with the specified name was removed
         /// <c>false</c> otherwise.
         /// </returns>
-        public bool RemoveKey(string keyName)
-        {
-            return _keyData.Remove(keyName);
-        }
+        public bool RemoveKey(string keyName) => keyData.Remove(keyName);
 
         /// <summary>
         /// Sets the key data associated to a specified key.
@@ -275,7 +260,7 @@ namespace IniParser.Model
         {
             if (data == null) return;
 
-            if (_keyData.ContainsKey(data.KeyName))
+            if (keyData.ContainsKey(data.KeyName))
                 RemoveKey(data.KeyName);
 
             AddKey(data);
@@ -291,8 +276,8 @@ namespace IniParser.Model
         /// <returns>A strong-typed IEnumerator </returns>
         public IEnumerator<KeyData> GetEnumerator()
         {
-            foreach (var key in _keyData.Keys)
-                yield return _keyData[key];
+            foreach (var key in keyData.Keys)
+                yield return keyData[key];
         }
 
         #region IEnumerable Members
@@ -301,10 +286,7 @@ namespace IniParser.Model
         /// Implementation needed
         /// </summary>
         /// <returns>A weak-typed IEnumerator.</returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _keyData.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => keyData.GetEnumerator();
 
         #endregion
 
@@ -317,16 +299,16 @@ namespace IniParser.Model
         internal KeyData GetLast()
         {
             KeyData result = null;
-            if (_keyData.Keys.Count <= 0) return result;
+            if (keyData.Keys.Count <= 0) return result;
 
-            foreach (var k in _keyData.Keys) result = _keyData[k];
+            foreach (var k in keyData.Keys) result = keyData[k];
             return result;
         }
 
         /// <summary>
         /// Collection of KeyData for a given section
         /// </summary>
-        private readonly Dictionary<string, KeyData> _keyData;
+        readonly Dictionary<string, KeyData> keyData;
 
         #endregion
     }

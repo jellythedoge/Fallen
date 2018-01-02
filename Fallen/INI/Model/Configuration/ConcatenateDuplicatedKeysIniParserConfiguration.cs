@@ -13,7 +13,7 @@ namespace IniParser.Model.Configuration
             ConcatenateSeparator = ori.ConcatenateSeparator;
         }
 
-        public new bool AllowDuplicateKeys { get { return true; } }
+        public new bool AllowDuplicateKeys => true;
 
         /// <summary>
         ///     Gets or sets the string used to concatenate duplicated keys.

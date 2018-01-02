@@ -13,10 +13,9 @@ using static System.Math;
 
 namespace Fallen.API
 {
-    /////////////////////
-    //CSGO EXTERNAL SDK//
-    /////////////////////
-
+    // ///////////////////
+    // CSGO EXTERNAL SDK//
+    // ///////////////////
 
     #region States
 
@@ -58,9 +57,9 @@ namespace Fallen.API
         {
             while (true)
             {
-                ////////////////
-                //LOCAL PLAYER//
-                ////////////////
+                // //////////////
+                // LOCAL PLAYER//
+                // //////////////
 
                 SDK.LocalPlayer.m_iBase = MemoryManager.ReadMemory<int>(MainClass.ClientPointer + Offsets.dwLocalPlayer);
                 SDK.LocalPlayer.m_iTeam = MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + Offsets.m_iTeamNum);
@@ -68,24 +67,24 @@ namespace Fallen.API
                 SDK.LocalPlayer.m_iGlowBase = MemoryManager.ReadMemory<int>(MainClass.ClientPointer + Offsets.dwGlowObjectManager);
                 SDK.LocalPlayer.m_iJumpFlags = MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + Offsets.m_fFlags);
 
-                ////////////////
-                //ENTITY STUFF//
-                ////////////////
+                // //////////////
+                // ENTITY STUFF//
+                // //////////////
 
                 for (var i = 0; i < 64; i++)
                 {
-                    var Entity = SDK.Arrays.Entity[i];
+                    var entity = SDK.Arrays.Entity[i];
 
-                    Entity.m_iBase = MemoryManager.ReadMemory<int>(MainClass.ClientPointer + Offsets.dwEntityList + i * 0x10);
+                    entity.m_iBase = MemoryManager.ReadMemory<int>(MainClass.ClientPointer + Offsets.dwEntityList + i * 0x10);
 
-                    if (Entity.m_iBase > 0)
+                    if (entity.m_iBase > 0)
                     {
-                        Entity.m_iTeam = MemoryManager.ReadMemory<int>(Entity.m_iBase + Offsets.m_iTeamNum);
-                        Entity.m_iHealth = MemoryManager.ReadMemory<int>(Entity.m_iBase + Offsets.m_iHealth);
-                        Entity.m_iDormant = MemoryManager.ReadMemory<int>(Entity.m_iBase + 0xE9);
-                        Entity.m_iGlowIndex = MemoryManager.ReadMemory<int>(Entity.m_iBase + Offsets.m_iGlowIndex);
+                        entity.m_iTeam = MemoryManager.ReadMemory<int>(entity.m_iBase + Offsets.m_iTeamNum);
+                        entity.m_iHealth = MemoryManager.ReadMemory<int>(entity.m_iBase + Offsets.m_iHealth);
+                        entity.m_iDormant = MemoryManager.ReadMemory<int>(entity.m_iBase + 0xE9);
+                        entity.m_iGlowIndex = MemoryManager.ReadMemory<int>(entity.m_iBase + Offsets.m_iGlowIndex);
 
-                        SDK.Arrays.Entity[i] = Entity;
+                        SDK.Arrays.Entity[i] = entity;
                     }
 
                     #region WeaponINFO
@@ -93,18 +92,18 @@ namespace Fallen.API
                     m_bIsScoped = MemoryManager.ReadMemory<bool>(SDK.LocalPlayer.m_iBase + Offsets.m_bIsScoped);
                     HitVal = MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + 0xA2C8);
 
-                    Weapon Weapon = new Weapon();
+                    var weapon = new Weapon();
 
                     #region CurrentWeapon
 
                     // My Current Weapon
-                    var CurrentWeapon = (MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + Offsets.m_hActiveWeapon + (i - 1) * 0x4)) & 0xFFF;
+                    var currentWeapon = (MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + Offsets.m_hActiveWeapon + (i - 1) * 0x4)) & 0xFFF;
 
-                    var WepBaseC = MemoryManager.ReadMemory<int>(MainClass.ClientPointer + Offsets.dwEntityList + (CurrentWeapon - 1) * 0x10);
+                    var wepBaseC = MemoryManager.ReadMemory<int>(MainClass.ClientPointer + Offsets.dwEntityList + (currentWeapon - 1) * 0x10);
 
-                    Weapon.m_ICurrentWeapon = MemoryManager.ReadMemory<int>(WepBaseC + Offsets.m_iItemDefinitionIndex);
+                    weapon.m_ICurrentWeapon = MemoryManager.ReadMemory<int>(wepBaseC + Offsets.m_iItemDefinitionIndex);
 
-                    switch (Weapon.m_ICurrentWeapon)
+                    switch (weapon.m_ICurrentWeapon)
                     {
                         #region RIFLE
 
@@ -309,6 +308,7 @@ namespace Fallen.API
 
                     #endregion
                 }
+
                 Thread.Sleep(1);
             }
         }
@@ -323,7 +323,7 @@ namespace Fallen.API
         }
 
         public static Random Rand = new Random();
-        private static IntPtr handle;
+        static IntPtr handle;
 
         #endregion
 
@@ -568,7 +568,7 @@ namespace Fallen.API
 
             public Vector3D VectorClone()
             {
-                return new Vector3D(this.x, this.y, this.z);
+                return new Vector3D(x, y, z);
             }
         };
 
@@ -610,7 +610,7 @@ namespace Fallen.API
 
             public Vector2D VectorClone()
             {
-                return new Vector2D(this.x, this.y);
+                return new Vector2D(x, y);
             }
         };
 

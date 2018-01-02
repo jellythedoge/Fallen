@@ -7,18 +7,18 @@ namespace FormOverlayExamples
     {
         public static int GetRealWindowRect(IntPtr hwnd, out RECT rect)
         {
-            RECT windowRect = new RECT();
-            RECT clientRect = new RECT();
+            var windowRect = new RECT();
+            var clientRect = new RECT();
 
-            int result = GetWindowRect(hwnd, out windowRect);
+            var result = GetWindowRect(hwnd, out windowRect);
             if (GetClientRect(hwnd, out clientRect) == 0)
             {
                 rect = windowRect;
                 return result;
             }
 
-            int windowWidth = windowRect.Right - windowRect.Left;
-            int windowHeight = windowRect.Bottom - windowRect.Top;
+            var windowWidth = windowRect.Right - windowRect.Left;
+            var windowHeight = windowRect.Bottom - windowRect.Top;
 
             if (windowWidth == clientRect.Right && windowHeight == clientRect.Bottom)
             {
@@ -26,8 +26,8 @@ namespace FormOverlayExamples
                 return result;
             }
 
-            int dif_x = windowWidth > clientRect.Right ? windowWidth - clientRect.Right : clientRect.Right - windowWidth;
-            int dif_y = windowHeight > clientRect.Bottom ? windowHeight - clientRect.Bottom : clientRect.Bottom - windowHeight;
+            var dif_x = windowWidth > clientRect.Right ? windowWidth - clientRect.Right : clientRect.Right - windowWidth;
+            var dif_y = windowHeight > clientRect.Bottom ? windowHeight - clientRect.Bottom : clientRect.Bottom - windowHeight;
 
             dif_x /= 2;
             dif_y /= 2;
@@ -154,7 +154,7 @@ namespace FormOverlayExamples
             public WindowsMessage Msg;
             public IntPtr lParam;
             public IntPtr wParam;
-            //public IntPtr Result;
+            // public IntPtr Result;
 
             public uint Time;
             public int X;
@@ -455,7 +455,7 @@ namespace FormOverlayExamples
                 return (uint)Marshal.SizeOf(ObfuscatorNeedsThis<WNDCLASSEX>());
             }
 
-            private static Type ObfuscatorNeedsThis<T>()
+            static Type ObfuscatorNeedsThis<T>()
             {
                 return typeof(T);
             }
@@ -484,17 +484,17 @@ namespace FormOverlayExamples
         internal static class WinApi
         {
             [DllImport("kernel32.dll", EntryPoint = "GetProcAddress", SetLastError = false, CharSet = CharSet.Ansi)]
-            private static extern IntPtr getProcAddress(IntPtr hmodule, string procName);
+            static extern IntPtr getProcAddress(IntPtr hmodule, string procName);
 
             [DllImport("kernel32.dll", EntryPoint = "LoadLibraryW", SetLastError = false, CharSet = CharSet.Unicode)]
-            private static extern IntPtr loadLibraryW(string lpFileName);
+            static extern IntPtr loadLibraryW(string lpFileName);
 
             [DllImport("kernel32.dll", EntryPoint = "GetModuleHandleW", SetLastError = false, CharSet = CharSet.Unicode)]
-            private static extern IntPtr getModuleHandle(string modulename);
+            static extern IntPtr getModuleHandle(string modulename);
 
             public static IntPtr GetProcAddress(string modulename, string procname)
             {
-                IntPtr hModule = getModuleHandle(modulename);
+                var hModule = getModuleHandle(modulename);
 
                 if (hModule == IntPtr.Zero) hModule = loadLibraryW(modulename);
 
@@ -503,11 +503,11 @@ namespace FormOverlayExamples
 
             public static T GetMethod<T>(string modulename, string procname)
             {
-                IntPtr hModule = getModuleHandle(modulename);
+                var hModule = getModuleHandle(modulename);
 
                 if (hModule == IntPtr.Zero) hModule = loadLibraryW(modulename);
 
-                IntPtr procAddress = getProcAddress(hModule, procname);
+                var procAddress = getProcAddress(hModule, procname);
 
 #if DEBUG
                 if (hModule == IntPtr.Zero || procAddress == IntPtr.Zero)
@@ -517,10 +517,7 @@ namespace FormOverlayExamples
                 return (T)(object)Marshal.GetDelegateForFunctionPointer(procAddress, ObfuscatorNeedsThis<T>());
             }
 
-            private static Type ObfuscatorNeedsThis<T>()
-            {
-                return typeof(T);
-            }
+            static Type ObfuscatorNeedsThis<T>() => typeof(T);
         }
 
         #endregion LoadLibrary and GetProcAddress

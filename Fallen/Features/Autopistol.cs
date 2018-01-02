@@ -9,9 +9,9 @@ namespace Fallen.Features
     {
         public static async void Run()
         {
-            ///////////////
-            //AUTO PISTOL//
-            ///////////////
+            // /////////////
+            // AUTO PISTOL//
+            // /////////////
 
             while (true)
             {

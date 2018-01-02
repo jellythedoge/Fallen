@@ -8,16 +8,16 @@ namespace Overlay
 {
     public class OverlayWindow : IDisposable
     {
-        private Random rng;
+        Random rng;
 
         private delegate IntPtr WndProc(IntPtr hWnd, PInvoke.WindowsMessage msg, IntPtr wParam, IntPtr lParam);
 
-        private IntPtr wndProcPointer;
-        private WndProc wndProc;
+        IntPtr wndProcPointer;
+        WndProc wndProc;
 
-        private Thread windowThread;
+        Thread windowThread;
 
-        private string randomClassName;
+        string randomClassName;
 
         public IntPtr WindowHandle { get; private set; }
 
@@ -58,7 +58,7 @@ namespace Overlay
             Dispose(false);
         }
 
-        private void windowThreadMethod(int x = 0, int y = 0, int width = 800, int height = 600)
+        void windowThreadMethod(int x = 0, int y = 0, int width = 800, int height = 600)
         {
             setupInstance(x, y, width, height);
 
@@ -66,7 +66,7 @@ namespace Overlay
             {
                 PInvoke.WaitMessage();
 
-                PInvoke.Message message = new PInvoke.Message();
+                var message = new PInvoke.Message();
 
                 if (PInvoke.PeekMessageW(ref message, WindowHandle, 0, 0, 1) != 0)
                 {
@@ -78,7 +78,7 @@ namespace Overlay
             }
         }
 
-        private void setupInstance(int x = 0, int y = 0, int width = 800, int height = 600)
+        void setupInstance(int x = 0, int y = 0, int width = 800, int height = 600)
         {
             IsVisible = true;
             Topmost = true;
@@ -89,15 +89,15 @@ namespace Overlay
             Height = height;
 
             randomClassName = generateRandomString(5, 11);
-            string randomMenuName = generateRandomString(5, 11);
-            string randomWindowName = generateRandomString(5, 11);
+            var randomMenuName = generateRandomString(5, 11);
+            var randomWindowName = generateRandomString(5, 11);
 
             // prepare method
             wndProc = windowProcedure;
             RuntimeHelpers.PrepareDelegate(wndProc);
             wndProcPointer = Marshal.GetFunctionPointerForDelegate(wndProc);
 
-            PInvoke.WNDCLASSEX wndClassEx = new PInvoke.WNDCLASSEX()
+            var wndClassEx = new PInvoke.WNDCLASSEX()
             {
                 cbSize = PInvoke.WNDCLASSEX.Size(),
                 style = 0,
@@ -133,7 +133,7 @@ namespace Overlay
             PInvoke.UpdateWindow(WindowHandle);
         }
 
-        private IntPtr windowProcedure(IntPtr hwnd, PInvoke.WindowsMessage msg, IntPtr wParam, IntPtr lParam)
+        IntPtr windowProcedure(IntPtr hwnd, PInvoke.WindowsMessage msg, IntPtr wParam, IntPtr lParam)
         {
             switch (msg)
             {
@@ -167,13 +167,13 @@ namespace Overlay
 
         public void extendFrameIntoClientArea()
         {
-            //var margin = new MARGIN
-            //{
+            // var margin = new MARGIN
+            // {
             //    cxLeftWidth = this.X,
             //    cxRightWidth = this.Width,
             //    cyBottomHeight = this.Height,
             //    cyTopHeight = this.Y
-            //};
+            // };
 
             var margin = new PInvoke.MARGIN
             {
@@ -186,18 +186,16 @@ namespace Overlay
             PInvoke.DwmExtendFrameIntoClientArea(WindowHandle, ref margin);
         }
 
-        private string generateRandomString(int minlen, int maxlen)
+        string generateRandomString(int minlen, int maxlen)
         {
             if (rng == null) rng = new Random();
 
-            int len = rng.Next(minlen, maxlen);
+            var len = rng.Next(minlen, maxlen);
 
             char[] chars = new char[len];
 
             for (int i = 0; i < chars.Length; i++)
-            {
                 chars[i] = (char)rng.Next(97, 123);
-            }
 
             return new string(chars);
         }
@@ -247,7 +245,7 @@ namespace Overlay
 
         #region IDisposable Support
 
-        private bool disposedValue = false;
+        bool disposedValue;
 
         protected virtual void Dispose(bool disposing)
         {

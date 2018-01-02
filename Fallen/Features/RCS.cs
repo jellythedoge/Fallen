@@ -21,9 +21,9 @@ namespace Fallen.Features
         {
             while (true)
             {
-                /////////////////////////
-                //RECOIL CONTROL SYSTEM//
-                /////////////////////////
+                // ///////////////////////
+                // RECOIL CONTROL SYSTEM//
+                // ///////////////////////
 
                 ///TO DO
                 ///Add smoothing and view angle reset!
@@ -54,6 +54,7 @@ namespace Fallen.Features
                         OldAimPunch.x = OldAimPunch.y = OldAimPunch.z = 0;
                     }
                 }
+
                 Thread.Sleep(1);
             }
         }

@@ -6,8 +6,8 @@ namespace FormOverlayExamples.Objects
 {
     public class OverlayManager : IDisposable
     {
-        private bool exitThread;
-        private Thread serviceThread;
+        bool exitThread;
+        Thread serviceThread;
 
         public IntPtr ParentWindowHandle { get; private set; }
 
@@ -22,7 +22,7 @@ namespace FormOverlayExamples.Objects
 
         public OverlayManager(IntPtr parentWindowHandle, bool vsync = false, bool measurefps = false, bool antialiasing = true)
         {
-            Direct2DRendererOptions options = new Direct2DRendererOptions()
+            var options = new Direct2DRendererOptions()
             {
                 AntiAliasing = antialiasing,
                 Hwnd = IntPtr.Zero,
@@ -42,20 +42,20 @@ namespace FormOverlayExamples.Objects
             Dispose(false);
         }
 
-        private void setupInstance(IntPtr parentWindowHandle, Direct2DRendererOptions options)
+        void setupInstance(IntPtr parentWindowHandle, Direct2DRendererOptions options)
         {
             ParentWindowHandle = parentWindowHandle;
 
             if (PInvoke.IsWindow(parentWindowHandle) == 0) throw new Exception("The parent window does not exist");
 
-            PInvoke.RECT bounds = new PInvoke.RECT();
+            var bounds = new PInvoke.RECT();
             PInvoke.GetRealWindowRect(parentWindowHandle, out bounds);
 
-            int x = bounds.Left;
-            int y = bounds.Top;
+            var x = bounds.Left;
+            var y = bounds.Top;
 
-            int width = bounds.Right - x;
-            int height = bounds.Bottom - y;
+            var width = bounds.Right - x;
+            var height = bounds.Bottom - y;
 
             Window = new OverlayWindow(x, y, width, height);
 
@@ -72,9 +72,9 @@ namespace FormOverlayExamples.Objects
             serviceThread.Start();
         }
 
-        private void windowServiceThread()
+        void windowServiceThread()
         {
-            PInvoke.RECT bounds = new PInvoke.RECT();
+            var bounds = new PInvoke.RECT();
 
             while (!exitThread)
             {
@@ -92,11 +92,11 @@ namespace FormOverlayExamples.Objects
 
                 PInvoke.GetRealWindowRect(ParentWindowHandle, out bounds);
 
-                int x = bounds.Left;
-                int y = bounds.Top;
+                var x = bounds.Left;
+                var y = bounds.Top;
 
-                int width = bounds.Right - x;
-                int height = bounds.Bottom - y;
+                var width = bounds.Right - x;
+                var height = bounds.Bottom - y;
 
                 if (Window.X == x
                     && Window.Y == y
@@ -110,7 +110,7 @@ namespace FormOverlayExamples.Objects
 
         #region IDisposable Support
 
-        private bool disposedValue = false;
+        bool disposedValue;
 
         protected virtual void Dispose(bool disposing)
         {

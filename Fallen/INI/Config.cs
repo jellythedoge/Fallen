@@ -11,25 +11,25 @@ namespace Fallen.INI
 {
     internal class INI
     {
-        private static bool LoadFailed;
+        static bool LoadFailed;
 
         public static void LoadConfig()
         {
             var path = Path.Combine(Directory.GetCurrentDirectory(), "Settings.ini");
-            bool LoadNoConfig = false;
+            var loadNoConfig = false;
 
             if (!File.Exists(path))
                 using (var sw = File.AppendText(path))
                 {
                     {
                         sw.WriteLine("");
-                        LoadNoConfig = true;
+                        loadNoConfig = true;
                     }
                 }
 
-            if (LoadNoConfig)
+            if (loadNoConfig)
             {
-                LoadNoConfig = false;
+                loadNoConfig = false;
                 SaveConfig();
             }
 
@@ -37,9 +37,9 @@ namespace Fallen.INI
             {
                 var parser = new FileIniDataParser();
                 var data = parser.ReadFile("Settings.ini");
-                //Keep ^^
+                // Keep ^^
 
-                //Features
+                // Features
                 Settings.GlowTeam.Enabled = bool.Parse(data["GLOW TEAM"]["Enabled"]);
                 Settings.GlowTeam.ChamsEnabled = bool.Parse(data["GLOW TEAM"]["Chams"]);
                 Settings.GlowTeam.Alpha = float.Parse(data["GLOW TEAM"]["Alpha"]);
@@ -117,7 +117,7 @@ namespace Fallen.INI
                 Settings.Skinchanger.WEAPON_SCAR20 = int.Parse(data["SKINCHANGER"]["SCAR20Skin"]);
                 Settings.Skinchanger.WEAPON_SG556 = int.Parse(data["SKINCHANGER"]["SG556Skin"]);
                 Settings.Skinchanger.WEAPON_SSG08 = int.Parse(data["SKINCHANGER"]["SSG08Skin"]);
-                //Load config ^^
+                // Load config ^^
             }
             catch
             {
@@ -144,15 +144,12 @@ namespace Fallen.INI
 
             if (!File.Exists(path))
                 using (var sw = File.AppendText(path))
-                {
-                    {
-                        sw.WriteLine("");
-                    }
-                }
+                    sw.WriteLine("");
+
 
             var parser = new FileIniDataParser();
             var data = parser.ReadFile("Settings.ini");
-            //Keep ^^
+            // Keep ^^
 
             data["GLOW TEAM"]["Enabled"] = Settings.GlowTeam.Enabled.ToString();
             data["GLOW TEAM"]["Chams"] = Settings.GlowTeam.ChamsEnabled.ToString();
@@ -230,10 +227,10 @@ namespace Fallen.INI
             data["SKINCHANGER"]["SG556Skin"] = Settings.Skinchanger.WEAPON_SG556.ToString();
             data["SKINCHANGER"]["SSG08Skin"] = Settings.Skinchanger.WEAPON_SSG08.ToString();
 
-            //Get value ^^
+            // Get value ^^
 
             parser.WriteFile("Settings.ini", data);
-            //Save config ^^
+            // Save config ^^
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Fallen.Features
     {
         internal void Run()
         {
-            bool glow = true;
+            var glow = true;
 
             while (true)
             {
@@ -38,6 +38,7 @@ namespace Fallen.Features
                             Settings.Skinchanger.Enabled = !Settings.Skinchanger.Enabled;
                             Console.WriteLine("Skinchanger changer Off!");
                         }
+
                         break;
 
                     case "change flash":
@@ -70,6 +71,7 @@ namespace Fallen.Features
                             Settings.Fovchanger.Enabled = !Settings.Fovchanger.Enabled;
                             Console.WriteLine("Fov changer Off!");
                         }
+
                         break;
 
                     case "glow":
@@ -86,6 +88,7 @@ namespace Fallen.Features
                             Settings.GlowEnemy.Enabled = false;
                             Settings.GlowTeam.Enabled = true;
                         }
+
                         break;
 
                     case "chams":
@@ -111,7 +114,7 @@ namespace Fallen.Features
 
                     case "help":
                     case "commands":
-                        //Console.WriteLine("Available Commands are NoFlash, glow, fov, bhop, trigger, chams 'ENABLED AFTER GLOW', change fov, change Flash");
+                        // Console.WriteLine("Available Commands are NoFlash, glow, fov, bhop, trigger, chams 'ENABLED AFTER GLOW', change fov, change Flash");
                         break;
 
                     case "clear":

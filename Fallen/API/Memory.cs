@@ -9,25 +9,25 @@ namespace Memory
 {
     internal class MemoryManager
     {
-        public static Process m_Process;
-        public static IntPtr m_pProcessHandle;
+        static Process m_Process;
+        static IntPtr m_pProcessHandle;
 
-        public static int m_iNumberOfBytesRead = 0;
-        public static int m_iNumberOfBytesWritten = 0;
+        static int m_iNumberOfBytesRead;
+        static int m_iNumberOfBytesWritten;
 
-        public static void Initialize(string ProcessName)
+        public static void Initialize(string processName)
         {
-            // Check if program.exe is running
-            if (Process.GetProcessesByName(ProcessName).Length > 0)
-                m_Process = Process.GetProcessesByName(ProcessName)[0];
+            if (Process.GetProcessesByName(processName).Length > 0)
+                m_Process = Process.GetProcessesByName(processName)[0];
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Couldn't find " + ProcessName + ", Please start it first!");
+                Console.WriteLine("Couldn't find " + processName + ", Please start it first!");
                 Console.ResetColor();
                 Console.ReadKey();
                 Environment.Exit(1);
             }
+
             m_pProcessHandle = OpenProcess(PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE, false, m_Process.Id); // Sets Our ProcessHandle
         }
 
@@ -52,7 +52,7 @@ namespace Memory
 
         public static T ReadMemory<T>(int address) where T : struct
         {
-            int ByteSize = Marshal.SizeOf(typeof(T));
+            var ByteSize = Marshal.SizeOf(typeof(T));
 
             byte[] buffer = new byte[ByteSize];
 
@@ -72,7 +72,7 @@ namespace Memory
 
         public static float[] ReadMatrix<T>(int Adress, int MatrixSize) where T : struct
         {
-            int ByteSize = Marshal.SizeOf(typeof(T));
+            var ByteSize = Marshal.SizeOf(typeof(T));
             byte[] buffer = new byte[ByteSize * MatrixSize]; // Create A Buffer With Size Of ByteSize * MatrixSize
             ReadProcessMemory((int)m_pProcessHandle, Adress, buffer, buffer.Length, ref m_iNumberOfBytesRead);
 
@@ -93,28 +93,28 @@ namespace Memory
             WriteProcessMemory((int)m_pProcessHandle, Adress, buffer, buffer.Length, out m_iNumberOfBytesWritten);
         }
 
-        //S1ONS SIG SCANNER!
-        //I DONT KNOW HOW TO MAKE ONE ,-,
+        // S1ONS SIG SCANNER!
+        // I DONT KNOW HOW TO MAKE ONE ,-,
         //
 
         #region SigScanning
 
         public static int ScanPattern(int dll, string pattern, int extra, int offset, bool modeSubtract)
         {
-            int tempOffset = BitConverter.ToInt32(ReadMemory(AobScan(dll, 0x1800000, pattern, 0) + extra, 4), 0) + offset;
+            var tempOffset = BitConverter.ToInt32(ReadMemory(AobScan(dll, 0x1800000, pattern, 0) + extra, 4), 0) + offset;
 
             if (modeSubtract) tempOffset -= dll;
 
             return tempOffset;
         }
 
-        private static int AobScan(int dll, int range, string signature, int instance)
+        static int AobScan(int dll, int range, string signature, int instance)
         {
             if (signature == string.Empty) return -1;
 
-            string tempSignature = Regex.Replace(signature.Replace("??", "3F"), "[^a-fA-F0-9]", "");
+            var tempSignature = Regex.Replace(signature.Replace("??", "3F"), "[^a-fA-F0-9]", "");
 
-            int count = -1;
+            var count = -1;
 
             byte[] searchRange = new byte[(tempSignature.Length / 2)];
 
@@ -122,8 +122,8 @@ namespace Memory
 
             byte[] readMemory = ReadMemory(dll, range);
 
-            int temp1 = 0;
-            int iEnd = searchRange.Length < 0x20 ? searchRange.Length : 0x20;
+            var temp1 = 0;
+            var iEnd = searchRange.Length < 0x20 ? searchRange.Length : 0x20;
 
             for (int j = 0; j <= iEnd - 1; j++)
             {
@@ -139,7 +139,7 @@ namespace Memory
 
             temp1 = 1;
 
-            int index = (iEnd - 1);
+            var index = (iEnd - 1);
 
             while ((index >= 0))
             {
@@ -150,15 +150,15 @@ namespace Memory
                 temp1 = (temp1 << 1);
             }
 
-            int temp2 = 0;
+            var temp2 = 0;
 
             while ((temp2 <= (readMemory.Length - searchRange.Length)))
             {
-                int last = searchRange.Length;
+                var last = searchRange.Length;
 
                 temp1 = (searchRange.Length - 1);
 
-                int temp3 = -1;
+                var temp3 = -1;
 
                 while ((temp3 != 0))
                 {
@@ -206,7 +206,7 @@ namespace Memory
             return floats;
         }
 
-        private static T ByteArrayToStructure<T>(byte[] bytes) where T : struct
+        static T ByteArrayToStructure<T>(byte[] bytes) where T : struct
         {
             var handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
             try
@@ -219,13 +219,13 @@ namespace Memory
             }
         }
 
-        private static byte[] StructureToByteArray(object obj)
+        static byte[] StructureToByteArray(object obj)
         {
-            int length = Marshal.SizeOf(obj);
+            var length = Marshal.SizeOf(obj);
 
             byte[] array = new byte[length];
 
-            IntPtr pointer = Marshal.AllocHGlobal(length);
+            var pointer = Marshal.AllocHGlobal(length);
 
             Marshal.StructureToPtr(obj, pointer, true);
             Marshal.Copy(pointer, array, 0, length);
@@ -239,22 +239,22 @@ namespace Memory
         #region DllImports
 
         [DllImport("kernel32.dll")]
-        private static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+        static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
 
         [DllImport("kernel32.dll")]
-        private static extern bool ReadProcessMemory(int hProcess, int lpBaseAddress, byte[] buffer, int size, ref int lpNumberOfBytesRead);
+        static extern bool ReadProcessMemory(int hProcess, int lpBaseAddress, byte[] buffer, int size, ref int lpNumberOfBytesRead);
 
         [DllImport("kernel32.dll")]
-        private static extern bool WriteProcessMemory(int hProcess, int lpBaseAddress, byte[] buffer, int size, out int lpNumberOfBytesWritten);
+        static extern bool WriteProcessMemory(int hProcess, int lpBaseAddress, byte[] buffer, int size, out int lpNumberOfBytesWritten);
 
         #endregion DllImports
 
         #region Constants
 
-        private const int PROCESS_VM_OPERATION = 0x0008;
-        private const int PROCESS_VM_READ = 0x0010;
-        private const int PROCESS_VM_WRITE = 0x0020;
-        private static IntPtr handle;
+        const int PROCESS_VM_OPERATION = 0x0008;
+        const int PROCESS_VM_READ = 0x0010;
+        const int PROCESS_VM_WRITE = 0x0020;
+        static IntPtr handle;
 
         #endregion Constants
     }

@@ -7,9 +7,6 @@ namespace IniParser.Helpers
         /// </summary>
         /// <param name="s">The string to be checked.</param>
         /// <returns></returns>
-        internal static bool StringHasNoBlankSpaces(string s)
-        {
-            return !s.Contains(" ");
-        }
+        internal static bool StringHasNoBlankSpaces(string s) => !s.Contains(" ");
     }
 }
