@@ -68,7 +68,7 @@ namespace Fallen.Features
                             glowObject = MemoryManager.ReadMemory<SDK.GlowObject>(SDK.LocalPlayer.m_iGlowBase + SDK.Arrays.Entity[i].m_iGlowIndex * 0x38);
 
                             glowObject.r = Settings.GlowTeam.Red / 255;
-                            glowObject.g = Settings.GlowEnemy.Green / 255;
+                            glowObject.g = Settings.GlowTeam.Green / 255;
                             glowObject.b = Settings.GlowTeam.Blue / 255;
                             glowObject.a = Settings.GlowTeam.Alpha / 254;
                             glowObject.m_bRenderWhenOccluded = true;
