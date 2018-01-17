@@ -128,14 +128,8 @@ namespace Fallen.INI
                 LoadFailed = true;
             }
 
-            if (!LoadFailed)
-            {
-                SDK.Log("Config Loaded!", true);
-            }
-            else
-            {
-                LoadFailed = false;
-            }
+            if (!LoadFailed) SDK.Log("Config Loaded!", true);
+            else LoadFailed = false;
         }
 
         public static void SaveConfig()
@@ -145,7 +139,6 @@ namespace Fallen.INI
             if (!File.Exists(path))
                 using (var sw = File.AppendText(path))
                     sw.WriteLine("");
-
 
             var parser = new FileIniDataParser();
             var data = parser.ReadFile("Settings.ini");

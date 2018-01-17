@@ -35,7 +35,7 @@ namespace Fallen.Features
 
                     CurrentViewAngles = MemoryManager.ReadMemory<SDK.Vector3D>(SDK.LocalPlayer.m_iClientState + Offsets.dwClientState_ViewAngles);
 
-                    if (ShotsFired > 2 && SDK.HeldWeapon != "PISTOL")
+                    if (ShotsFired > 2)
                     {
                         NewViewAngles.x = ((CurrentViewAngles.x + OldAimPunch.x) - (vPunch.x * Settings.RCS.X));
                         NewViewAngles.y = ((CurrentViewAngles.y + OldAimPunch.y) - (vPunch.y * Settings.RCS.Y));

@@ -224,8 +224,7 @@ namespace IniParser.Model
         /// <param name="data">The new <see cref="SectionData"instance.</param>
         public void SetSectionData(string sectionName, SectionData data)
         {
-            if (data != null)
-                sectionData[sectionName] = data;
+            if (data != null) sectionData[sectionName] = data;
         }
 
         /// <summary>

@@ -88,8 +88,7 @@ namespace IniParser.Model
 
             set
             {
-                if (value != string.Empty)
-                    keyName = value;
+                if (value != string.Empty) keyName = value;
             }
         }
 

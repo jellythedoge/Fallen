@@ -251,10 +251,7 @@ namespace Overlay
         {
             if (!disposedValue)
             {
-                if (disposing)
-                {
-                    rng = null;
-                }
+                if (disposing) rng = null;
 
                 if (windowThread != null) windowThread.Abort();
 

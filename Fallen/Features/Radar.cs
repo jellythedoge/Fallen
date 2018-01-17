@@ -16,12 +16,10 @@ namespace Fallen.Features
             {
                 for (var i = 0; i < 64; i++)
                 {
-                    if (SDK.Arrays.Entity[i].m_iBase == 0)
-                        continue;
+                    if (SDK.Arrays.Entity[i].m_iBase == 0) continue;
                     if (SDK.Arrays.Entity[i].m_iBase == SDK.LocalPlayer.m_iBase)
                         continue;
-                    if (SDK.Arrays.Entity[i].m_iHealth < 1)
-                        continue;
+                    if (SDK.Arrays.Entity[i].m_iHealth < 1) continue;
                     if (SDK.Arrays.Entity[i].m_iDormant == 1)
                         continue;
 

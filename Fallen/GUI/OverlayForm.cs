@@ -89,10 +89,7 @@ namespace Fallen.GUI
         {
             HitMark = HitMark + 1;
 
-            if (HitMark > 1)
-            {
-                HitMark = 0;
-            }
+            if (HitMark > 1) HitMark = 0;
 
             await Task.Delay(5);
         }

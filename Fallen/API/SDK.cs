@@ -53,7 +53,7 @@ namespace Fallen.API
 
         #region AddressReader
 
-        public static async void AddressReader()
+        public static void AddressReader()
         {
             while (true)
             {
@@ -79,92 +79,106 @@ namespace Fallen.API
 
                     if (entity.m_iBase > 0)
                     {
-                        entity.m_iTeam = MemoryManager.ReadMemory<int>(entity.m_iBase + Offsets.m_iTeamNum);
-                        entity.m_iHealth = MemoryManager.ReadMemory<int>(entity.m_iBase + Offsets.m_iHealth);
-                        entity.m_iDormant = MemoryManager.ReadMemory<int>(entity.m_iBase + 0xE9);
-                        entity.m_iGlowIndex = MemoryManager.ReadMemory<int>(entity.m_iBase + Offsets.m_iGlowIndex);
+                        var EntityStruct = new Entity_t();
+
+                        EntityStruct = MemoryManager.ReadMemory<Entity_t>(entity.m_iBase);
+
+                        entity.m_VecOrigin = EntityStruct.m_vecOrigin;
+                        entity.m_VecMin = EntityStruct.m_vecMins;
+                        entity.m_VecMax = EntityStruct.m_vecMaxs;
+
+                        entity.m_iTeam = EntityStruct.m_iTeam;
+                        entity.m_iHealth = EntityStruct.m_iHealth;
+                        entity.m_iDormant = EntityStruct.m_iDormant;
+                        entity.m_iGlowIndex = EntityStruct.m_iGlowIndex;
 
                         SDK.Arrays.Entity[i] = entity;
                     }
+                }
 
-                    #region WeaponINFO
+                #region WeaponINFO
+
+                for (var i = 0; i < 16; i++)
+                {
 
                     m_bIsScoped = MemoryManager.ReadMemory<bool>(SDK.LocalPlayer.m_iBase + Offsets.m_bIsScoped);
-                    HitVal = MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + 0xA2C8);
+                    HitVal = MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + Offsets.m_totalHitsOnServer);
 
                     var weapon = new Weapon();
 
                     #region CurrentWeapon
 
                     // My Current Weapon
-                    var currentWeapon = (MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + Offsets.m_hActiveWeapon + (i - 1) * 0x4)) & 0xFFF;
+                    var ActiveWeapon = (MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + Offsets.m_hActiveWeapon + (i - 1) * 0x4)) & 0xFFF;
 
-                    var wepBaseC = MemoryManager.ReadMemory<int>(MainClass.ClientPointer + Offsets.dwEntityList + (currentWeapon - 1) * 0x10);
+                    var wepBaseC = MemoryManager.ReadMemory<int>(MainClass.ClientPointer + Offsets.dwEntityList + (ActiveWeapon - 1) * 0x10);
 
-                    weapon.m_ICurrentWeapon = MemoryManager.ReadMemory<int>(wepBaseC + Offsets.m_iItemDefinitionIndex);
+                    weapon.m_hActiveWeapon = MemoryManager.ReadMemory<int>(wepBaseC + Offsets.m_iItemDefinitionIndex);
 
-                    switch (weapon.m_ICurrentWeapon)
+                    Console.WriteLine(HeldWeapon);
+
+                    switch (weapon.m_hActiveWeapon)
                     {
                         #region RIFLE
 
                         case (int)WeaponIDs.WEAPON_AK47:
                             SDK.HeldWeapon = "RIFLE";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_AUG:
                             SDK.HeldWeapon = "RIFLE";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_AWP:
                             SDK.HeldWeapon = "RIFLE";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_BIZON:
                             SDK.HeldWeapon = "RIFLE";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_FAMAS:
                             SDK.HeldWeapon = "RIFLE";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_G3SG1:
                             SDK.HeldWeapon = "RIFLE";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_GALILAR:
                             SDK.HeldWeapon = "RIFLE";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_M4A1:
                             SDK.HeldWeapon = "RIFLE";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_SCAR20:
                             SDK.HeldWeapon = "RIFLE";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_SG556:
                             SDK.HeldWeapon = "RIFLE";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_SSG08:
                             SDK.HeldWeapon = "RIFLE";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_M4A1_SILENCER:
                             SDK.HeldWeapon = "RIFLE";
-                            await Task.Delay(20);
+
                             break;
 
                         #endregion
@@ -173,27 +187,27 @@ namespace Fallen.API
 
                         case (int)WeaponIDs.WEAPON_MAC10:
                             SDK.HeldWeapon = "SMG";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_P90:
                             SDK.HeldWeapon = "SMG";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_UMP45:
                             SDK.HeldWeapon = "SMG";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_MP7:
                             SDK.HeldWeapon = "SMG";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_MP9:
                             SDK.HeldWeapon = "SMG";
-                            await Task.Delay(20);
+
                             break;
 
                         #endregion
@@ -202,12 +216,12 @@ namespace Fallen.API
 
                         case (int)WeaponIDs.WEAPON_NEGEV:
                             SDK.HeldWeapon = "HEAVY";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_M249:
                             SDK.HeldWeapon = "HEAVY";
-                            await Task.Delay(20);
+
                             break;
 
                         #endregion
@@ -216,52 +230,52 @@ namespace Fallen.API
 
                         case (int)WeaponIDs.WEAPON_DEAGLE:
                             SDK.HeldWeapon = "PISTOL";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_ELITE:
                             SDK.HeldWeapon = "PISTOL";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_FIVESEVEN:
                             SDK.HeldWeapon = "PISTOL";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_GLOCK:
                             SDK.HeldWeapon = "PISTOL";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_TEC9:
                             SDK.HeldWeapon = "PISTOL";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_HKP2000:
                             SDK.HeldWeapon = "PISTOL";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_USP_SILENCER:
                             SDK.HeldWeapon = "PISTOL";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_CZ75A:
                             SDK.HeldWeapon = "PISTOL";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_REVOLVER:
                             SDK.HeldWeapon = "PISTOL";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_P250:
                             SDK.HeldWeapon = "PISTOL";
-                            await Task.Delay(20);
+
                             break;
 
                         #endregion
@@ -270,22 +284,22 @@ namespace Fallen.API
 
                         case (int)WeaponIDs.WEAPON_XM1014:
                             SDK.HeldWeapon = "SHOTGUN";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_MAG7:
                             SDK.HeldWeapon = "SHOTGUN";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_SAWEDOFF:
                             SDK.HeldWeapon = "SHOTGUN";
-                            await Task.Delay(20);
+
                             break;
 
                         case (int)WeaponIDs.WEAPON_NOVA:
                             SDK.HeldWeapon = "SHOTGUN";
-                            await Task.Delay(20);
+
                             break;
 
                         #endregion
@@ -294,20 +308,20 @@ namespace Fallen.API
 
                         case (int)WeaponIDs.WEAPON_KNIFE:
                             SDK.HeldWeapon = "KNIFE";
-                            await Task.Delay(20);
+
                             break;
 
                         #endregion
 
                         default:
-                            await Task.Delay(20);
                             break;
                     }
 
                     #endregion
 
-                    #endregion
                 }
+
+                #endregion
 
                 Thread.Sleep(1);
             }
@@ -321,6 +335,8 @@ namespace Fallen.API
 
             await Task.Delay(1000);
         }
+
+
 
         public static Random Rand = new Random();
         static IntPtr handle;
@@ -388,13 +404,11 @@ namespace Fallen.API
 
                 if (KeyPressed(Keys.Space))
                 {
-                    if (!Settings.Bhop.Key)
-                        Settings.Bhop.Key = true;
+                    if (!Settings.Bhop.Key) Settings.Bhop.Key = true;
                 }
                 else
                 {
-                    if (Settings.Bhop.Key)
-                        Settings.Bhop.Key = false;
+                    if (Settings.Bhop.Key) Settings.Bhop.Key = false;
                 }
 
                 if (KeyPressed(Keys.LMenu))
@@ -435,7 +449,7 @@ namespace Fallen.API
             public int m_iXuIDLow;
             public int m_iTexture;
             public int m_iItemDefinitionIndex;
-            public int m_ICurrentWeapon;
+            public int m_hActiveWeapon;
         };
 
         #region IDS
@@ -672,11 +686,21 @@ namespace Fallen.API
 
         internal struct Entity
         {
+            public int m_iID;
             public int m_iBase;
             public int m_iDormant;
             public int m_iHealth;
             public int m_iTeam;
             public int m_iGlowIndex;
+
+            public Vector3D m_VecOrigin;
+            public Vector3D m_VecMin;
+            public Vector3D m_VecMax;
+
+            internal class Arrays
+            {
+                public static Entity[] Entity = new Entity[64];
+            }
         }
 
         internal struct LocalPlayer
@@ -686,6 +710,10 @@ namespace Fallen.API
             public static int m_iClientState;
             public static int m_iGlowBase;
             public static int m_iJumpFlags;
+            public static int m_hActiveWeapon;
+
+            public static QAngle m_angEyeAngles;
+            public static Vector3D m_VecOrigin;
         }
 
         internal class Arrays
@@ -694,6 +722,41 @@ namespace Fallen.API
         }
 
         #region Reading
+
+        [StructLayout(LayoutKind.Explicit)]
+        internal struct LocalPlayer_t
+        {
+            [FieldOffset(Offsets.m_iTeamNum)]
+            public int m_iTeamNum;
+
+            [FieldOffset(Offsets.m_bIsScoped)]
+            public int m_bIsScoped;
+        }
+
+        [StructLayout(LayoutKind.Explicit)]
+        internal struct Entity_t
+        {
+            [FieldOffset(Offsets.m_vecOrigin)]
+            public Vector3D m_vecOrigin;
+
+            [FieldOffset(Offsets.m_vecMins)]
+            public Vector3D m_vecMins;
+
+            [FieldOffset(Offsets.m_vecMaxs)]
+            public Vector3D m_vecMaxs;
+
+            [FieldOffset(Offsets.m_iTeamNum)]
+            public int m_iTeam;
+
+            [FieldOffset(Offsets.m_iHealth)]
+            public int m_iHealth;
+
+            [FieldOffset(0xE9)]
+            public int m_iDormant;
+
+            [FieldOffset(Offsets.m_iGlowIndex)]
+            public int m_iGlowIndex;
+        }
 
         [StructLayout(LayoutKind.Explicit)]
         public struct GlowObject

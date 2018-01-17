@@ -13,7 +13,7 @@ namespace Fallen.Features
     {
         internal async void Run()
         {
-            bool bhopInitialized = false;
+            var bhopInitialized = false;
             var jumpsDone = 0;
             while (true)
             {
@@ -21,21 +21,21 @@ namespace Fallen.Features
 
                 if (Settings.Bhop.Enabled)
                 {
-                    var flag = MemoryManager.ReadMemory<int>(SDK.LocalPlayer.m_iBase + 0x100);
+                    var flag = SDK.LocalPlayer.m_iJumpFlags;
 
-                    //If user jumped, turn bhop, not possible when in chat or menu.
+                    // If user jumped, turn bhop, not possible when in chat or menu.
                     if (flag == 256 && !bhopInitialized)
                     {
                         bhopInitialized = true;
                         continue;
                     }
-                    else if(!bhopInitialized && Settings.Bhop.Key)
+                    else if (!bhopInitialized && Settings.Bhop.Key)
                     {
                         bhopInitialized = false;
                         continue;
                     }
-                    if (!Settings.Bhop.Key)
-                        bhopInitialized = false;
+
+                    if (!Settings.Bhop.Key) bhopInitialized = false;
 
                     if (flag == 257 && (Settings.Bhop.Key) || flag == 263 && (Settings.Bhop.Key))
                     {

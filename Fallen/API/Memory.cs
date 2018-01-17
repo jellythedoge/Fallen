@@ -99,14 +99,18 @@ namespace Memory
 
         #region SigScanning
 
-        public static int ScanPattern(int dll, string pattern, int extra, int offset, bool modeSubtract)
+        public static int ScanPattern(int dll, string pattern, int offset, int extra, bool modeSubtract)
         {
-            var tempOffset = BitConverter.ToInt32(ReadMemory(AobScan(dll, 0x1800000, pattern, 0) + extra, 4), 0) + offset;
+            var tempOffset = BitConverter.ToInt32(ReadMemory(AobScan(dll, 0x1800000, pattern, 0) + offset, 4), 0) + extra;
 
             if (modeSubtract) tempOffset -= dll;
 
             return tempOffset;
         }
+
+        internal static object ReadMemory<T>(object p)
+        {
+            throw new NotImplementedException();
 
         static int AobScan(int dll, int range, string signature, int instance)
         {

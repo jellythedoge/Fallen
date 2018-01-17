@@ -122,8 +122,7 @@ namespace IniParser.Parser
             catch (Exception ex)
             {
                 errorExceptions.Add(ex);
-                if (Configuration.ThrowExceptionsOnError)
-                    throw;
+                if (Configuration.ThrowExceptionsOnError) throw;
             }
 
             if (HasError) return null;
@@ -307,8 +306,7 @@ namespace IniParser.Parser
                 return;
             }
 
-            if (Configuration.SkipInvalidLines)
-                return;
+            if (Configuration.SkipInvalidLines) return;
 
             throw new ParsingException(
                 "Unknown file format. Couldn't parse the line: '" + currentLine + "'.");
@@ -338,8 +336,7 @@ namespace IniParser.Parser
             // Checks if the section already exists
             if (currentIniData.Sections.ContainsSection(sectionName))
             {
-                if (Configuration.AllowDuplicateSections)
-                    return;
+                if (Configuration.AllowDuplicateSections) return;
 
                 throw new ParsingException(string.Format("Duplicate section with name '{0}' on line '{1}'", sectionName, line));
             }

@@ -125,8 +125,7 @@ namespace IniParser.Model
         public bool TryGetKey(string key, out string value)
         {
             value = string.Empty;
-            if (string.IsNullOrEmpty(key))
-                return false;
+            if (string.IsNullOrEmpty(key)) return false;
 
             var splitKey = key.Split(SectionKeySeparator);
             var separatorCount = splitKey.Length - 1;
@@ -135,8 +134,7 @@ namespace IniParser.Model
 
             if (separatorCount == 0)
             {
-                if (!Global.ContainsKey(key))
-                    return false;
+                if (!Global.ContainsKey(key)) return false;
 
                 value = Global[key];
                 return true;
@@ -148,8 +146,7 @@ namespace IniParser.Model
             if (!sections.ContainsSection(section))
                 return false;
             var sectionData = sections[section];
-            if (!sectionData.ContainsKey(key))
-                return false;
+            if (!sectionData.ContainsKey(key)) return false;
 
             value = sectionData[key];
             return true;
