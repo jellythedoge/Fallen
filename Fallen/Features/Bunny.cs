@@ -1,9 +1,8 @@
 ﻿#region
 
-using Fallen.API;
-using Memory;
+using Fallen.Managers;
+using Fallen.Other;
 using System.Threading;
-using System.Threading.Tasks;
 
 #endregion
 
@@ -11,51 +10,50 @@ namespace Fallen.Features
 {
     internal class Bunny
     {
-        internal async void Run()
+        public static void Run()
         {
             var bhopInitialized = false;
             var jumpsDone = 0;
             while (true)
             {
-                Thread.Sleep(1);
+                Thread.Sleep(5);
 
-                if (Settings.Bhop.Enabled)
+                if (Settings.Bhop.Enabled) continue;
+
+                var flag = Structs.LocalPlayer.m_fFlags;
+
+                // If user jumped, turn bhop, not possible when in chat or menu.
+                if (flag == 256 && !bhopInitialized)
                 {
-                    var flag = SDK.LocalPlayer.m_iJumpFlags;
+                    bhopInitialized = true;
+                    continue;
+                }
+                else if (!bhopInitialized && Settings.Bhop.Key)
+                {
+                    bhopInitialized = false;
+                    continue;
+                }
 
-                    // If user jumped, turn bhop, not possible when in chat or menu.
-                    if (flag == 256 && !bhopInitialized)
-                    {
-                        bhopInitialized = true;
-                        continue;
-                    }
-                    else if (!bhopInitialized && Settings.Bhop.Key)
-                    {
-                        bhopInitialized = false;
-                        continue;
-                    }
+                if (!Settings.Bhop.Key) bhopInitialized = false;
 
-                    if (!Settings.Bhop.Key) bhopInitialized = false;
+                if (flag == 257 && (Settings.Bhop.Key) || flag == 263 && (Settings.Bhop.Key))
+                {
+                    if (Settings.Bhop.MaxJumps > jumpsDone || !Settings.Bhop.JumpLimit)
+                    {
+                        Memory.WriteMemory<bool>(Structs.Base.ClientPointer + Offsets.dwForceJump, true);
+                        jumpsDone++;
+                        Thread.Sleep(50);
+                    }
+                }
+                else
+                {
+                    Memory.WriteMemory<bool>(Structs.Base.ClientPointer + Offsets.dwForceJump, false);
+                }
 
-                    if (flag == 257 && (Settings.Bhop.Key) || flag == 263 && (Settings.Bhop.Key))
-                    {
-                        if (Settings.Bhop.MaxJumps > jumpsDone || !Settings.Bhop.JumpLimit)
-                        {
-                            MemoryManager.WriteMemory<bool>(MainClass.ClientPointer + Offsets.dwForceJump, true);
-                            jumpsDone++;
-                            await Task.Delay(50);
-                        }
-                    }
-                    else
-                    {
-                        MemoryManager.WriteMemory<bool>(MainClass.ClientPointer + Offsets.dwForceJump, false);
-                    }
-
-                    if (!Settings.Bhop.Key && Settings.Bhop.JumpLimit && jumpsDone > 1)
-                    {
-                        await Task.Delay(50);
-                        jumpsDone = 0;
-                    }
+                if (!Settings.Bhop.Key && Settings.Bhop.JumpLimit && jumpsDone > 1)
+                {
+                    Thread.Sleep(50);
+                    jumpsDone = 0;
                 }
             }
         }

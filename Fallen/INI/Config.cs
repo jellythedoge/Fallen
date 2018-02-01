@@ -1,6 +1,6 @@
 ﻿#region
 
-using Fallen.API;
+using Fallen.Other;
 using IniParser;
 using System;
 using System.IO;
@@ -83,9 +83,6 @@ namespace Fallen.INI
                 Settings.RCS.X = float.Parse(data["RCS"]["X"]);
                 Settings.RCS.Y = float.Parse(data["RCS"]["Y"]);
 
-                Settings.Overlay.Enabled = bool.Parse(data["OVERLAY"]["Enabled"]);
-                Settings.Overlay.Crosshair = bool.Parse(data["OVERLAY"]["Crosshair"]);
-
                 Settings.Skinchanger.Enabled = bool.Parse(data["SKINCHANGER"]["Enabled"]);
                 Settings.Skinchanger.WEAPON_DEAGLE = int.Parse(data["SKINCHANGER"]["DEAGLESkin"]);
                 Settings.Skinchanger.WEAPON_ELITE = int.Parse(data["SKINCHANGER"]["ELITESkin"]);
@@ -121,24 +118,22 @@ namespace Fallen.INI
             }
             catch
             {
-                SDK.Error("Config cannot be Loaded!, Try to delete your old one!", true);
-                SDK.Error("IF YOU DONT HAVE A CONFIG STOP BITCHING AT ME ON UC!!!", true);
+                Extensions.Error("Config cannot be Loaded!, Try to delete your old one!");
+                Extensions.Error("IF YOU DONT HAVE A CONFIG STOP BITCHING AT ME ON UC!!!");
                 Console.WriteLine("");
 
                 LoadFailed = true;
             }
 
-            if (!LoadFailed) SDK.Log("Config Loaded!", true);
+            if (!LoadFailed) Extensions.Information("Config Loaded!");
             else LoadFailed = false;
         }
 
         public static void SaveConfig()
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "Settings.ini");
+            var Path = "Settings.ini";
 
-            if (!File.Exists(path))
-                using (var sw = File.AppendText(path))
-                    sw.WriteLine("");
+            if (!File.Exists(Path)) File.Create(Path);
 
             var parser = new FileIniDataParser();
             var data = parser.ReadFile("Settings.ini");
@@ -185,9 +180,6 @@ namespace Fallen.INI
             data["RCS"]["Enabled"] = Settings.RCS.Enabled.ToString();
             data["RCS"]["X"] = Settings.RCS.X.ToString();
             data["RCS"]["Y"] = Settings.RCS.Y.ToString();
-
-            data["OVERLAY"]["Enabled"] = Settings.Overlay.Enabled.ToString();
-            data["OVERLAY"]["Crosshair"] = Settings.Overlay.Crosshair.ToString();
 
             data["SKINCHANGER"]["Enabled"] = Settings.Skinchanger.Enabled.ToString();
             data["SKINCHANGER"]["DEAGLESkin"] = Settings.Skinchanger.WEAPON_DEAGLE.ToString();

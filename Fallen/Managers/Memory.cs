@@ -1,53 +1,53 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Memory
-{
-    internal class MemoryManager
-    {
-        static Process m_Process;
-        static IntPtr m_pProcessHandle;
+#endregion
 
-        static int m_iNumberOfBytesRead;
-        static int m_iNumberOfBytesWritten;
+namespace Fallen.Managers
+{
+    internal class Memory
+    {
+        static Process m_iProcess;
+        static IntPtr m_iProcessHandle;
+
+        static int m_iBytesWritten;
+        static int m_iBytesRead;
 
         public static void Initialize(string processName)
         {
             if (Process.GetProcessesByName(processName).Length > 0)
-                m_Process = Process.GetProcessesByName(processName)[0];
+            {
+                m_iProcess = Process.GetProcessesByName(processName)[0];
+                m_iProcessHandle = Imports.OpenProcess(Flags.PROCESS_VM_OPERATION | Flags.PROCESS_VM_READ | Flags.PROCESS_VM_WRITE, false, m_iProcess.Id);
+            }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Couldn't find " + processName + ", Please start it first!");
+                Console.WriteLine("ERROR: Cannot find - " + processName + " | Check ProcessName.");
                 Console.ResetColor();
                 Console.ReadKey();
-                Environment.Exit(1);
+                Environment.Exit(0);
             }
-
-            m_pProcessHandle = OpenProcess(PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE, false, m_Process.Id); // Sets Our ProcessHandle
         }
 
-        public static int GetModuleAdress(string ModuleName)
+        public static void WriteMemory<T>(int Address, object Value)
         {
-            try
-            {
-                foreach (ProcessModule ProcMod in m_Process.Modules)
-                {
-                    if (!ModuleName.Contains(".dll"))
-                        ModuleName = ModuleName.Insert(ModuleName.Length, ".dll");
+            byte[] buffer = StructureToByteArray(Value);
 
-                    if (ModuleName == ProcMod.ModuleName)
-                    {
-                        return (int)ProcMod.BaseAddress;
-                    }
-                }
-            }
-            catch { }
-            return -1;
+            Imports.WriteProcessMemory((int)m_iProcessHandle, Address, buffer, buffer.Length, out m_iBytesWritten);
+        }
+
+        public static void WriteMemory<T>(int Adress, char[] Value)
+        {
+            byte[] buffer = Encoding.UTF8.GetBytes(Value);
+
+            Imports.WriteProcessMemory((int)m_iProcessHandle, Adress, buffer, buffer.Length, out m_iBytesWritten);
         }
 
         public static T ReadMemory<T>(int address) where T : struct
@@ -56,7 +56,7 @@ namespace Memory
 
             byte[] buffer = new byte[ByteSize];
 
-            ReadProcessMemory((int)m_pProcessHandle, address, buffer, buffer.Length, ref m_iNumberOfBytesRead);
+            Imports.ReadProcessMemory((int)m_iProcessHandle, address, buffer, buffer.Length, ref m_iBytesRead);
 
             return ByteArrayToStructure<T>(buffer);
         }
@@ -65,7 +65,7 @@ namespace Memory
         {
             byte[] buffer = new byte[size];
 
-            ReadProcessMemory((int)m_pProcessHandle, offset, buffer, size, ref m_iNumberOfBytesRead);
+            Imports.ReadProcessMemory((int)m_iProcessHandle, offset, buffer, size, ref m_iBytesRead);
 
             return buffer;
         }
@@ -73,29 +73,34 @@ namespace Memory
         public static float[] ReadMatrix<T>(int Adress, int MatrixSize) where T : struct
         {
             var ByteSize = Marshal.SizeOf(typeof(T));
-            byte[] buffer = new byte[ByteSize * MatrixSize]; // Create A Buffer With Size Of ByteSize * MatrixSize
-            ReadProcessMemory((int)m_pProcessHandle, Adress, buffer, buffer.Length, ref m_iNumberOfBytesRead);
+            byte[] buffer = new byte[ByteSize * MatrixSize];
+            Imports.ReadProcessMemory((int)m_iProcessHandle, Adress, buffer, buffer.Length, ref m_iBytesRead);
 
-            return ConvertToFloatArray(buffer); // Transform the ByteArray to A Float Array (PseudoMatrix ;P)
+            return ConvertToFloatArray(buffer);
         }
 
-        public static void WriteMemory<T>(int Adress, object Value)
+        public static int GetModuleAddress(string Name)
         {
-            byte[] buffer = StructureToByteArray(Value); // Transform Data To ByteArray
+            try
+            {
+                foreach (ProcessModule ProcMod in m_iProcess.Modules)
+                {
+                    if (Name == ProcMod.ModuleName)
+                    {
+                        return (int)ProcMod.BaseAddress;
+                    }
+                }
+            }
+            catch
+            {
+            }
 
-            WriteProcessMemory((int)m_pProcessHandle, Adress, buffer, buffer.Length, out m_iNumberOfBytesWritten);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("ERROR: Cannot find - " + Name + " | Check file extension.");
+            Console.ResetColor();
+
+            return -1;
         }
-
-        public static void WriteMemory<T>(int Adress, char[] Value)
-        {
-            byte[] buffer = Encoding.UTF8.GetBytes(Value);
-
-            WriteProcessMemory((int)m_pProcessHandle, Adress, buffer, buffer.Length, out m_iNumberOfBytesWritten);
-        }
-
-        // S1ONS SIG SCANNER!
-        // I DONT KNOW HOW TO MAKE ONE ,-,
-        //
 
         #region SigScanning
 
@@ -111,6 +116,7 @@ namespace Memory
         internal static object ReadMemory<T>(object p)
         {
             throw new NotImplementedException();
+        }
 
         static int AobScan(int dll, int range, string signature, int instance)
         {
@@ -195,7 +201,7 @@ namespace Memory
 
         #endregion SigScanning
 
-        #region Transformation
+        #region Conversion
 
         public static float[] ConvertToFloatArray(byte[] bytes)
         {
@@ -204,7 +210,7 @@ namespace Memory
 
             float[] floats = new float[bytes.Length / 4];
 
-            for (int i = 0; i < floats.Length; i++)
+            for (var i = 0; i < floats.Length; i++)
                 floats[i] = BitConverter.ToSingle(bytes, i * 4);
 
             return floats;
@@ -238,28 +244,29 @@ namespace Memory
             return array;
         }
 
-        #endregion Transformation
+        #endregion
 
-        #region DllImports
+        #region Other
 
-        [DllImport("kernel32.dll")]
-        static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+        internal struct Flags
+        {
+            public const int PROCESS_VM_OPERATION = 0x0008;
+            public const int PROCESS_VM_READ = 0x0010;
+            public const int PROCESS_VM_WRITE = 0x0020;
+        }
 
-        [DllImport("kernel32.dll")]
-        static extern bool ReadProcessMemory(int hProcess, int lpBaseAddress, byte[] buffer, int size, ref int lpNumberOfBytesRead);
+        internal class Imports
+        {
+            [DllImport("kernel32.dll")]
+            public static extern IntPtr OpenProcess(int DesiredAccess, bool InheritHandle, int m_iProcessID);
 
-        [DllImport("kernel32.dll")]
-        static extern bool WriteProcessMemory(int hProcess, int lpBaseAddress, byte[] buffer, int size, out int lpNumberOfBytesWritten);
+            [DllImport("kernel32.dll")]
+            public static extern bool ReadProcessMemory(int h_Process, int BaseAddress, byte[] buffer, int size, ref int BytesRead);
 
-        #endregion DllImports
+            [DllImport("kernel32.dll")]
+            public static extern bool WriteProcessMemory(int h_Process, int BaseAddress, byte[] buffer, int size, out int BytesWritten);
+        }
 
-        #region Constants
-
-        const int PROCESS_VM_OPERATION = 0x0008;
-        const int PROCESS_VM_READ = 0x0010;
-        const int PROCESS_VM_WRITE = 0x0020;
-        static IntPtr handle;
-
-        #endregion Constants
+        #endregion
     }
 }

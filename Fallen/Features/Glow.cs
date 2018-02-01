@@ -1,7 +1,7 @@
 ﻿#region
 
-using Fallen.API;
-using Memory;
+using Fallen.Managers;
+using Fallen.Other;
 using System;
 using System.Threading;
 
@@ -11,28 +11,30 @@ namespace Fallen.Features
 {
     internal class Glow
     {
-        internal void Run()
+        public static void Run()
         {
             while (true)
             {
+                Thread.Sleep(5);
+
                 for (var i = 0; i < 64; i++)
                 {
-                    if (SDK.Arrays.Entity[i].m_iBase == 0) continue;
-                    if (SDK.Arrays.Entity[i].m_iBase == SDK.LocalPlayer.m_iBase)
+                    if (Structs.Arrays.Entity[i].m_iBase == 0) continue;
+                    if (Structs.Arrays.Entity[i].m_iBase == Structs.LocalPlayer.m_iBase)
                         continue;
-                    if (SDK.Arrays.Entity[i].m_iHealth < 1) continue;
-                    if (SDK.Arrays.Entity[i].m_iDormant == 1)
+                    if (Structs.Arrays.Entity[i].m_iHealth < 1) continue;
+                    if (Structs.Arrays.Entity[i].m_iDormant == 1)
                         continue;
 
-                    var cEntity = MemoryManager.ReadMemory<int>(MainClass.ClientPointer + Offsets.dwEntityList + (i - 1) * 16);
+                    var cEntity = Memory.ReadMemory<int>(Structs.Base.ClientPointer + Offsets.dwEntityList + (i - 1) * 16);
 
-                    var glowObject = new SDK.GlowObject();
+                    var glowObject = new Structs.GlowObject();
 
-                    if (SDK.Arrays.Entity[i].m_iTeam != SDK.LocalPlayer.m_iTeam)
+                    if (Structs.Arrays.Entity[i].m_iTeam != Structs.LocalPlayer.m_iTeamNum)
                     {
                         if (Settings.GlowEnemy.Enabled)
                         {
-                            glowObject = MemoryManager.ReadMemory<SDK.GlowObject>(SDK.LocalPlayer.m_iGlowBase + SDK.Arrays.Entity[i].m_iGlowIndex * 0x38);
+                            glowObject = Memory.ReadMemory<Structs.GlowObject>(Structs.LocalPlayer.m_iGlowBase + Structs.Arrays.Entity[i].m_iGlowIndex * 0x38);
 
                             glowObject.r = Settings.GlowEnemy.Red / 255;
                             glowObject.g = Settings.GlowEnemy.Green / 255;
@@ -42,9 +44,9 @@ namespace Fallen.Features
                             glowObject.m_bRenderWhenUnoccluded = false;
                             glowObject.m_bFullBloom = Settings.GlowEnemy.ChamsEnabled;
 
-                            if (Settings.GlowEnemy.ChamsEnabled && SDK.Arrays.Entity[i].m_iTeam != SDK.LocalPlayer.m_iTeam)
+                            if (Settings.GlowEnemy.ChamsEnabled && Structs.Arrays.Entity[i].m_iTeam != Structs.LocalPlayer.m_iTeamNum)
                             {
-                                var chamsObject = new SDK.ChamsObject()
+                                var chamsObject = new Structs.ChamsObject()
                                 {
                                     r = Convert.ToByte(Settings.GlowEnemy.Red),
                                     g = Convert.ToByte(Settings.GlowEnemy.Green),
@@ -52,18 +54,18 @@ namespace Fallen.Features
                                     a = 254
                                 };
 
-                                MemoryManager.WriteMemory<SDK.ChamsObject>(cEntity + 0x70, chamsObject);
+                                Memory.WriteMemory<Structs.ChamsObject>(cEntity + 0x70, chamsObject);
                             }
 
-                            MemoryManager.WriteMemory<SDK.GlowObject>(SDK.LocalPlayer.m_iGlowBase + SDK.Arrays.Entity[i].m_iGlowIndex * 0x38, glowObject);
+                            Memory.WriteMemory<Structs.GlowObject>(Structs.LocalPlayer.m_iGlowBase + Structs.Arrays.Entity[i].m_iGlowIndex * 0x38, glowObject);
                         }
                     }
 
-                    if (SDK.Arrays.Entity[i].m_iTeam == SDK.LocalPlayer.m_iTeam)
+                    if (Structs.Arrays.Entity[i].m_iTeam == Structs.LocalPlayer.m_iTeamNum)
                     {
                         if (Settings.GlowTeam.Enabled)
                         {
-                            glowObject = MemoryManager.ReadMemory<SDK.GlowObject>(SDK.LocalPlayer.m_iGlowBase + SDK.Arrays.Entity[i].m_iGlowIndex * 0x38);
+                            glowObject = Memory.ReadMemory<Structs.GlowObject>(Structs.LocalPlayer.m_iGlowBase + Structs.Arrays.Entity[i].m_iGlowIndex * 0x38);
 
                             glowObject.r = Settings.GlowTeam.Red / 255;
                             glowObject.g = Settings.GlowTeam.Green / 255;
@@ -73,9 +75,9 @@ namespace Fallen.Features
                             glowObject.m_bRenderWhenUnoccluded = false;
                             glowObject.m_bFullBloom = Settings.GlowTeam.ChamsEnabled;
 
-                            if (Settings.GlowTeam.ChamsEnabled && SDK.Arrays.Entity[i].m_iTeam == SDK.LocalPlayer.m_iTeam)
+                            if (Settings.GlowTeam.ChamsEnabled && Structs.Arrays.Entity[i].m_iTeam == Structs.LocalPlayer.m_iTeamNum)
                             {
-                                var ChamsObject = new SDK.ChamsObject()
+                                var ChamsObject = new Structs.ChamsObject()
                                 {
                                     r = Convert.ToByte(Settings.GlowTeam.Red),
                                     g = Convert.ToByte(Settings.GlowTeam.Green),
@@ -83,15 +85,13 @@ namespace Fallen.Features
                                     a = 254
                                 };
 
-                                MemoryManager.WriteMemory<SDK.ChamsObject>(cEntity + 0x70, ChamsObject);
+                                Memory.WriteMemory<Structs.ChamsObject>(cEntity + 0x70, ChamsObject);
                             }
 
-                            MemoryManager.WriteMemory<SDK.GlowObject>(SDK.LocalPlayer.m_iGlowBase + SDK.Arrays.Entity[i].m_iGlowIndex * 0x38, glowObject);
+                            Memory.WriteMemory<Structs.GlowObject>(Structs.LocalPlayer.m_iGlowBase + Structs.Arrays.Entity[i].m_iGlowIndex * 0x38, glowObject);
                         }
                     }
                 }
-
-                Thread.Sleep(1);
             }
         }
     }

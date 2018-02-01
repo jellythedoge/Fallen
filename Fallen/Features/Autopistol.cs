@@ -1,30 +1,24 @@
-﻿using Fallen.API;
-using Memory;
+﻿using Fallen.Managers;
+using Fallen.Other;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Fallen.Features
 {
     internal class Autopistol
     {
-        public static async void Run()
+        public static void Run()
         {
-            // /////////////
-            // AUTO PISTOL//
-            // /////////////
-
             while (true)
             {
-                Thread.Sleep(1);
+                Thread.Sleep(5);
 
-                if (Settings.Autopistol.Enabled)
+                if (Settings.Autopistol.Enabled) continue;
+
+                if (Settings.Autopistol.Key && Checks.IsPistol() || Settings.Autopistol.Key && Settings.Autopistol.AnyGun)
                 {
-                    if (Settings.Autopistol.Key && SDK.HeldWeapon == "PISTOL" || Settings.Autopistol.Key && Settings.Autopistol.AnyGun)
-                    {
-                        MemoryManager.WriteMemory<bool>(MainClass.ClientPointer + Offsets.dwForceAttack, true);
-                        await Task.Delay(1);
-                        MemoryManager.WriteMemory<bool>(MainClass.ClientPointer + Offsets.dwForceAttack, false);
-                    }
+                    Memory.WriteMemory<bool>(Structs.Base.ClientPointer + Offsets.dwForceAttack, true);
+                    Thread.Sleep(15);
+                    Memory.WriteMemory<bool>(Structs.Base.ClientPointer + Offsets.dwForceAttack, false);
                 }
             }
         }

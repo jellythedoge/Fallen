@@ -1,4 +1,4 @@
-﻿namespace Fallen.API
+﻿namespace Fallen.Other
 {
     internal class Settings
     {
@@ -88,17 +88,6 @@
             public static bool Enabled;
             public static float X = 2f;
             public static float Y = 2f;
-        }
-
-        public struct Overlay
-        {
-            public static bool Enabled;
-            public static bool Crosshair;
-
-            ///Not used in config files, for menu control
-            ///
-
-            public static bool MenuON;
         }
 
         public struct Skinchanger

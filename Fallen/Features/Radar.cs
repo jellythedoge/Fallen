@@ -1,7 +1,7 @@
 ﻿#region
 
-using Fallen.API;
-using Memory;
+using Fallen.Managers;
+using Fallen.Other;
 using System.Threading;
 
 #endregion
@@ -14,24 +14,23 @@ namespace Fallen.Features
         {
             while (true)
             {
+                Thread.Sleep(150);
+
                 for (var i = 0; i < 64; i++)
                 {
-                    if (SDK.Arrays.Entity[i].m_iBase == 0) continue;
-                    if (SDK.Arrays.Entity[i].m_iBase == SDK.LocalPlayer.m_iBase)
+                    if (Structs.Arrays.Entity[i].m_iBase == 0) continue;
+                    if (Structs.Arrays.Entity[i].m_iBase == Structs.LocalPlayer.m_iBase)
                         continue;
-                    if (SDK.Arrays.Entity[i].m_iHealth < 1) continue;
-                    if (SDK.Arrays.Entity[i].m_iDormant == 1)
+                    if (Structs.Arrays.Entity[i].m_iHealth < 1) continue;
+                    if (Structs.Arrays.Entity[i].m_iDormant == 1)
                         continue;
 
-                    if (Settings.Radar.Enabled)
+                    if (Settings.Radar.Enabled) continue;
+
+                    if (!Checks.IsMyTeam())
                     {
-                        if (SDK.Arrays.Entity[i].m_iTeam != SDK.LocalPlayer.m_iTeam)
-                        {
-                            MemoryManager.WriteMemory<int>(SDK.Arrays.Entity[i].m_iBase + Offsets.m_bSpotted, 1);
-                        }
+                        Memory.WriteMemory<int>(Structs.Arrays.Entity[i].m_iBase + Offsets.m_bSpotted, 1);
                     }
-
-                    Thread.Sleep(150);
                 }
             }
         }
