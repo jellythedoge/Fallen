@@ -1,8 +1,12 @@
 ### Fallen
 
+## TODO
+- Fix Glow
+- Fix Chams
+
 ## Features
-- Glow
-- Chams
+- Glow (CSGO BROKE IT)
+- Chams (CSGO BROKE IT)
 - Fov
 - Bhop
 - NoFlash
@@ -17,7 +21,7 @@
 ## Usage
 
 - Update offsets | https://github.com/frk1/hazedumper
-- Add pJunk code || Rewrite/Remove/Add Features!
+- Make undetected | https://github.com/ThaisenPM/AutoJunk
 - Compile!
 - Play!
 
