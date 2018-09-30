@@ -1,12 +1,8 @@
 ### Fallen
 
-## TODO
-- Fix Glow
-- Fix Chams
-
 ## Features
-- Glow (CSGO BROKE IT)
-- Chams (CSGO BROKE IT)
+- Glow
+- Chams
 - Fov
 - Bhop
 - NoFlash
@@ -34,6 +30,6 @@
 #Other
 - Anon for mem class
 - pajamac
+- Zaczero
 
 ### If you straight rename this and post on UC im going to litteraly shank you!
- 

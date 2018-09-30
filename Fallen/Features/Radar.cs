@@ -25,7 +25,7 @@ namespace Fallen.Features
                     if (Structs.Arrays.Entity[i].m_iDormant == 1)
                         continue;
 
-                    if (Settings.Radar.Enabled) continue;
+                    if (!Settings.Radar.Enabled) continue;
 
                     if (!Checks.IsMyTeam())
                     {

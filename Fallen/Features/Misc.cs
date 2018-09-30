@@ -24,7 +24,6 @@ namespace Fallen.Features
                 var hitsOnServer = Memory.ReadMemory<int>(Structs.LocalPlayer.m_iBase + Offsets.m_totalHitsOnServer);
                 var currentFOV = Memory.ReadMemory<int>(Structs.LocalPlayer.m_iBase + Offsets.m_iFOV);
                 var currentHands = Memory.ReadMemory<int>(Structs.LocalPlayer.m_iBase + 0x254);
-                var endFlash = (!Settings.NoFlash.Enabled);
 
                 // /////////////
                 // FOV CHANGER//
@@ -45,23 +44,20 @@ namespace Fallen.Features
                 // NO FLASH//
                 // //////////
 
-                if (Settings.NoFlash.Enabled || endFlash)
-                {
-                    var flashCheck = Memory.ReadMemory<float>(Structs.LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha);
+                var flashCheck = Memory.ReadMemory<float>(Structs.LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha);
 
-                    if (endFlash)
+                if (!Settings.NoFlash.Enabled)
+                {
+                    if (flashCheck == Settings.NoFlash.Flash && flashCheck != 255)
                     {
-                        if (flashCheck == Settings.NoFlash.Flash && flashCheck != 255)
-                        {
-                            Memory.WriteMemory<float>(Structs.LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha, 255);
-                        }
+                        Memory.WriteMemory<float>(Structs.LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha, 255);
                     }
-                    else
+                }
+                else
+                {
+                    if (flashCheck != Settings.NoFlash.Flash && flashCheck != 0)
                     {
-                        if (flashCheck != Settings.NoFlash.Flash && flashCheck != 0)
-                        {
-                            Memory.WriteMemory<float>(Structs.LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha, Settings.NoFlash.Flash);
-                        }
+                        Memory.WriteMemory<float>(Structs.LocalPlayer.m_iBase + Offsets.m_flFlashMaxAlpha, Settings.NoFlash.Flash);
                     }
                 }
 

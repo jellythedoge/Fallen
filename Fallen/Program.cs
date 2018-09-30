@@ -19,7 +19,7 @@ namespace Fallen
         {
             Memory.Initialize("csgo");
 
-            Structs.Base.ClientPointer = Memory.GetModuleAddress("client.dll");
+            Structs.Base.ClientPointer = Memory.GetModuleAddress("client_panorama.dll");
             Structs.Base.EnginePointer = Memory.GetModuleAddress("engine.dll");
 
             List<string> outdatedSignatures = Offsets.ScanPatterns();
@@ -68,6 +68,7 @@ namespace Fallen
             bunnyThread.Start();
             glowThread.Start();
             miscThread.Start();
+            radarThread.Start();
             rCSThread.Start();
             skinChangerThread.Start();
             triggerThread.Start();

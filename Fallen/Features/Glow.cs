@@ -26,7 +26,7 @@ namespace Fallen.Features
                     if (Structs.Arrays.Entity[i].m_iDormant == 1)
                         continue;
 
-                    var cEntity = Memory.ReadMemory<int>(Structs.Base.ClientPointer + Offsets.dwEntityList + (i - 1) * 16);
+                    var cEntity = Memory.ReadMemory<int>(Structs.Base.ClientPointer + Offsets.dwEntityList + (i - 1) * 0x10);
 
                     var glowObject = new Structs.GlowObject();
 

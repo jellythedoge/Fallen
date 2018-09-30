@@ -18,7 +18,7 @@ namespace Fallen.Features
             {
                 Thread.Sleep(5);
 
-                if (Settings.Bhop.Enabled) continue;
+                if (!Settings.Bhop.Enabled) continue;
 
                 var flag = Structs.LocalPlayer.m_fFlags;
 

@@ -24,9 +24,9 @@ namespace Fallen.Managers
                 {
                     var entity = Structs.Arrays.Entity[i];
 
-                    entity.m_iBase = Memory.ReadMemory<int>(Structs.Base.ClientPointer + Offsets.dwEntityList + i * 0x10);
+                    entity.m_iBase = Memory.ReadMemory<int>(Structs.Base.ClientPointer + Offsets.dwEntityList + (i - 1) * 0x10);
 
-                    if (entity.m_iBase > 0)
+                    if (entity.m_iBase != 0)
                     {
                         var entityStruct = new Structs.Entity_t();
 

@@ -3,6 +3,7 @@
 using Fallen.Other;
 using IniParser;
 using System;
+using System.Diagnostics;
 using System.IO;
 
 #endregion
@@ -62,7 +63,7 @@ namespace Fallen.INI
 
                 Settings.NoFlash.Flash = float.Parse(data["NO FLASH"]["Flash Amount"]);
 
-                Settings.NoFlash.Enabled = bool.Parse(data["NOHANDS"]["Enabled"]);
+                Settings.Nohands.Enabled = bool.Parse(data["NOHANDS"]["Enabled"]);
 
                 Settings.Fovchanger.Enabled = bool.Parse(data["FOV"]["Enabled"]);
                 Settings.Fovchanger.Fov = int.Parse(data["FOV"]["Fov"]);

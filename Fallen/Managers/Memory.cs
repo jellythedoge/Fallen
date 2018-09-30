@@ -122,7 +122,7 @@ namespace Fallen.Managers
         {
             if (signature == string.Empty) return -1;
 
-            var tempSignature = Regex.Replace(signature.Replace("??", "3F"), "[^a-fA-F0-9]", "");
+            var tempSignature = Regex.Replace(Regex.Replace(signature, @"\?+", "3F"), @"[^a-fA-F0-9]", "");
 
             var count = -1;
 
