@@ -10,7 +10,7 @@ namespace Fallen.Managers
 {
     internal class Watcher
     {
-        static bool GetAsyncKeyState(Keys key) => Imports.GetAsyncKeyState(key) != 0;
+        static bool IsKeyDown(Keys key) => (Imports.GetAsyncKeyState(key) & 0x8000) > 0;
 
         public static void Run()
         {
@@ -18,11 +18,11 @@ namespace Fallen.Managers
             {
                 Thread.Sleep(5);
 
-                if (GetAsyncKeyState(Keys.Space)) Settings.Bhop.Key = true; else Settings.Bhop.Key = false;
+                Settings.Bhop.Key = IsKeyDown(Keys.Space);
 
-                if (GetAsyncKeyState(Keys.LMenu)) Settings.Trigger.Key = true; else Settings.Trigger.Key = false;
+                Settings.Trigger.Key = IsKeyDown(Keys.LMenu);
 
-                if (GetAsyncKeyState(Keys.LButton)) Settings.Autopistol.Key = true; else Settings.Autopistol.Key = false;
+                Settings.Autopistol.Key = IsKeyDown(Keys.LButton);
             }
         }
     }

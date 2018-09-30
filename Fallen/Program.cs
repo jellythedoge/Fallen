@@ -19,7 +19,7 @@ namespace Fallen
         {
             Memory.Initialize("csgo");
 
-            Structs.Base.ClientPointer = Memory.GetModuleAddress("client.dll");
+            Structs.Base.ClientPointer = Memory.GetModuleAddress("client_panorama.dll");
             Structs.Base.EnginePointer = Memory.GetModuleAddress("engine.dll");
 
             List<string> outdatedSignatures = Offsets.ScanPatterns();
