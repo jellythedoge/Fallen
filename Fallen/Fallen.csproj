@@ -113,6 +113,7 @@
     <None Include="App.config" />
     <None Include="ILMerge.props" />
     <None Include="INI\Model\IniData.cs.rej" />
+    <None Include="packages.config" />
     <None Include="Settings.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
