@@ -12,13 +12,13 @@ namespace Fallen.Features
             {
                 Thread.Sleep(5);
 
-                if (Settings.Autopistol.Enabled) continue;
+                if (!Settings.Autopistol.Enabled) continue;
 
                 if (Settings.Autopistol.Key && Checks.IsPistol() || Settings.Autopistol.Key && Settings.Autopistol.AnyGun)
                 {
-                    Memory.WriteMemory<bool>(Structs.Base.ClientPointer + Offsets.dwForceAttack, true);
+                    Memory.WriteMemory<byte>(Structs.Base.ClientPointer + Offsets.dwForceAttack, 5);
                     Thread.Sleep(15);
-                    Memory.WriteMemory<bool>(Structs.Base.ClientPointer + Offsets.dwForceAttack, false);
+                    Memory.WriteMemory<byte>(Structs.Base.ClientPointer + Offsets.dwForceAttack, 4);
                 }
             }
         }

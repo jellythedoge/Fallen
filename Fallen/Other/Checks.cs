@@ -28,7 +28,7 @@ namespace Fallen.Other
                 var entityInCrossId = Memory.ReadMemory<int>(Structs.LocalPlayer.m_iBase + Offsets.m_iCrosshairId);
                 if (entityInCrossId != 0)
                 {
-                    var entityTeam = Memory.ReadMemory<int>(Structs.Arrays.Entity[entityInCrossId - 1].m_iBase + Offsets.m_iTeamNum);
+                    var entityTeam = Memory.ReadMemory<int>(Structs.Arrays.Entity[entityInCrossId].m_iBase + Offsets.m_iTeamNum);
 
                     if (Structs.LocalPlayer.m_iTeamNum != entityTeam) return true;
                 }

@@ -68,6 +68,7 @@ namespace Fallen
             bunnyThread.Start();
             glowThread.Start();
             miscThread.Start();
+            radarThread.Start();
             rCSThread.Start();
             skinChangerThread.Start();
             triggerThread.Start();
